@@ -1,0 +1,243 @@
+%-------------------------------------------------------------------
+\chapter{Power Line Communication}
+\label{c:plc}
+%-------------------------------------------------------------------
+
+\epigraph{``The wireless telegraph is not difficult to understand. The ordinary telegraph is like a very long cat. You pull the tail in New York, and it meows in Los Angeles. The wireless is the same, only without the cat.''}{\emph{Albert Einstein}}
+
+La \ac{PLC}, sistema di comunicazione powerline o onde convogliate, è una tecnologia che consente la trasmissione di dati sugli stessi cavi delle rete elettrica.
+L'energia elettrica viene trasmessa in alta tensione sulle linee di distribuzione più grandi, a media tensione sulla rete intermedia e infine utilizzata in bassa tensione all'interno delle abitazioni.
+La tecnologia powerline può essere realizzata in ognuno di questi passaggi.
+Molte tecnologie powerline sono limitate alla rete locale a cui appartengono (es. solo all'interno dell'abitazione) ma altre possono attraversare reti diverse (es. impiego della powerline sulla rete di distribuzione a media tensione e poi sulla rete a bassa tensione).
+In ogni caso il principio di funzionamento è il medesimo; per trasmettere i dati si utilizza un segnale modulato ad alta frequenza ed inviato sugli stessi cavi della corrente elettrica.
+Nel caso più frequente si ha perciò la tensione di rete (es. 50 Hz) alla quale è sovrapposto un segnale a frequenza più elevata e ampiezza limitata.
+
+La larghezza di banda per la trasmissione su powerline è molto variabile.
+Per esempio, una bassa frequenza di circa 100/200 Khz della modulante su una linea ad alta tensione ha un bit rate di poche centinaia di bps ma consente una lunghezza della linea di parecchi chilometri.
+Un elevato bit rate prevede generalmente una linea di trasmissione molto più breve; per esempio una rete locale ha un bit rate di parecchi Mbps ma può coprire al più una stanza o al massimo un piano di un edificio.
+
+Nel seguito sono illustrati i protocolli più comunemente utilizzati per la tecnologia powerline.
+
+%-------------------------------------------------------------------
+\section{Applicazioni domotiche e reti locali}
+\label{s:dom-lan}
+%-------------------------------------------------------------------
+
+La tecnologia powerline trova una prima applicazione in un ambito molto vicino a tutti noi, ovvero nella domotica che comprende l'\emph{Home Automation} e la \emph{Building Automation}\footnote{Con questo termine si identificano grandi edifici e complessi civili (aeroporti, ospedali, supermercati, banche) in cui si utilizzino applicazione di nuove tecnologie atte ad automatizzare diversi servizi quali illumnazione, condizionamento, sicurezza, nonché fornire segnali in banda larga, TV ed altro.}.
+Per domotica si intende, in generale, l'insieme di tecnologie orientate a migliorare la qualità della vita negli ambienti in cui l'uomo vive/lavora~\cite{home-scen1}.
+
+%-------------------------------------------------------------------
+\subsection{Protocollo X10}
+\label{s:x10-dom-lan}
+%-------------------------------------------------------------------
+
+Uno dei primi sistemi di comunicazione su powerline utilizzato per la domotica è l'X10~\cite{spe-x10}, uno standard aperto di comunicazione attraverso la trasmissione di onde convogliate.
+Nato nel 1975 in Scozia, si è poi sviluppato e diffuso soprattutto negli USA, dove componenti X10 si trovano in tutte le catene di materiale elettrico, per il controllo remoto di dispositivi connessi attraverso la stessa linea di alimentazione (es. luci, antifurto).
+
+Sebbene sia molto datato e siano anche disponibili altre tecnologie che consentono prestazioni migliori, rimane ancora tutt'oggi il più popolare per quanto riguarda l'ambiente domestico, il più economico e il più sviluppato e commercializzato.
+
+Per ridurre gli errori il protocollo X10 richiede due attraversamenti dello zero per trasmettere i simboli binari, cioè l'identificazione e la trasmissione di ogni bit richiede un ciclo completo a 60 Hz.
+Ipotizzando un alternata a 60 Hz la sua velocità di trasmissione è quindi limitata a 60 bit al secondo.
+Solitamente un comando completo è formato da due pacchetti con un offset di tre cicli tra l'uno e l'altro.
+Ogni pacchetto contiene due messaggi uguali di 11 bit (quindi 11 cicli) ciascuno e perciò un comando completo necessita di 47 cicli, che corrisponde a un tempo di trasmissione di circa 0,8 sec.
+\`E questa ridondanza di trasmissione che rende il protocollo X10 abbastanza sicuro ma al tempo stesso molto lento; risulta quindi poco adatto per applicazioni che richiedono elevata velocità di trasmissione come lo streaming audio e video. 
+
+Per realizzare la comunicazione attraverso la linea elettrica basata sul protocollo X10 è necessaria l'installazione di moduli ricevitori/attuatori e moduli trasmettitori/controller.
+I più diffusi sono certamente quelli da inserire direttamente nelle prese di corrente, ma sono stati sviluppati anche dispositivi più compatti da poter installare direttamente dentro le prese stesse.
+Alcuni esempi di moduli sono visibili in \fref{fig:x10-mod}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.15\textwidth]{figs/x10-mod-1}
+\hspace{1cm}
+\includegraphics[width=0.15\textwidth]{figs/x10-mod-2}
+\caption[Moduli X10]{Esempio di moduli X10 da presa e da porta lampada, Fonte~\cite{smart1}.\label{fig:x10-mod}}
+\end{figure}
+
+I dispositivi vengono selezionati attraverso una lettera tra A e P (per l'house code), \tref{tab:x10-table-hcod} e un valore da 1 a 16 (per il key code).
+Cambiando il suffisso (ultimo bit del key code) è possibile impostare il comando come mostrato in \tref{tab:x10-table-comcod}.
+
+\begin{table}
+\centering
+\begin{tabulary}{\textwidth}{CC}
+\toprule
+\emph{House Code} & \emph{Valore H1-H2-H4-H8} \\\midrule
+A & 0110\\
+B & 1110\\
+C & 0010\\ 
+D & 1010\\ 
+E & 0001\\ 
+F & 1001\\ 
+G & 0101\\ 
+H & 1101\\ 
+I & 0111\\ 
+J & 1111\\ 
+K & 0011\\ 
+L & 1011\\ 
+M & 0000\\ 
+N & 1000\\ 
+O & 0100\\ 
+P & 1100\\ 
+\bottomrule
+\end{tabulary}
+\caption[Tabella valori house code protocollo X10]{Valori impostabili dell'House code per ciascun modulo X10.\label{tab:x10-table-hcod}}
+\end{table}
+
+\begin{table}
+\centering	
+\begin{tabulary}{\textwidth}{lClC}
+\toprule
+\emph{Indirizzo} & \emph{Valore} &\emph{Comando } & \emph{Valore} \\
+\emph{Key Code} & \emph{\small D1-D2-D4-D8-D16} & \emph{Key Code} & \emph{\small D1-D2-D4-D8-D16}\\\midrule
+1 & 01100 & ON & 00101 \\ 
+2 & 11100 & OFF & 00111 \\
+3 & 00100 & DIM & 01001 \\ 
+4 & 10100 & BRIGHT & 01011 \\ 
+5 & 00010 & ALL LIGHTS ON & 00011\\ 
+6 & 10010 & ALL UNITS OFF & 00001 \\ 
+7 & 01010 & ALL LIGHTS OFF & 01101 \\ 
+8 & 11010 & EXTENDED CODE 1 & 01111\\ 
+9 & 01110 & HAIL REQUEST & 10001 \\
+10& 11110 & HAIL ACK. & 10011 \\ 
+11& 00110 & EXTENDED CODE 3& 10101 \\ 
+12& 10110 & UNUSED & 10111 \\ 
+13& 00000 & EXTENDED CODE 2& 11001 \\ 
+14& 10000 & STATUS ``ON'' & 11011 \\
+15& 01000 & STATUS ``OFF'' & 11101 \\ 
+16& 11000 &	STATUS REQUEST & 11111 \\ 
+\bottomrule
+\end{tabulary}
+\caption[Tabella valori key code protocollo X10]{Valori impostabili di Key Code per ciascun modulo X10.\label{tab:x10-table-comcod}}
+\end{table}
+
+%-------------------------------------------------------------------
+\subsection{Standard HomePlug}
+\label{s:home-dom-lan}
+%-------------------------------------------------------------------
+
+Il termine HomePlug indica un protocollo che consente di creare reti telematiche su powerline attraverso i cavi della rete elettrica.
+Per poter definire le specifiche e promuovere questo standard è stata creata l'\emph{HomePlug Powerline Alliance}~\cite{hmplug}, un consorzio formato da circa 50 compagnie di settore nato appunto con l'intento di creare un sistema di comunicazione per il \emph{networking domestico} ad alta velocità tramite powerline.
+Esistono due versioni per le reti domestiche: l'HomePlug 1.0 e l'HomePlug AV~\cite{hmover1}.
+Il primo consente una velocità di trasmissione fino a 14 Mbps mentre il secondo, pensato per la TV ad alta definizione e il VOIP consente un massimo bit rate di 200 Mbps\footnote{Ovviamente questi sono tutti valori teorici e dipendono da molti fattori quali per esempio la qualità dell'impianto elettrico, la struttura, la presenza o meno di fonti di disturbo.}.
+Grazie a questi standard è possibile creare delle reti per il collegamento di HDTV, PC, Internet a banda larga in modo semplice e veloce, come mostrato in \fref{fig:hp-ex}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.60\textwidth]{figs/hp-ex}
+\caption[Esempio di rete HomePlug]{Esempio di rete HomePlug.\label{fig:hp-ex}}
+\end{figure}
+
+L'utilizzo della linea elettrica come mezzo fisico per la trasmissione \ac{PLC} risulta molto vantaggiosa grazie alla disponibilità di prese elettriche in qualunque luogo si possa installare un dispositivo di rete.
+Questo porta a diversi vantaggi nell'implementazione di un nuovo concetto di \emph{networking domestico}:
+
+\begin{itemize}
+\item facile da installare essendo necessario solo un modulo nella presa elettrica;
+\item aumento della sicurezza in quanto i dati viaggiano solo nella rete interna ed in modo crittografato;
+\item non sono presenti problemi dovuti a distanze, muri, tubature o qualsiasi altro problema presente con il collegamento wireless;
+\item i problemi di interferenze sono risolti attraverso l'impiego della modulazione \ac{ODFM} con 84 possibili frequenze.
+\end{itemize}
+
+Una delle principali caratteristiche dell'HomePlug è la sua affidabilità anche in presenza di interferenze elettromagnetiche.
+Le sorgenti di disturbo che potrebbero essere presenti in un abitazione sono: motori e azionamenti elettrici, lampade alogene e fluorescenti, alimentatori, varialuce e antenne radio amatoriali.
+Tutto questo introduce notevoli errori sui bit trasmessi, i quali devono in qualche modo essere corretti.
+La tecnologia HomePlug utilizza una combinazione di Forward Error Correction \footnote{Parametro che, in una trasmissione digitale, indica quanti dei bit trasmessi sono destinati alla correzione di eventuali errori.} (FEC), Interleaving \footnote{Metodo per l'invio dei messaggi utilizzato nelle reti a pacchetto nelle quali si trasmettono dati non contigui al fine di migliorare le prestazioni in caso di errori.}, riconoscimento degli errori e ripetizione dei dati \ac{ARQ} per poter garantire l'affidabilità di trasmissione del canale.
+
+Sebbene la comunicazione in una rete HomePlug avvenga soltanto all'interno della rete domestica, quest'ultima è di per se una struttura aperta e per incrementare il livello di sicurezza è stato implementato un sistema di crittografia dei dati.
+\`E previsto infatti l'utilizzo a livello MAC della tecnica \ac{DES}\footnote{Algoritmo di cifratura basato su chiave a 56 bit.}.
+Inoltre i dispositivi su una stessa rete condividono la stessa chiave per la quale è previsto anche un sistema di distribuzione tra i nodi.
+
+%-------------------------------------------------------------------
+\subsection{Protocollo PowerDom}
+\label{s:powerdom-dom-lan}
+%-------------------------------------------------------------------
+
+Il PowerDom~\cite{powdom} è un sistema domotico di nuova concezione in grado di realizzare una rete domestica sulle linee di alimentazione 220V, comunemente disponibili all'interno delle abitazioni.
+La realizzazione, come da caratteristica di un sistema powerline, non richiede una particolare infrastruttura ad hoc e nemmeno la posa di nuovi cavi, ma richiede semplicemente di poter accedere all'impianto elettrico per l'installazione dei relativi moduli.
+I moduli comunicano attraverso una \ac{PLC} con portante multifrequenza variabile tra 60 Khz e 132 Khz con modulazione \ac{FSK}.
+Il massimo bit rate di trasmissione è di 4800 bps.
+Attraverso l'impiego di una o più centrali di controllo touch screen (PowerGuard) è possibile comandare e configurare diversi dispositivi come:
+
+\begin{itemize}
+\item moduli di allarme (PowerEye);
+\item moduli per la segnalazione acustica (PowerAlarm);
+\item moduli per il controllo degli accessi (PowerAccess);
+\item moduli per il controllo delle utenze (PowerControl);
+\item moduli per il controllo del riscaldamento e climatizzazione (PowerClima);
+\end{itemize}
+
+La vera novità del sistema PowerDom è l'uso intensivo del controllo remoto delle funzioni principali.
+Attraverso un software installabile su tutti i più comuni smartphone, \fref{fig:powerdom-sms}, è possibile mantenere sotto controllo la propria abitazione.
+Il programma permette per esempio di attivare e disattivare gli allarmi, accendere e spegnere le utente.
+Inoltre il sistema autonomamente provvede a inviare un SMS nel caso in cui si verifichino accessi non autorizzati, malfunzionamenti o allarmi diversi.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.40\textwidth]{figs/powerdom-sms}
+\caption[Software smartphone PowerDom]{Software smartphone PowerDom. Fonte:~\cite{powdom}\label{fig:powerdom-sms}}
+\end{figure}
+
+%-------------------------------------------------------------------
+\section{Internet a banda larga}
+\label{s:broadband}
+%-------------------------------------------------------------------
+
+Un altro possibile impiego per il quale la tecnologia powerline può essere una ottima soluzione è quello della diffusione di Internet a banda larga, mediante il cosiddetto \ac{BPLC}.
+La \ac{BPLC} viene utilizzata per quei luoghi, non coperti dal normale servizio ADSL e per i quali a causa di condizioni territoriali sfavorevoli, come la presenza di alberi, montagne o altri ostacoli, non è possibile impiegare direttamente la tecnologia wireless.
+Anche laddove fosse possibile installare un ripetitore wi-fi ma le utenze richieste non siano sufficienti a coprire le spese per posizionare il ripetitore ad un altezza tale da coprire la zona, viene utilizzata una soluzione ibrida composta dal segnale wireless più la trasmissione su powerline.
+In questi casi risulta quindi più comodo e meno costoso collegare un convertitore che invia il segnale sul cavo elettrico, partendo dal ripetitore wireless più vicino.
+Oltre al vantaggio di riuscire a collegare anche le utenze più difficili, è probabile infatti che sia sempre presente un cavo elettrico su cui poter trasmettere, si ottiene un sensibile risparmio di cablaggio in fibra delle centraline a bassa tensione\footnote{Centrali elettriche a cui fanno capo tutte le abitazioni che sono a loro volta collegate a quelle di media tensione.}.
+A queste ultime la banda larga può essere inviata per esempio tramite i meno costosi ponti radio.
+Inoltre attraverso l'utilizzo del segnale wireless è possibile mantenere una qualità migliore e latenze più basse anche su notevoli distanze rispetto all'utilizzo del cavo in rame, a patto che siano attuati i corretti meccanismi sui nodi trasmettitori (es. algoritmi di correzione del segnale).
+In \fref{fig:plc-wifi} è mostrato un esempio della rete ibrida.
+
+\begin{figure}
+\centering
+\includegraphics[width=.80\textwidth]{figs/plc-wifi}
+\caption[Esempio rete ibrida Wifi-powerline]{Esempio rete ibrida Wifi-powerline.\label{fig:plc-wifi}}
+\end{figure}
+
+Un progetto di questo tipo, nel quale però la connessione ad internet della cabina elettrica è effettuato in fibra ottica, è stato realizzato a Brescia~\cite{plcbs1}.
+
+%-------------------------------------------------------------------
+\section{Applicazioni automotive}
+\label{s:automotive}
+%-------------------------------------------------------------------
+
+I vantaggi derivanti dall'utilizzo della tecnologia powerline possono essere trasferiti anche in ambito Automotive, come descritto nella \sref{s:com-auto}.
+Esistono dei prototipi di modem transceiver che consentono di implementare una comunicazione powerline andando a sostituire il livello fisico dei già affermati bus \ac{CAN} e \ac{LIN} operanti su linea dedicata.
+I componenti che verranno considerati, prodotti dalla \emph{Yamar Electronics Ltd}\footnote{\url{http://www.yamar.com}}, sono i seguenti: DCAN250, \sref{sc:dcan250-automotive} e SIG40, \sref{sc:sig40-automotive}.
+
+Per un possibile impiego di questi componenti e soluzioni è comunque fondamentale assicurarsi che essi forniscano delle prestazioni minime, in termini di bit rate, almeno comparabili con quelle del \ac{CAN} e \ac{LIN}.
+Da questo punto di vista i primi componenti citati, risultano a prestazioni ridotte rispetto a quelle fornite dal diffusissimo CAN.
+L'unico componente in grado di offrire prestazioni paragonabili è il DCB500, prodotto sempre da Yamar Electronics Ltd, che sarà considerato e descritto meglio nella \sref{s:comp-trasm-dcb500}.
+
+Dato che attualmente le prestazioni del diffusissimo e affermatissimo \ac{CAN} bus sono molto al di sopra di quelle possibili con questi due dispositivi, si è deciso di impiegare, per lo sviluppo di questa tesi, un altro dispositivo che consente di unire le potenzialità di una comunicazione su DC-BUS\footnote{Digital Current - Bus, bus a tensione continua.} al mantenimento di un bit rate di comunicazione idoneo alle applicazioni automotive.
+Il dispositivo menzionato è il DCB500 di cui si parlerà nella \sref{s:comp-trasm-dcb500}.
+
+%-------------------------------------------------------------------
+\subsection{DCAN250}
+\label{s:dcan250-automotive}
+%-------------------------------------------------------------------
+
+Il DCAN250~\cite{dcan250} è un dispositivo che consente di sostituire il livello fisico del \ac{CAN} bus e poter utilizzare una powerline come linea di comunicazione.
+Si comporta come un vero e proprio \emph{transceiver} e consente di collegare tutti quei dispositivi che fanno uso del protocollo \ac{CAN}: dal controllo del volante, alle portiere, sensori, display, pannelli di controllo, ecc.
+Il DCAN250 contiene al suo interno un modem, un codificatore/decodificatore per il canale, un communication controller e un buffer per i dati che devono essere inviati sul bus.
+Come tutti i dispositivi basati sulla tecnologia DC-BUS consente di ridurre il complesso cablaggio all'interno del veicolo e fornisce una facile e veloce installazione.
+
+Il segnale viene modulato con la tecnica DQPSK e sono implementati anche protocolli di risoluzione delle collisioni, correzione degli errori e risparmio energetico (Modalità \emph{sleep} per i nodi in stand-by).
+Fra le caratteristiche di questo dispositivo vi è la possibilità di connettere allo stesso \dcbus\ fino a 16 nodi, che comunicano tra loro utilizzando l'affidabile protocollo \ac{CAN} attraverso una powerline. 
+
+%-------------------------------------------------------------------
+\subsection{SIG40}
+\label{s:sig40-automotive}
+%-------------------------------------------------------------------
+
+Anche il SIG40~\cite{sig40} è un transceiver che consente di realizzare una comunicazione digitale su powerline eliminando i collegamenti altrimenti necessari per il controllo e per i dati.
+Si propone come sostituto del livello fisico di UART e \ac{LIN}.
+Può essere impiegato in svariati ambiti dall'automotive, all'avionica e all'industria.
+Applicazioni tipiche possono essere: la lettura di sensori, attivazione di attuatori, controllo di porte, specchietti, condizionamento, luci e molto altro.
+Al suo interno contiene un modem, un'interfaccia di collegamento all'host, driver e filtri.
+Se impiegato come sostituto del livello fisico del \ac{LIN} consente di triplicarne la velocità fino ad un bit rate massimo di 57.6 Kbps.
+Sullo stesso \dcbus\ possono inoltre essere presenti diverse sottoreti che trasmettono ciascuna con una frequenza della portante diversa (4.5-6.5 Mhz).
+Il SIG40 può inoltre essere integrato in una qualsiasi applicazione CMOS come per esempio un microcontrollore.
+

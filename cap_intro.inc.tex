@@ -1,0 +1,90 @@
+%-------------------------------------------------------------------
+\chapter{Introduction}
+\label{c:intro}
+%-------------------------------------------------------------------
+
+%
+% toOl: the % symbol can be used for comments like C-style //
+%
+
+\epigraph{``A design of any kind shows its real value when taking beyond its original limits.''}{\emph{Tom Jennings}}
+
+Some few conventions (and an example of nested item list):
+
+\begin{itemize}
+\item text lines must have variable length;
+\item newline must appear only after fullstops;
+\item this is a tradeoff for using versioning tools:
+\begin{itemize}
+\item lines too long (full paragraphs) would nitroduce diffs that are too large;
+\item fixed maximum line width (e.g., 80 columns) lead to programs to reorganize the paragraph to fit the width, causing again diffs that are too large.
+\end{itemize}
+\end{itemize}
+%
+You can use the percentage symbol to avoid a space between item list and this paragraph, so that the first line of this paragraph is not indented.
+
+Example of line breaking follows\footnote{And this is an example of footnote.}.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Enumerated list:
+
+\begin{enumerate}
+\item Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+\item Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+\item Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+\item Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\end{enumerate}
+
+%-------------------------------------------------------------------
+\section{First section}
+\label{s:com-auto}
+%-------------------------------------------------------------------
+
+Le automobili moderne sono un complesso insieme di meccanica ed elettronica, ci sono infatti parecchie ECU (Electronic Control Unit) atte a controllare tutti i sottosistemi a bordo ed in particolare sistemi cruciali come iniezione e sistema frenante~\cite{nolte1}.
+
+Le ECU sono collegate anche a sensori ed attuatori e sono interconnesse attraverso linee dati dedicate.
+L'interazione di tutte le ECU permette di avere una visione globale aggiornata del sistema sotto controllo, in questo caso l'automobile e di migliorare la qualità del controllo stesso, l'affidabilità, la sicurezza e il comfort.
+Inoltre, essendo dispositivi elettronici, condividono la stessa linea di alimentazione e questo rende interessante una ricerca in questo ambito, ancora del tutto estraneo ad un sistema di comunicazione su powerline.
+Nell'automotive, se si escludono i sottosistemi di tipo infotaintment (sistemi di intrattenimento multimediale), si impiegano attualmente tre tipi di bus\footnote{Una trattazione più approfondita verrà affrontata nel \cref{cap:fieldbus}} comunemente utilizzati: LIN~\cite{lin1}, CAN, FLEXRAY~\cite{flexray1}.
+
+Ci sono molte ragioni che motivano la ricerca di una soluzione PLC in ambito automotive, essenzialmente si cerca di ridurre il cablaggio presente.
+Il complesso insieme di cavi è il secondo fattore di costo e peso in un'autovettura; si pensi infatti che il sistema di cablaggio all'interno di una moderna automobile può raggiungere i 2 Km di lunghezza~\cite{bbfan1}.
+Un elevato cablaggio implica:
+
+I requisiti di comunicazione nei veicoli elettrici ed ibridi, sono simili a quelli dei motori a combustione interna e sono in relazione col crescente numero di connessioni tra le unità principali~\cite{elec1}.
+
+Le moderne ECU dedicano fino al 20\% della loro dimensione ai contatti e collegamenti fisici, perciò la riduzione del numero di fili comporta anche il ridimensionamento e la riduzione di costo di ogni singola ECU.
+
+%----------------------------------------------------------
+\section{Objectives of the thesis}
+%----------------------------------------------------------
+
+\lipsum[2-4]
+
+%----------------------------------------------------------
+\section{Organization of the document}
+%----------------------------------------------------------
+
+The thesis is organized as follows:
+
+%
+% toOl: notice that some labels are missing; thus in the generated pdf will show up the ?? symbols
+% it is important to look for ?? symbols in the pdf to avoid this kind of issues
+%
+\begin{itemize}
+\item \textbf{\cref{c:plc}} explains this
+\item \textbf{\cref{c:fieldbus}} explains that
+\item \textbf{\cref{c:hw}} presents this
+\item \textbf{\cref{c:sw}} presents that
+\item finally the conclusions in~\textbf{\cref{c:conc}}.
+\end{itemize}
+
+%----------------------------------------------------------
+\section{Partnership}
+%----------------------------------------------------------
+
+Any possible additional information regarding the thesis.

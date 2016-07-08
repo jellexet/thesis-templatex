@@ -1,0 +1,126 @@
+\documentclass[a4paper,italian,twoside,openright,11pt]{book}
+\usepackage{lipsum} % this is for dummy text
+\usepackage{cmap} % makes PDF searchable
+\usepackage{babel}
+\usepackage{tabulary}
+%\usepackage[latin9]{inputenc}
+\usepackage[latin1]{inputenc}
+\usepackage{lmodern} % Latin Modern font
+\usepackage[T1]{fontenc}
+\usepackage{textcomp} % needed for fontenc
+\usepackage{extref}
+	\newcommand{\sectionname}{Sezione}
+	\newcommand{\subsectionname}{Sezione}
+\usepackage[bookmarksnumbered,final]{easyoutput}
+\usepackage{url}
+\usepackage[final]{listings}
+	\lstset{numbers=left,breaklines}
+	\usepackage{acronym}
+\usepackage{makeidx}
+	\makeindex
+%\usepackage[square]{natbib}
+\usepackage[binding=0.8cm]{layaureo} % better handling of A4 format
+\usepackage{tocbibind} 
+\usepackage[labelfont=bf]{caption}[2004/07/16] % format of captions
+\usepackage{subfig}
+% tables
+\usepackage{booktabs}
+\usepackage{tabulary}
+% citations at the beginning of each chapter
+\usepackage{epigraph}
+	\setlength{\epigraphwidth}{.59\textwidth}
+	\renewcommand{\epigraphsize}{\small}
+	\renewcommand{\epigraphflush}{flushleft}
+\usepackage{reallyblank} % insert empty page at the beginning of a chapter with empty headings
+% the following is for thesis in Italian language; adapt it for English ones
+\usepackage{sistyle}
+\AddToSIstyle{Italian}{
+   \SIdecimalsign{,}
+   \SIthousandsep{\,}
+   \SIproductsign{\cdot}
+   \SIunitsep{\,}
+   \SIunitspace{\,}
+   \SIunitdot{\cdot}
+   \SIobeyboldfalse
+   \SIgroupfourfalse}
+\SIstyle{Italian}
+\usepackage{verbatim}
+	
+\usepackage{acronym}
+\usepackage{gensymb}
+\usepackage{wasysym}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+\newcommand{\dspic}{dsPIC$^{\text{\textregistered}}$ DSC}
+\newcommand{\dcbus}{DC-BUS\texttrademark }
+
+% C code formatting for listings
+\usepackage{listings}
+	\lstset{language=[ANSI]C,
+		numbersep=5pt,
+		numberstyle=\tiny,
+		numbers=none,
+		basicstyle=\footnotesize
+	}
+
+\title{This is the title of my thesis}
+\author{John Doe}
+\date{Academic Year 2007/2008}
+\subject{Master Thesis in computer Engineering at University of Pavia}
+
+\begin{document}
+\input{frontpage.inc}
+
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+%
+\begin{flushright}
+\thispagestyle{empty}
+\null\vspace*{\stretch{1}}
+{\it Here you can write whatever you want
+
+\vspace{10pt}
+and here too.
+}
+\vspace{\stretch{2}}\null
+\end{flushright}
+%
+\thispagestyle{empty}
+\mbox{}
+\newpage
+%
+\chapter*{Acknowledgments}
+
+Some acknowledgments to family, friends, supervisors, etc.
+
+\thispagestyle{empty}
+\mbox{}
+\newpage
+
+%-------------------------------------------------------------------
+% Indexes
+%-------------------------------------------------------------------
+\tableofcontents
+\listoffigures
+\listoftables
+
+
+\mainmatter
+\input{cap_acronyms.inc}
+\input{cap_intro.inc}
+\input{cap_plc.inc}
+\input{cap_conclusions.inc}
+
+%\backmatter
+
+%-------------------------------------------------------------------
+% Bibliography
+%-------------------------------------------------------------------
+\label{Bibliography}
+\bibliographystyle{plain}
+\bibliography{biblio}
+
+\end{document}
