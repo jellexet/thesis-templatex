@@ -3,7 +3,7 @@ stages:
   - deploy
 before_script:
   - export PATH=$HOME/bin:/usr/local/bin:/usr/bin:/bin
-	
+
 # Working is for normal commits: it produce an artifact that expire in 3 weeks
 working:
   stage: wip
