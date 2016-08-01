@@ -1,0 +1,27 @@
+stages:
+  - wip
+  - deploy
+before_script:
+  - export PATH=$HOME/bin:/usr/local/bin:/usr/bin:/bin
+
+# Working is for normal commits: it produce an artifact that expire in 3 weeks
+working:
+  stage: wip
+  script:
+    - /usr/bin/make
+  artifacts:
+    expire_in: 3 week
+    paths:
+    - thesis.pdf
+
+# Tagged steps is for important commits: it produces an artifact that won't ever expire
+tagged_steps:
+  stage: deploy
+  script:
+    - /usr/bin/make
+  artifacts:
+    paths:
+    - thesis.pdf
+  only:
+    - tags
+    - triggers
