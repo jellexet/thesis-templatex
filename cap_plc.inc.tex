@@ -121,11 +121,14 @@ Esistono due versioni per le reti domestiche: l'HomePlug 1.0 e l'HomePlug AV~\ci
 Il primo consente una velocità di trasmissione fino a 14 Mbps mentre il secondo, pensato per la TV ad alta definizione e il VOIP consente un massimo bit rate di 200 Mbps\footnote{Ovviamente questi sono tutti valori teorici e dipendono da molti fattori quali per esempio la qualità dell'impianto elettrico, la struttura, la presenza o meno di fonti di disturbo.}.
 Grazie a questi standard è possibile creare delle reti per il collegamento di HDTV, PC, Internet a banda larga in modo semplice e veloce, come mostrato in \fref{fig:hp-ex}.
 
+\afterpage{
 \begin{figure}[t]
 \centering
 \includegraphics[width=.60\textwidth]{figs/hp-ex}
-\caption[Esempio di rete HomePlug]{Esempio di rete HomePlug.\label{fig:hp-ex}}
+\caption[Esempio di rete HomePlug]{Esempio di rete HomePlug\footnotemark.\label{fig:hp-ex}}
 \end{figure}
+\footnotetext{This is a footnote placed within the figure's caption. Notice the use of $\backslash$footnotemark and $\backslash$footnotetext; it is important that $\backslash$footnotetext appears in the same page of $\backslash$footnotemark; this is achieved by the $\backslash$afterpage command.}
+}
 
 L'utilizzo della linea elettrica come mezzo fisico per la trasmissione \ac{PLC} risulta molto vantaggiosa grazie alla disponibilità di prese elettriche in qualunque luogo si possa installare un dispositivo di rete.
 Questo porta a diversi vantaggi nell'implementazione di un nuovo concetto di \emph{networking domestico}:
