@@ -1,3 +1,6 @@
+# gitlab-ci for docker image
+image: giangiangian/latex_runner
+
 stages:
   - wip
   - deploy
