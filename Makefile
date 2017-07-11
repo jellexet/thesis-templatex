@@ -22,16 +22,16 @@ all: pdf $(MAIN).pdf
 
 # automatic generation of pdf files from sources
 
-DIA_FILES = $(shell find $(FIG_DIR) -iname *.dia)
+DIA_FILES = $(shell find $(FIG_DIR) -iname '*.dia')
 PDF_DIA_FILES = $(patsubst %.dia,%.pdf, $(DIA_FILES))
 
-FIG_FILES = $(shell find $(FIG_DIR) -iname *.fig)
+FIG_FILES = $(shell find $(FIG_DIR) -iname '*.fig')
 PDF_FIG_FILES = $(patsubst %.fig,%.pdf, $(FIG_FILES))
 
-GIF_FILES = $(shell find $(FIG_DIR) -iname *.gif)
+GIF_FILES = $(shell find $(FIG_DIR) -iname '*.gif')
 PDF_GIF_FILES = $(patsubst %.gif,%.pdf, $(GIF_FILES))
 
-SVG_FILES = $(shell find $(FIG_DIR) -iname *.svg)
+SVG_FILES = $(shell find $(FIG_DIR) -iname '*.svg')
 PDF_SVG_FILES = $(patsubst %.svg,%.pdf, $(SVG_FILES))
 
 .PHONY: pdf
