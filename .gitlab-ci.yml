@@ -16,6 +16,8 @@ working:
     expire_in: 3 week
     paths:
     - thesis.pdf
+  tags:
+  - docker
 
 # Tagged steps is for important commits: it produces an artifact that won't ever expire
 tagged_steps:
@@ -28,3 +30,5 @@ tagged_steps:
   only:
     - tags
     - triggers
+  tags:
+  - docker
