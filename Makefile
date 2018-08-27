@@ -2,6 +2,9 @@
 
 FIG_DIR = ./figs
 
+# detect the OS: if the content of OS is 'Darwin' the OS is MacOS
+OS = $(shell uname)
+
 ifndef MAIN
 MAIN = thesis
 endif
@@ -50,7 +53,11 @@ cleanall: cleandist
 pdf: $(PDF_TO_BUILD)
 
 %.pdf: %.svg
+ifeq ("$(OS)", "Darwin")
+	rsvg-convert -f pdf $< -o $@
+else
 	inkscape --without-gui --export-area-drawing --export-pdf=$@ $<
+endif
 
 %.pdf : %.dia
 	dia $< -t pdf-builtin -e $@
