@@ -20,5 +20,5 @@
 *.ps
 *.pdf
 .*.swp
-paper.synctex.gz
+*.synctex.gz
 .directory
