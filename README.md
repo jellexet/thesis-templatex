@@ -12,6 +12,18 @@ How to install rsvg-convert run on a terminal:
 brew install librsvg
 ```
 
+# Building the pdf
+
+If you use the terminal and have all the tools installed, you can run
+
+```
+make all
+```
+
+to generate the pdf file.
+
+It automatically converts the figures into supported formats, and handles the correct generation of the bibliography.
+
 # Credits
 
 * Tullio Facchinetti
