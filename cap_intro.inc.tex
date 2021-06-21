@@ -7,63 +7,173 @@
 % toOl: the % symbol can be used for comments like C-style //
 %
 
-\epigraph{``A design of any kind shows its real value when taking beyond its original limits.''}{\emph{Tom Jennings}}
+\epigraph{\enquote{A design of any kind shows its real value when taking beyond its original limits.}}{\emph{Tom Jennings}}
 
 Some few conventions (and an example of nested item list):
 
 \begin{itemize}
-\item text lines must have variable length;
-\item newline must appear only after fullstops;
-\item this is a tradeoff for using versioning tools:
+\item In a \texttt{.tex} file, text lines can have variable length.
+\item Put a newline after every fullstops, see an example in \cref{s:example_section}; paragraphs are separated by empty lines, so a newline at the end of a sentence does not affect the structure of the paragraph.
+\item This is a tradeoff for using versioning tools:
 \begin{itemize}
-\item lines too long (full paragraphs) would nitroduce diffs that are too large;
-\item fixed maximum line width (e.g., 80 columns) lead to programs to reorganize the paragraph to fit the width, causing again diffs that are too large.
+\item Lines too long (full paragraphs) would introduce diffs that are too large.
+\item Fixed maximum line width (e.g., $80$ columns) lead to programs to reorganize the paragraph to fit the width, causing again diffs that are too large.
 \end{itemize}
 \end{itemize}
 %
-You can use the percentage symbol to avoid a space between item list and this paragraph, so that the first line of this paragraph is not indented.
-
-Example of line breaking follows\footnote{And this is an example of footnote.}.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+You can use the percentage symbol (\%)\footnote{And notice how to insert a symbol of percentage!} to avoid a space between item list and this paragraph, so that the first line of this paragraph is not indented.
 
 Enumerated list:
 
 \begin{enumerate}
-\item Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-\item Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-\item Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-\item Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\item Item 1.
+\item Item 2.
+\item Item 3.
+\item Item 4.
 \end{enumerate}
 
+Sometimes, when you have a list of items for which you don't want to use bullet points or enumerations, you can use paragraphs with titles.
+See the following text.
+
+\paragraph{This is the first paragraph.}
+This is the long text of the first paragraph.
+This is the long text of the first paragraph.
+
+\paragraph{This is the second paragraph.}
+This is the long text of the second paragraph.
+This is the long text of the second paragraph.
+This is the long text of the second paragraph.
+This is the long text of the second paragraph.
+
+\paragraph{This is the third paragraph.}
+This is the long text of the third paragraph.
+This is the long text of the third paragraph.
+This is the long text of the third paragraph.
+This is the long text of the third paragraph.
+This is the long text of the third paragraph.
+This is the long text of the third paragraph.
+
+Finally, \cref{t:example-table} provides an example of table.
+You can add as many columns and rows as you wish.
+Please refer to \url{https://www.ctan.org/pkg/tabulary} for the documentation of the package.
+In particular, see how to change the size and the alignment of the columns, if you need it.
+
+\begin{table}
+\centering
+\begin{tabulary}{\textwidth}{lL}
+\toprule
+{} & \emph{Column} \\
+\emph{Column 1} & 2 \\
+\midrule
+text 1 & Some long text in the table. Some long text in the table. Some long text in the table. Some long text in the table. Some long text in the table.Some long text in the table. \\
+text 2 & some other text. some other text. some other text. some other text. some other text. some other text. \\
+\bottomrule
+\end{tabulary}
+\caption[This is the title of the table that goes in the list of tables]{This is the caption of the table.\label{tab:example-table}}
+\end{table}
+
 %-------------------------------------------------------------------
-\section{First section}
-\label{s:com-auto}
+\section{General recommendations}
+\label{s:example_section}
 %-------------------------------------------------------------------
 
-Le automobili moderne sono un complesso insieme di meccanica ed elettronica, ci sono infatti parecchie ECU (Electronic Control Unit) atte a controllare tutti i sottosistemi a bordo ed in particolare sistemi cruciali come iniezione e sistema frenante~\cite{nolte1}.
+An example of line breaking follows\footnote{And this is another example of footnote; don't forget the full stop at the end of the footnote.}.
+Do you see it? This is a new line in the \texttt{.tex} file but it is the same paragraph in the pdf.
 
-Le ECU sono collegate anche a sensori ed attuatori e sono interconnesse attraverso linee dati dedicate.
-L'interazione di tutte le ECU permette di avere una visione globale aggiornata del sistema sotto controllo, in questo caso l'automobile e di migliorare la qualità del controllo stesso, l'affidabilità, la sicurezza e il comfort.
-Inoltre, essendo dispositivi elettronici, condividono la stessa linea di alimentazione e questo rende interessante una ricerca in questo ambito, ancora del tutto estraneo ad un sistema di comunicazione su powerline.
-Nell'automotive, se si escludono i sottosistemi di tipo infotaintment (sistemi di intrattenimento multimediale), si impiegano attualmente tre tipi di bus\footnote{Una trattazione più approfondita verrà affrontata nel \cref{cap:fieldbus}} comunemente utilizzati: LIN~\cite{lin1}, CAN, FLEXRAY~\cite{flexray1}.
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{figs/logo-unipv-bw}
+\caption[This is the text that goes in the list of figures]{Example of figure; this is the caption that goes below the figure.\label{f:logo}}
+\end{figure}
 
-Ci sono molte ragioni che motivano la ricerca di una soluzione PLC in ambito automotive, essenzialmente si cerca di ridurre il cablaggio presente.
-Il complesso insieme di cavi è il secondo fattore di costo e peso in un'autovettura; si pensi infatti che il sistema di cablaggio all'interno di una moderna automobile può raggiungere i 2 Km di lunghezza~\cite{bbfan1}.
-Un elevato cablaggio implica:
+\Cref{f:logo} reports an example of template to include a figure.
+Just copy this template around and set the filename (without extension!), the size, and write the caption.
 
-I requisiti di comunicazione nei veicoli elettrici ed ibridi, sono simili a quelli dei motori a combustione interna e sono in relazione col crescente numero di connessioni tra le unità principali~\cite{elec1}.
+Use something like
 
-Le moderne ECU dedicano fino al 20\% della loro dimensione ai contatti e collegamenti fisici, perciò la riduzione del numero di fili comporta anche il ridimensionamento e la riduzione di costo di ogni singola ECU.
+\begin{verbatim}
+width=0.5\textwidth
+\end{verbatim}
+
+to set the size of the figure as a percentage of the text width (in this case it is 50\%).
+You can also specify an absolute width with \texttt{width=4cm}, but usually a relative size is fine.
+Sometimes (very rarely, in my experience) you may want to set the size on the basis of the height of the figure, i.e., \texttt{height=4cm}.
+The label \textbf{must go inside the caption}, otherwise sometimes \LaTeX does not handle the references correctly.
+
+Every figure, table, listing must be referenced and properly described in the text.
+\textbf{Never use statements such as \enquote{previous chapter}, \enquote{next section} or \enquote{figure below}}: these elements may be moved during the editing of the text, thus if you do not use these statements you do not have to look for them every time you move something around.
+This document uses the package \texttt{cleveref}, so use the command \texttt{\textbackslash cref} for a smart referencing (use \texttt{\textbackslash Cref} for uppercase).
+It takes care of putting the right label and spacing before the number, and it will reference the item independently from its position in the text.
+
+To use equations and to refer to them, use the \texttt{equation} environment like in this way:
+
+\begin{equation}
+\label{eq:example}
+A = \pi r^2
+\end{equation}
+%
+And proper reference to \cref{eq:example}.
+
+If you don't need to refer to an equation, you can skipt the numbering:
+
+\[
+2 + 2 = 4
+\]
+%
+In case of inline math, this is how it is done: $P = 2 \cdot \pi \cdot R$.
+
+%----------------------------------------------------------
+\subsection{Formatting text}
+%----------------------------------------------------------
+
+Beside equations and math text, there are some other formattings that are worth mentioning:
+
+\begin{itemize}
+\item for everything related to software, such as file names, functions, variables, etc., use \texttt{texttt}, e.g., \texttt{hello.txt} or \texttt{var\_name}.
+\item to put some text within quotes, use \texttt{enquote}, e.g., \enquote{like this}; \texttt{enquote} is better than other solutions because is more robust and handles internationalization correctly.
+\end{itemize}
+
+%----------------------------------------------------------
+\subsection{Citations}
+%----------------------------------------------------------
+
+For citations from the bibliography use \texttt{\textbackslash cite}.
+Here an example: \cite{example-citation}.
+
+You have to populate the bibliography file \texttt{bilbio.bib}.
+You can put as many items as you want in the file.
+Only the items that are cited in the thesis with \texttt{\textbackslash cite} will be included in the bibliography, as in the example above.
+
+The items to populate the \texttt{.bib} file are in BibTeX format.
+This is a popular format.
+If you look for some paper or book, it is likely that somewhere the bib format already exists.
+Try to search on the Internet for the title of the paper plus \textit{bibliobraphy} or \textit{bib}.
+
+%----------------------------------------------------------
+\subsection{Use of acronyms}
+%----------------------------------------------------------
+
+Acronyms are very popular in scientific and technical documents.
+We use the \texttt{acronym} package.
+
+All the acronyms are defined in \texttt{cap\_acronyms.inc.tex}.
+
+Use the acronyms with \enquote{\ac{UNIPV}}, \enquote{\ac{Robolab}}, \enquote{\ac{LED}}.
+The package is smart enough to write the long version the first time, and then to use the short version, like so: \enquote{\ac{UNIPV}} and \enquote{\ac{Robolab}}.
+
+Sometimes you need to use the full version again, do it with \acf{UNIPV}.
+If you need the long version only, use \acl{UNIPV}.
+
+Plurals can be handled with \acp{LED}.
 
 %----------------------------------------------------------
 \section{Objectives of the thesis}
 %----------------------------------------------------------
 
-\lipsum[2-4]
+%
+% toOl: to be completed
+%
+Put here the objectives of the thesis.
 
 %----------------------------------------------------------
 \section{Organization of the document}
@@ -72,15 +182,14 @@ Le moderne ECU dedicano fino al 20\% della loro dimensione ai contatti e collega
 The thesis is organized as follows:
 
 %
-% toOl: notice that some labels are missing; thus in the generated pdf will show up the ?? symbols
-% it is important to look for ?? symbols in the pdf to avoid this kind of issues
+% toOl: complete this summary once the actual structure of the thesis is finalized.
 %
 \begin{itemize}
-\item \textbf{\cref{c:plc}} explains this
-\item \textbf{\cref{c:fieldbus}} explains that
-\item \textbf{\cref{c:hw}} presents this
-\item \textbf{\cref{c:sw}} presents that
-\item finally the conclusions in~\textbf{\cref{c:conc}}.
+\item \cref{c:sota} explains this $\ldots$
+\item \cref{c:tools} explains that $\ldots$
+\item \cref{c:implementation} presents this $\ldots$
+\item \cref{c:results} presents that $\ldots$
+\item finally the conclusions in \cref{c:conc}.
 \end{itemize}
 
 %----------------------------------------------------------
