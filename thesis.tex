@@ -1,5 +1,4 @@
 \documentclass[a4paper,english,twoside,openright,11pt]{book}
-\usepackage{lipsum} % this is for dummy text
 \usepackage{cmap} % makes PDF searchable
 \usepackage{babel}
 \usepackage{tabulary}
@@ -8,7 +7,7 @@
 \usepackage{lmodern} % Latin Modern font
 \usepackage[T1]{fontenc}
 \usepackage{textcomp} % needed for fontenc
-\usepackage{styles/extref}
+%\usepackage{styles/extref}
 \usepackage[bookmarksnumbered,final]{styles/easyoutput}
 \usepackage{url}
 \usepackage[final]{listings}
@@ -63,6 +62,8 @@
 		numbers=none,
 		basicstyle=\footnotesize
 	}
+
+\usepackage{cleveref}
 
 \title{This is the title of my thesis}
 \author{John Doe}
