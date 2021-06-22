@@ -23,8 +23,15 @@ make all
 to generate the pdf file.
 
 It automatically converts the figures into supported formats, and handles the correct generation of the bibliography.
+It uses external tools to convert the following file formats:
+
+* `.gif` with [ImageMagick](https://imagemagick.org/index.php) `convert`
+* `.dia` with [Dia](http://dia-installer.de/download/linux.html.en)
+* `.fig` with [XFig](https://www.xfig.org/)
+* `.svg` with [Inkscape](https://inkscape.org/)
 
 # Credits
 
 * Tullio Facchinetti
 * Guido Benetti
+* Gianluca Roveda
