@@ -60,11 +60,16 @@
 		numbersep=5pt,
 		numberstyle=\tiny,
 		numbers=none,
-		basicstyle=\footnotesize
+		basicstyle=\linespread{0.8}\footnotesize
 	}
 
 \usepackage{csquotes}
 \usepackage{cleveref}
+
+% toOl: set linespread to 1 in the verbatim environment
+\makeatletter
+\def\verbatim@font{\linespread{1}\normalfont\ttfamily}
+\makeatother
 
 \title{This is the title of my thesis}
 \author{John Doe}
