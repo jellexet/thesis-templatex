@@ -130,7 +130,7 @@ Beside equations and math text, there are some other formattings that are worth 
 
 \begin{itemize}
 \item for everything related to software, such as file names, functions, variables, etc., use \texttt{texttt}, e.g., \texttt{hello.txt} or \texttt{var\_name}.
-\item to put some text within quotes, use \texttt{enquote}, e.g., \enquote{like this}; \texttt{enquote} is better than other solutions because is more robust and handles internationalization correctly.
+\item to put some text within quotes, use \texttt{enquote}, e.g., \enquote{like this}; \texttt{enquote} is better than other solutions because it is more robust and handles internationalization correctly.
 \end{itemize}
 
 %----------------------------------------------------------
@@ -140,7 +140,15 @@ Beside equations and math text, there are some other formattings that are worth 
 For citations from the bibliography use \texttt{\textbackslash cite}.
 Here an example: \cite{example-citation}.
 
-You have to populate the bibliography file \texttt{bilbio.bib}.
+Citations go \textbf{inside} the corresponding sentence.
+Note the position of the citation w.r.t. the full stop:
+
+\begin{itemize}
+\item \enquote{The algorithm has poor efficiency. \cite{example-citation}} \textbf{WRONG}
+\item \enquote{The algorithm has poor efficiency \cite{example-citation}.} \textbf{CORRECT}
+\end{itemize}
+
+You have to populate the bibliography file \texttt{biblio.bib}.
 You can put as many items as you want in the file.
 Only the items that are cited in the thesis with \texttt{\textbackslash cite} will be included in the bibliography, as in the example above.
 
