@@ -123,6 +123,21 @@ If you don't need to refer to an equation, you can skipt the numbering:
 %
 In case of inline math, this is how it is done: $P = 2 \cdot \pi \cdot R$.
 
+\Cref{lst:example-listing} provides an example of listing for source code.
+
+\begin{lstlisting}[language=Python,
+caption={Example of listing.},
+label={lst:example-listing},
+float=tp]
+def filter_difference(lines):
+    filter_header_lines = filter(lambda line: not line.startswith(
+        '---') and not line.startswith('+++'), lines)
+    filter_difference = filter(lambda line: line.startswith(
+        '-') or line.startswith('+'), filter_header_lines)
+    return filter_difference
+\end{lstlisting}
+
+
 %----------------------------------------------------------
 \subsection{Formatting text}
 %----------------------------------------------------------

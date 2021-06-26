@@ -20,7 +20,7 @@
 \usepackage[bookmarksnumbered,final]{styles/easyoutput}
 \usepackage{url}
 \usepackage[final]{listings}
-	\lstset{numbers=left,breaklines}
+	%\lstset{numbers=left,breaklines}
 \usepackage{acronym}
 \usepackage{makeidx}
 	\makeindex
@@ -64,12 +64,13 @@
 
 \usepackage{verbatim}
 \usepackage{courier}
+\usepackage{float}
 
-\lstset{language=[ANSI]C,
-numbersep=5pt,
+\lstset{numbersep=5pt,
 numberstyle=\tiny,
 numbers=none,
-basicstyle=\linespread{0.9}\ttfamily\footnotesize
+frame=lines,
+basicstyle=\linespread{1.0}\ttfamily\footnotesize
 }
 
 \usepackage{cleveref}
