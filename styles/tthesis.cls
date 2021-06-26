@@ -1,16 +1,20 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{exampleclass}[2021/06/21 Example LaTeX class]
+\ProvidesClass{tthesis}[2021/06/21 Example LaTeX class]
 
 \LoadClass[a4paper,english,twoside,openright,11pt]{book}
 
 % makes PDF searchable
 \usepackage{cmap}
 
-\usepackage{babel}
+\usepackage[english]{babel}
+
 %\usepackage[latin9]{inputenc}
 \usepackage[latin1]{inputenc}
 \usepackage{lmodern} % Latin Modern font
 \usepackage[T1]{fontenc}
+
+\usepackage{csquotes}
+
 \usepackage{textcomp} % needed for fontenc
 %\usepackage{styles/extref}
 \usepackage[bookmarksnumbered,final]{styles/easyoutput}
@@ -68,7 +72,6 @@ numbers=none,
 basicstyle=\linespread{0.9}\ttfamily\footnotesize
 }
 
-\usepackage{csquotes}
 \usepackage{cleveref}
 
 % Set linespread to 1 in the verbatim environment
