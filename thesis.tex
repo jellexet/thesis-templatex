@@ -7,7 +7,6 @@
 \author{John Doe}
 \graduation{Master Degree in Computer Engineering}
 \academicyear{2021/2022}
-
 \supervisor{
 Prof. Tullio Facchinetti \\
 Someone else
@@ -17,13 +16,12 @@ Someone else
 \begin{document}
 %-------------------------------------------------------------------
 
-\input{frontpage.inc}
+%-------------------------------------------------------------------
+% Frontpage
+%-------------------------------------------------------------------
 
-\thispagestyle{empty}
-\mbox{}
-\newpage
+\printfrontpage
 
-%
 \begin{flushright}
 \thispagestyle{empty}
 \null\vspace*{\stretch{1}}
@@ -50,12 +48,13 @@ Some acknowledgments to family, friends, supervisors, etc.
 %-------------------------------------------------------------------
 % Indexes
 %-------------------------------------------------------------------
+
 \tableofcontents
 \listoffigures
 \listoftables
 
-
 \mainmatter
+
 \input{chapter_acronyms.inc}
 \input{chapter_intro.inc}
 \input{chapter_sota.inc}
@@ -69,6 +68,7 @@ Some acknowledgments to family, friends, supervisors, etc.
 %-------------------------------------------------------------------
 % Bibliography
 %-------------------------------------------------------------------
+
 \label{Bibliography}
 \bibliographystyle{plain}
 \bibliography{biblio}

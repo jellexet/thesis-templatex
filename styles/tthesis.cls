@@ -68,12 +68,20 @@ numbers=none,
 basicstyle=\linespread{0.9}\ttfamily\footnotesize
 }
 
-% toOl: set linespread to 1 in the verbatim environment
+\usepackage{csquotes}
+\usepackage{cleveref}
+
+% Set linespread to 1 in the verbatim environment
 \makeatletter
 \def\verbatim@font{\linespread{1}\normalfont\ttfamily}
 \makeatother
 
+% Set default linespread for the whole document
 \renewcommand{\baselinestretch}{1.3}
+
+%-------------------------------------------------------------------
+% Frontpage
+%-------------------------------------------------------------------
 
 \makeatletter
 \newcommand{\graduation}[1]{\def\@graduation{#1}}
@@ -84,6 +92,10 @@ basicstyle=\linespread{0.9}\ttfamily\footnotesize
 \newcommand{\printsupervisor}{\@ifundefined{@supervisor}{}{\@supervisor}}
 \makeatother
 
-\usepackage{csquotes}
-\usepackage{cleveref}
+\newcommand{\printfrontpage}{%
+\input{frontpage.inc}%
+\thispagestyle{empty}%
+\mbox{}%
+\newpage%
+}
 
