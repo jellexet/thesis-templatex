@@ -8,7 +8,7 @@
 
 Number | Chapter        | Version | Status  | Responsibility
 ------ | -------------- | ------- | ------- | --------------
-       | Abstract       | v1      | WRITING | Student
+0      | Abstract       | v1      | WRITING | Student
 1      | Intro          | v1      | WRITING | Student
 2      | SOTA           | v1      | WRITING | Student
 3      | Tools          | v1      | WRITING | Student
