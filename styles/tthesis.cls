@@ -18,7 +18,7 @@
 \usepackage{textcomp} % needed for fontenc
 %\usepackage{styles/extref}
 \usepackage[bookmarksnumbered,final]{styles/easyoutput}
-\usepackage{url}
+\usepackage{xurl}
 \usepackage[final]{listings}
 	%\lstset{numbers=left,breaklines}
 \usepackage{acronym}
