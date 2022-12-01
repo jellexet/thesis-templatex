@@ -17,7 +17,6 @@
 
 \usepackage{textcomp} % needed for fontenc
 %\usepackage{styles/extref}
-\usepackage[bookmarksnumbered,final]{styles/easyoutput}
 \usepackage{xurl}
 \usepackage[final]{listings}
 	%\lstset{numbers=left,breaklines}
@@ -74,6 +73,9 @@ basicstyle=\linespread{1.0}\ttfamily\footnotesize
 }
 
 \usepackage{cleveref}
+
+\newcommand{\printtitle}{\@title}
+\newcommand{\printauthor}{\@author}
 
 % Set linespread to 1 in the verbatim environment
 \makeatletter
