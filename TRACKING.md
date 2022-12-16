@@ -1,20 +1,20 @@
 # Progress tracking of the thesis
 
 - Type: Master Thesis
-- Student: Name, Family name
-- [https://myrepository.url](Repository on Gitlab)
+- Student: Luisella, Contu
+- [https://gitlab-rbl.unipv.it/robolab/thesis-templatex-contu](Repository on Gitlab)
 
 # Status
 
 Number | Chapter        | Version | Status  | Responsibility
 ------ | -------------- | ------- | ------- | --------------
-0      | Abstract       | v1      | WRITING | Student
-1      | Intro          | v1      | WRITING | Student
-2      | SOTA           | v1      | WRITING | Student
-3      | Tools          | v1      | WRITING | Student
-4      | Implementation | v1      | WRITING | Student
-5      | Results        | v1      | WRITING | Student
-6      | Conclusions    | v1      | WRITING | Student
+0      | Abstract       | v1      | WRITING | Luisella
+1      | Intro          | v1      | WRITING | Luisella
+2      | SOTA           | v1      | WRITING | Luisella
+3      | Tools          | v1      | WRITING | Luisella
+4      | Implementation | v1      | WRITING | Luisella
+5      | Results        | v1      | WRITING | Luisella
+6      | Conclusions    | v1      | WRITING | Luisella
 
 # Detailed structure
 
