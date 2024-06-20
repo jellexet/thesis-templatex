@@ -76,6 +76,7 @@ basicstyle=\linespread{1.0}\ttfamily\footnotesize
 
 \newcommand{\printtitle}{\@title}
 \newcommand{\printauthor}{\@author}
+\newcommand{\regnumber}{N. Matricola}
 
 % Set linespread to 1 in the verbatim environment
 \makeatletter
@@ -98,8 +99,10 @@ basicstyle=\linespread{1.0}\ttfamily\footnotesize
 \newcommand{\printsupervisor}{\@ifundefined{@supervisor}{}{\@supervisor}}
 \makeatother
 
+\newcommand{\frontpagefile}{frontpages/frontpage-unipv.inc}
+
 \newcommand{\printfrontpage}{%
-\input{frontpage.inc}%
+\input{\frontpagefile}%
 \thispagestyle{empty}%
 \mbox{}%
 \newpage%

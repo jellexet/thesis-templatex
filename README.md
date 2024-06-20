@@ -1,7 +1,17 @@
 # LaTeX Thesis Template
 
-`thesis_templatex` is the official template for theses to be written in LaTeX, which is made available for the graduation at the Robotics Laboratory of the Department of Electrical, Computer and Biomedical Engineering, University of Pavia.
+`thesis_templatex` is a template for theses to be written in LaTeX.
 The name of the repository reflects its purpose: `thesis temp-latex` :-D
+
+Now ships with the possibility to select between different frontpages (currently supporting frontpages for the University of Pavia - Dept. of Industrial, Computer and Biomedical Engineerint, and the LM AI4ST).
+
+The frontpage can be selected by renewing the following command in `thesis.tex`:
+
+```
+\renewcommand{\frontpagefile}{frontpages/frontpage-ai4st.inc}
+```
+Put the frontpage that is suitable for your thesis.
+The available frontpages are in the `frontpages` sub-directory.
 
 # Notes on installation
 
