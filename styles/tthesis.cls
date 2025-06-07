@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{tthesis}[2021/06/21 Example LaTeX class]
+\ProvidesClass{styles/tthesis}[2021/06/21 Example LaTeX class]
 
 \LoadClass[a4paper,english,twoside,openright,11pt]{book}
 
@@ -9,7 +9,7 @@
 \usepackage[english]{babel}
 
 %\usepackage[latin9]{inputenc}
-\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{lmodern} % Latin Modern font
 \usepackage[T1]{fontenc}
 
@@ -20,13 +20,32 @@
 \usepackage{xurl}
 \usepackage[final]{listings}
 	%\lstset{numbers=left,breaklines}
+\lstset{numbersep=5pt,
+numberstyle=\tiny,
+numbers=none,
+frame=lines,
+basicstyle=\linespread{1.0}\ttfamily\footnotesize,
+float=htbp
+}
 \usepackage{acronym}
 \usepackage{makeidx}
 	\makeindex
 \usepackage[binding=0.8cm]{styles/layaureo} % better handling of A4 format
 \usepackage{tocbibind} 
 \usepackage[labelfont=bf]{caption}[2004/07/16] % format of captions
-\usepackage{subfig}
+
+\usepackage[backend=biber,style=numeric,sorting=nty]{biblatex}
+\addbibresource{biblio.bib}
+
+\usepackage{rotating}
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\usepackage{graphicx}
+\usepackage{subcaption}
 
 % tables
 \usepackage{booktabs}
@@ -65,11 +84,11 @@
 \usepackage{courier}
 \usepackage{float}
 
-\lstset{numbersep=5pt,
-numberstyle=\tiny,
-numbers=none,
-frame=lines,
-basicstyle=\linespread{1.0}\ttfamily\footnotesize
+\usepackage[colorlinks=true]{hyperref}
+\hypersetup{
+  citecolor=black,
+  linkcolor=black,
+  urlcolor=black
 }
 
 \usepackage{cleveref}

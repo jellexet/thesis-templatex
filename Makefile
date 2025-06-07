@@ -16,7 +16,7 @@ LATEX=pdflatex --shell-escape $(SYNCTEX)
 
 $(MAIN).pdf: *.tex pdf
 	$(LATEX) $(MAIN).tex
-	bibtex $(MAIN)
+	biber $(MAIN)
 	$(LATEX) $(MAIN).tex
 	$(LATEX) $(MAIN).tex
 

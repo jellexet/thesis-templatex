@@ -1,0 +1,27 @@
+\chapter{Conclusions}
+
+\section{Summary}
+This thesis has addressed the challenges posed by the \acl{HL-LHC} era at \acs{CERN} with a focus on the \acs{FELIX} readout system. The thesis has introduced the \acs{FELIX} project and has presented the contributions to the open-source software \texttt{felix-distribution}, the network library \texttt{netio3}, and the hardware testing and benchmarking of the FLX-182-1B cards. This work has demonstrated that the throughput and scalability demands are being met. The benchmarks have validated the proposed solutions, confirming their suitability for future deployment in large-scale \acs{HEP} experiments. The \acs{FELIX} project is being noted and taken under consideration by the other large experiments of \acs{LHC} thanks to the collaboration and work of all the people involved.
+
+\section{Future developements}
+
+\subsubsection{felix-tohost improvement}
+\label{subsec:felix-tohost-improvement}
+
+Send blocks directly instead of decoding them into chunks and sending a netio3 encoded buffer. Preliminary tests show that \texttt{felix-tohost} performance improves by a factor of 8 (800\%) in the case of 20 byte messages. Further studies are needed to account for all possibilities, for example for chunks that are bigger than a 1KB block.
+
+\subsubsection{cmem\_rcc replacement}
+
+cmem\_rcc has been a very valid option during the yars, but the reason it exists is because the Linux kernel could not offer a valid alternative. The last feasibility study is from 2018, when Almalinux (The official \acs{CERN} OS) used kernel 3.X, and the kernel 4.X was actively being developed. With kernel 6.X \acs{DMA}, and NUMA support for it, will be the default, making it an interesting option to avoid using custom kernel modules. At the moment (2025) Almalinux 9 is the official release, and it uses kernel 5.X, this replacement can be done only when Almalinux 10 with kernel 6.X will be released, and supposedly it will happen in time to test the entire system before Phase II.
+
+\subsubsection{Alternative architecture}
+
+It is being taken into consideration to replace the current architecture with one that removes the networking between the FE electronics and the data handler. This will reduce the flexibility of the architecture but counterweights with many positive effects like cost savings, space savings, computing power and energy consumption. This requires software developement to allow data handler to use \acs{RDMA}
+
+\subsubsection{\acs{RDMA} to dataflow}
+
+Messages to Dataflow are sent via TCP, it's taken under consideration the possibility to use \acs{RDMA}.
+
+\subsubsection{Using servers with ARM processors}
+
+In an effort to reduce energy consumption at \acs{CERN} it is being investigated wether ARM processors could be a valid alternative to x86 ones. It will need software adjustmens, in particular in the \acs{FELIX} card driver side and kernel compilation.

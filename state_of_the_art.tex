@@ -1,0 +1,155 @@
+\chapter{State of the Art}
+
+\ac{CERN} \cite{cern-homepage} is the world's leading institution in the field of high-energy particle physics.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/introduction/cern.jpg}
+\caption{CERN Science Gateway pre-inauguration for the \acs{CERN} community \protect\cite{cern_science_gateway}}
+\label{fig:science-gateway}
+\end{figure}
+
+The \acf{CERN} convention \cite{cern-convention} signed in 1953 declares that its scientific work shall be publicly shared and dedicated to peaceful advancement. At the time of writing, \ac{CERN} comprises 24 member states, with scientists from over 110 countries collaborating to decipher the fundamental structure of the universe.
+
+Situated on the Franco-Swiss border near Geneva, \ac{CERN}'s hosts a chain of increasingly powerful accelerators and purpose-built detectors that operate at energies mirroring the universe's earliest moments. Major experiments such as \acs{ATLAS} \cite{atlas-experiment}, \acs{CMS} \cite{cms-experiment}, \acs{ALICE} \cite{alice-experiment}, and \acs{LHCb} \cite{lhcb-experiment} rely on the \ac{LHC} \cite{Lebrun:1284331} for their data collection. Meanwhile, projects like \acs{CLOUD} \cite{Kirkby:1310801}, \acs{ISOLDE} \cite{isolde-facility}, and NA62 \cite{Martellotti:2056863} explore complementary aspects of particle physics, expanding our knowledge on the Standard Model, which in short, is our best explanation on how the basic building blocks of matter interact \cite{standard-model}.
+
+Beyond contributions to fundamental science, \ac{CERN} has a rich history of technological innovation, perhaps the most famous example is the creation of the World Wide Web in 1989 \cite{www-proposal}. Advances in data analysis, accelerator technology, and detector development have also impacted fields such as medical imaging, materials science, and network engineering.
+
+\clearpage
+\section{\acs{LHC}}
+\label{sec:lhc-experiments}
+
+The \ac{LHC} \cite{Lebrun:1284331, Brüning:782076} is \ac{CERN}'s flagship accelerator and the most powerful particle collider in operation world-wide. Housed in a 27-km circular tunnel roughly 100 meters underground, it accelerates two beams of protons to 99.9999991\% the speed of light and collides them at energies up to 13.6 \ac{TeV} (2022-2026).
+
+Particles enter the \ac{LHC} after passing through smaller accelerators (see Figure~\ref{fig:cern-complex}). A beam inside the beam pipes in the \ac{LHC} is not a continuous stream of particles, but it is divided into bunches. Bunches typically contain around $10^{11}$ protons, they are spaced 25 ns apart, and collide at a rate of 40 MHz. On average, there are 43 proton-proton collisions on each bunch crossing.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/introduction/cern-experiments.png}
+\caption{The accelerator complex at \acs{CERN}. Several smaller accelerators boost the beam before it enters the \acs{LHC}. Primary experiments (\acs{ALICE}, \acs{ATLAS}, \acs{CMS}, \acs{LHCb}) are placed around the \acs{LHC} ring. Image source: \protect\cite{cern_accelerator_complex}}
+\label{fig:cern-complex}
+\end{figure}
+
+As mentioned before, the data is gathered through four main experiments, located around the \acs{LHC} ring:
+\begin{itemize}
+    \item \textbf{ATLAS} \cite{atlas-experiment} and \textbf{CMS} \cite{cms-experiment}: General-purpose detectors that investigate the Higgs boson, measure quantities of the Standard Model and search for phenomena beyond it.
+    \item \textbf{LHCb} \cite{lhcb-experiment}: Specializes in asymmetries between matter and antimatter, particularly in $b$-quarks. 
+    \item \textbf{ALICE} \cite{alice-experiment}: Focuses on the quark-gluon plasma in heavy-ion collisions.
+\end{itemize}
+
+Regular Long Shutdowns enable maintenance and upgrades to the \acs{LHC} and its experiments. These planned intervals improve performance and add new features, ensuring the facility meets new scientific objectives, including the transition toward the High-Luminosity \acs{LHC} phase.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/introduction/LHC_map.jpg}
+\caption{An approximate overlay of the \acs{LHC}'s underground tunnel. \protect\cite{lhc_tunnel_map}}
+\label{fig:LHC}
+\end{figure}
+
+\clearpage
+\section{ATLAS Experiment}
+
+The \acs{ATLAS} detector \cite{atlas-experiment}, central to this thesis, is the largest general-purpose experiment at the \acs{LHC}. Comparable in size to a multistory building (44 m in length and 25 m in diameter), \acs{ATLAS} features multiple layers of specialized subsystems (detectors), each engineered to measure distinct particle properties. Key scientific goals include precision studies of the Higgs boson (discovered in 2012 \cite{atlas-higgs-discovery}) and searches for supersymmetric particles.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/introduction/atlas-model.jpg}
+\caption{Schematic of the \acs{ATLAS} detector. Two primary magnet systems bend charged particle trajectories. The detectors measure particle energy and momentum. Image source: \acs{ATLAS} experiment. \protect\cite{atlas-experiment}}
+\label{fig:atlas-model}
+\end{figure}
+
+Operated by a global collaboration of over 5,000 scientists, \acs{ATLAS} sits about 100 meters below ground. A separate service cavern (USA15) houses cooling and readout electronics, which are connected to the detectors via optical fibers. Because of intense magnetic fields and radiation, \acs{lpGBT} \cite{lpgbt} has been developed to allow multipurpose high speed bidirectional optical links between the detectors and readout system.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/introduction/atlas.jpg}
+\caption{A view of the ATLAS detector installation. \protect\cite{atlas-experiment}}
+\label{fig:atlas}
+\end{figure}
+
+\clearpage
+\section{\acf{T-DAQ}}
+
+As the name suggests, a \acf{T-DAQ} system is composed of a Trigger and a \acf{DAQ} system. Figure~\ref{fig:tdaq} has a high level description of the \acs{T-DAQ} architecture showing also on top the Detectors layer and in the bottom the Event Filter layer. A  more in-depth description of each architectural component will be presented below.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.68\textwidth]{images/introduction/tdaq.png}
+\caption{Overview of the \acs{T-DAQ} architecture. Level-0 Trigger, DAQ (Readout and Dataflow subsystems),
+and Event Filter are the three layers that compose the architecture. Here are not shown direct connections between each Level-0 trigger component and the Readout to avoid clutter. Image source: \protect\cite{tdaq}}
+\label{fig:tdaq}
+\end{figure}
+
+\subsection{Trigger}
+
+\begin{definition}
+\label{def:event}
+An event captures the cumulative output of a bunch crossing observed by detectors
+\end{definition}
+
+The collision frequency in \acs{ATLAS} is 40 MHz. This can reach data volumes of roughly 60 TB/s. The duty of triggers is to filter out non-interesting events.
+
+\begin{definition}
+\label{def:trigger}
+A trigger is a hard- or software-based filter that issues \emph{ACCEPT} or \emph{REJECT} decisions for each event.
+\end{definition}
+
+Triggers may examine particle counts, reconstructed energy, momenta, or other indicators of interesting physics.
+
+A few words on the Trigger layer and its components \cite{tdaq}:
+This layer is composed of \acs{L0Calo}, \acs{L0Muon} (\acs{L0} stands for Level 0, which is a term used for components detached from the main detector that perform a first filtering of the events), the Global Trigger, and the Central Trigger Subsystem (\acs{CTP}). Essentially, \acs{L0Calo} filters for the energies and positions of charged and neutral particles, \acs{L0Muon} is used to filter for muons, and the \acs{MUCTPI}'s task is to interface \acs{L0Muon} with \acs{CTP}. The Global Trigger \cite{tdaq} uses full-granularity calorimeter information to perform offline-like algorithms, refines the trigger objects calculated by \acs{L0Calo} and \acs{L0Muon}, calculates event-level quantities, and executes topological algorithms. The \acs{CTP} \cite{tdaq} forms triggers based on combinations of inputs or conditions received from the Global Trigger and other sources; it applies pre-scale factors and introduces deadtime when necessary to avoid saturation in the front-end and readout systems. Ultimately, it makes the final decision on whether the event is accepted, driving the \acs{TTC} network to start the readout process of the detectors.
+
+\subsection{\acs{DAQ} - Readout and Dataflow}
+
+\begin{definition}
+\label{def:daq}
+A data acquisition system \acs{DAQ} aggregates detector data, relays trigger outcomes, and writes all accepted events to durable storage.
+\end{definition}
+
+It is not clear in the picture, but what happens in the Readout block is that the Data Handler can receive data only from the \acs{FELIX} card \cite{tdaq}, also the \acs{FELIX} card is directly linked to the Detectors via an optical interface, other than the \acs{L0} Triggers. The \acs{FELIX} card receives data fragments from the detectors, sends them to the Data Handlers that re-organizes those fragments for detector-specific operations that will be performed by the Dataflow.
+
+The Dataflow system \cite{tdaq} as shown in the previous Figure~\ref{fig:tdaq} includes all components needed to aggregate the data fragments towards a full event-building, to buffer the events for the software trigger (Event Filter) and send the selected event to permanent storage.
+
+\subsection{Event Filter}
+
+The Event Filter system \cite{tdaq} consists of a CPU-based processing farm and a \acf{HTT} \cite{htt} co-processor. The main function of the EF system is to refine the trigger objects in order to get down to the final
+output rate of 10 KHz. Events will be rejected as early as possible during their processing. The Event Filter decisions will be communicated to the Dataflow, which will then transfer the accepted events to permanent storage.
+
+\clearpage
+\section{\acs{FELIX}}
+
+Within the \acs{T-DAQ} architecture, \acs{FELIX} offers an interface between detector front-end electronics and downstream data processing. It is designed to handle the extreme rates projected for the forthcoming HL-LHC phase and allows for a flexible, high-throughput readout system.
+
+\subsection{The High-Luminosity \acs{LHC} Era}
+
+\ac{CERN} is preparing for \acf{LS3}, after which the \acs{HL-LHC} era begins (around June 2030), below Figure~\ref{fig:LHC-schedule} shows the schedule up to the year 2041. The \acf{HL-LHC} aims to increase luminosity by an order of magnitude over the original design, enabling data collection at rates of up to 200 simultaneous proton-proton collisions per bunch crossing. This high collision density compels substantial upgrades in \acs{ATLAS} detectors and online systems.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/introduction/LHC-schedule.png}
+\caption{Upgrade schedule for the LHC. LS3 marks the start of HL-LHC conditions. \protect\cite{lhc_upgrade_schedule}}
+\label{fig:LHC-schedule}
+\end{figure}
+
+\subsubsection{\acs{ATLAS} Phase II}
+
+The \acs{ATLAS} Phase II upgrade \cite{Affolder:2799535} adapts the experiment to make use of the \acs{HL-LHC}'s higher luminosity. 
+More precisely, the \acs{HL-LHC} will deliver 10 times more data compared to the previous run.  To meet the challenges \acs{ATLAS} will include a new \acf{HGTD} \cite{hgtd-phase2-upgrade} for a better time measurement, a new all-silicon acf{ITk} \cite{atlas-itk-pixel-detector}, and a new \acs{T-DAQ} system capable of handling data arriving at 1 MHz.
+
+\subsubsection{\acs{FELIX} in Phase II}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/introduction/felix-block-diagram.png}
+\caption{Block diagram of the Readout system, focusing on the FELIX part. It is connected to Front-End Electronics, Data Handler, Event Filter Farm, and \acf{LTI}.}
+\label{fig:felix-block-diagram}
+\end{figure}
+
+\acs{FELIX} for the Phase II readout, will be linking upgraded front-end electronics to commercial servers through \acs{FPGA}-based \acs{PCIe} cards. It will be translating detector-specific protocols into standard network packets, basically allowing the Detectors to commnicate with the Data Handlers.\\
+This last part is the main answer of why \acs{FELIX} is needed in the \acs{T-DAQ} architecture. The detectors have to be radiation hardened, and to do so they use custom \acl{FE} electronics developed for the purpose at \acs{CERN}, like \acl{lpGBT} \cite{lpgbt} that uses its own protocol, but the rest of the underlying architecture uses normal network protocols since they are shielded from radiations, thus creating the need for \acs{FELIX} in order to communicate.\\
+The new \acs{FELIX} can handle event rates in excess of 1 MHz and data streams beyond 150~TB/s, and allows for:
+\begin{itemize}
+    \item \textbf{Scalability}: Commodity server hardware reduces the cost and simplifies maintenance compared to purely custom designs.
+    \item \textbf{System Flexibility}: Uniform support for various upgraded detector systems, including the new \acs{ITk} detector and \acs{HGTD}.
+    \item \textbf{Low-Latency}: Low latency and minimal data loss are important to reach the \acs{HL-LHC} objectives.
+\end{itemize}

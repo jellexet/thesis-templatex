@@ -4,17 +4,17 @@
 \newcommand{\dcbus}{DC-BUS\texttrademark }
 
 % change the reference to the desired frontpage
-\renewcommand{\frontpagefile}{frontpages/frontpage-ai4st.inc}
+\renewcommand{\frontpagefile}{frontpages/frontpage-unipv.inc}
 
-\title{This is the title of my thesis}
-\author{Name Surname}
-\renewcommand{\regnumber}{AB512WX}
+\title{The FELIX project for the High Luminosity era of the Large Hadron Collider}
+\author{Mario Shehu}
 \graduation{Master Degree in Computer Engineering}
-\academicyear{2021/2022}
+\academicyear{2024/2025}
 \supervisor{
-Prof. Name Surname \\
+Prof. Tullio Facchinetti \\
 Co-supervisor: \\
-Dr. Name Surname \\
+PhD. Carlo Alberto Gottardo \\
+PhD. Jonas Till Roemer \\
 }
 
 %-------------------------------------------------------------------
@@ -67,22 +67,31 @@ and here too.
 
 \mainmatter
 
-\input{chapter_acronyms.inc}
-\input{chapter_intro.inc}
-\input{chapter_sota.inc}
-\input{chapter_tools.inc}
-\input{chapter_implementation.inc}
-\input{chapter_results.inc}
-\input{chapter_conclusions.inc}
+% \input{chapter_acronyms.inc}
+% \input{chapter_intro.inc}
+% \input{chapter_sota.inc}
+% \input{chapter_tools.inc}
+% \input{chapter_implementation.inc}
+% \input{chapter_results.inc}
+% \input{chapter_conclusions.inc}
 
+\input{acronyms}
+\input{introduction}
+\input{state_of_the_art}
+\input{felix-project}
+\input{felix-star}
+\input{netio3}
+\input{results}
+\input{conclusions}
+
+\appendix
+\input{appendix}
 %\backmatter
 
 %-------------------------------------------------------------------
 % Bibliography
 %-------------------------------------------------------------------
 
-\label{Bibliography}
-\bibliographystyle{plain}
-\bibliography{biblio}
+\printbibliography
 
 \end{document}
