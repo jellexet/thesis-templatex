@@ -27,7 +27,7 @@ Below a visual aid that illustrates the \texttt{felix-star} software architectur
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{images/felix/felix-star-architecture.png}
-\caption{felix-star software architecture. The colours help understand what interacts with what. Briefly: felix-tohost reads from the same-coloured DMA buffers and sends the data over the network. felix-toflx does the opposite, takes data from the network and writes it into the DMA buffers. felix-register is used for RW operations on firmware registers. Image source \cite{felix-user-manual}}
+\caption[felix-star software architecture]{felix-star software architecture. The colours help understand what interacts with what. Briefly: felix-tohost reads from the same-coloured DMA buffers and sends the data over the network. felix-toflx does the opposite, takes data from the network and writes it into the DMA buffers. felix-register is used for RW operations on firmware registers. Image source \cite{felix-user-manual}}
 \label{fig:felix-star}
 \end{figure}
 
@@ -54,13 +54,12 @@ Below a visual aid that illustrates the \texttt{felix-star} software architectur
 \label{def:FID}
 \acs{FELIX}-identifier:
 
-\begin{lstlisting}[caption={FELIX Identifier Fields}, label={lst:felix_identifier}]
-+------------+--------------+------------+--------------+----------+---------+
-|   4 bits   |    8 bits    |   16 bits  |    14 bits   |  14 bits |  8 bits |
-+------------+--------------+------------+--------------+----------+---------+
-| Version ID | Detector ID  | Connector  | Link ID      | Transport| Stream  |
-|            |              | ID         |              | ID       | ID      |
-+------------+--------------+------------+--------------+----------+---------+
+\begin{lstlisting}[caption={FELIX Identifier Fields - 64 bits}, label={lst:felix_identifier}]
++------------+-------------+--------------+---------+--------------+-----------+
+|   4 bits   |    8 bits   |   16 bits    | 14 bits |   14 bits    |  8 bits   |
++------------+-------------+--------------+---------+--------------+-----------+
+| Version ID | Detector ID | Connector ID | Link ID | Transport ID | Stream ID |
++------------+-------------+--------------+---------+--------------+-----------+
 \end{lstlisting}
 
 \end{definition}
@@ -147,11 +146,11 @@ The logging system of \texttt{felix-star} applications is \acf{ERS} \cite{ers}. 
 
 \begin{lstlisting}[language=C++, caption={ERS Assertion Issue Declaration}, label={lst:ers_assertion_issue}]
 ERS_DECLARE_ISSUE(
-    ers,                                                          // namespace
-    Assertion,                                                    // issue name
+    ers,                            // namespace
+    Assertion,                      // issue name
     "Assertion (" << condition << ") failed because " << reason,  // message
-    ((const char *)condition )                                    // first attribute
-    ((const char *)reason )                                       // second attribute
+    ((const char *)condition )      // first attribute
+    ((const char *)reason )         // second attribute
 )
 \end{lstlisting}
 
@@ -277,28 +276,28 @@ To address these limitations, the architecture was refactored to apply the \text
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.46\textwidth]{images/results/fifo-monitor.png}
-\caption{An example of what can be seen inside the UNIX FIFO. It's a JSON message containing the monitoring data.}
+\caption[Monitoring FIFO example]{An example of what can be seen inside the UNIX FIFO. It's a JSON message containing the monitoring data.}
 \label{fig:fifo-monitoring}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/results/monitoring-merged.png}
-\caption{This is a sample screenshot of the combined Prometheus and Grafana solution. The sampling rate can be set in the docker image, in this case it is 5 seconds. Here I was stress testing felix-tohost as shown by the size of the chunks and their \acs{E-link} rate well above 1.5 MHz. }
+\caption[Grafana sample screenshot]{This is a sample screenshot of the combined Prometheus and Grafana solution. The sampling rate can be set in the docker image, in this case it is 5 seconds. Here I was stress testing felix-tohost as shown by the size of the chunks and their \acs{E-link} rate well above 1.5 MHz. }
 \label{fig:felix-tohost-monitoring}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/results/monitor-one-elink.png}
-\caption{Here a screenshot showing that it is possible to select and focus one element at a time, in this case I selected the \acs{E-link} 0x2400000.}
+\caption[Grafana screenshot: select one E-link]{Here a screenshot showing that it is possible to select and focus one element at a time, in this case I selected the \acs{E-link} 0x2400000.}
 \label{fig:felix-tohost-single-elink}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/results/IS-monitoring.png}
-\caption{Sample image with IS monitoring. The reason that it is red is because it's trying to test it but there is no test available since this is just a play setup to check if it works.}
+\caption[IS monitoring screenshot]{Sample image with IS monitoring. The reason that it is red is because it's trying to test it but there is no test available since this is just a play setup to check if it works.}
 \label{fig:felix-tohost-is}
 \end{figure}
 
@@ -312,10 +311,13 @@ Below an Example~\ref{lst:ers-example} of an actual implementation:
 \begin{lstlisting}[language=C++, caption={Example of ERS custom issue declaration and usage.}, label={lst:ers-example}]
 /* In the header file */
 // Declare a custom issue for logging configuration-related errors
-ERS_DECLARE_ISSUE(felix_log, device_flx_issue, issue_message, ((const std::string&)issue_message))
+ERS_DECLARE_ISSUE(felix_log, device_flx_issue, issue_message, ((const
+std::string&)issue_message))
 
 /* In the cpp file */
 // Use the custom issue to log an error
-ers::error(felix_log::device_flx_issue(std::format("Invalid encoding type {} for elink channel {} group {}, epath {} using DIRECT", enc, channel, egroup, epath)));
+ers::error(felix_log::device_flx_issue(std::format("Invalid encoding type {}
+for elink channel {} group {}, epath {} using DIRECT", enc, channel, egroup,
+epath)));
 ;
 \end{lstlisting}

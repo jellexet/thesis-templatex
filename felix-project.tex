@@ -25,7 +25,7 @@ The FLX-182 \cite{Ilic:2873569} (Figure \ref{fig:FLX-182-combined}) is a Phase-I
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/felix/lti.jpg}
-\caption{The ATLAS \acf{LTI} is a replacement of the legacy \acf{TTC}.\\ \texttt{Timing}: Distribution of the \acs{LHC} bunch clock (the same clock source for entire system).\\\texttt{Trigger}: Decision from the trigger system indicating whether the data for a given event should be sent to the readout.\\ \texttt{Control}: Sends synchronization/configuration commands, subdetectors raise Busy signal to indicated that the internal buffers are filling up.\\Image source \protect\cite{lti}.}
+\caption[LTI]{The ATLAS \acf{LTI} is a replacement of the legacy \acf{TTC}.\\ \texttt{Timing}: Distribution of the \acs{LHC} bunch clock (the same clock source for entire system).\\\texttt{Trigger}: Decision from the trigger system indicating whether the data for a given event should be sent to the readout.\\ \texttt{Control}: Sends synchronization/configuration commands, subdetectors raise Busy signal to indicated that the internal buffers are filling up.\\Image source \protect\cite{lti}.}
 \label{fig:LTI}
 \end{figure}
 
@@ -105,7 +105,7 @@ An \acs{E-link} is a virtual lane inside a physical optical link. By using multi
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/felix/gbt.jpg}
-\caption{\acs{GBT} chip (left) and Versatile Link (right). Source \protect\cite{gbt-versatile-link}}
+\caption[GBT and Versatile Link]{\acs{GBT} chip (left) and Versatile Link (right). Source \protect\cite{gbt-versatile-link}}
 \label{fig:gbt-versalink-combined}
 \end{figure}
 
@@ -117,7 +117,7 @@ The \acf{lpGBT} \cite{lpgbt} is an extension of the \acf{GBT} project and is a r
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/felix/lpgbt.jpg}
-\caption{\acs{lpGBT} chip. Source \protect\cite{lpgbt-image-source}}
+\caption[lpGBT chip]{\acs{lpGBT} chip. Source \protect\cite{lpgbt-image-source}}
 \label{fig:lpgbt}
 \end{figure}
 
@@ -250,21 +250,21 @@ The assembly of the cards required specialized equipment, while programming the 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/contributions/felix-card-testing.jpg}
-\caption{Testing a FELIX card. The PSU on the right with on top a fan to help cooling the \acs{FPGA}. Also on the right detached the Aardvark host adapter. The function generator is on top of the oscilloscope, with the probes attached to the electrical triggers. The \acs{PCIe} loopback scan is barely visibile behind the acquamarine colored fiber-optic cables, just on top of the mounted fan. What is not visible is the fibers connecting in a loopback the Firefly \protect\cite{firefly-optical-transceiver} optical transceiver modules, the JTAG and UART cables.}
+\caption[Visual aid of FELIX card testing]{Testing a FELIX card. The PSU on the right with on top a fan to help cooling the \acs{FPGA}. Also on the right detached the Aardvark host adapter. The function generator is on top of the oscilloscope, with the probes attached to the electrical triggers. The \acs{PCIe} loopback scan is barely visibile behind the acquamarine colored fiber-optic cables, just on top of the mounted fan. What is not visible is the fibers connecting in a loopback the Firefly \protect\cite{firefly-optical-transceiver} optical transceiver modules, the JTAG and UART cables.}
 \label{fig:felix-testing}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/contributions/BIST.png}
-\caption{Builtin Selftest. The DHCP server is needed to give an IP to the card, which is connected to the server via Ethernet cable. The \acs{FELIX} card exposes this website which allows to check if all the active components in the \acs{PCB} are reachable and prepares the card for the eyescan test.}
+\caption[Builtin Selftest screenshot]{Builtin Selftest. The DHCP server is needed to give an IP to the card, which is connected to the server via Ethernet cable. The \acs{FELIX} card exposes this website which allows to check if all the active components in the \acs{PCB} are reachable and prepares the card for the eyescan test.}
 \label{fig:bist}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/contributions/eyescan.png}
-\caption{Sample of the eyescan of a GTY transceiver. Those transceivers receive the signals from the Firefly \protect\cite{firefly-optical-transceiver} modules and make them available to the FPGA. The GTY transceivers live inside the FPGA produced by AMD. What this image represents is the error rate of 1 transceiver. The blue part indicates a low error rate, while red a high error rate\\
+\caption[Sample of the eyescan of a GTY transceiver]{Sample of the eyescan of a GTY transceiver. Those transceivers receive the signals from the Firefly \protect\cite{firefly-optical-transceiver} modules and make them available to the FPGA. The GTY transceivers live inside the FPGA produced by AMD. What this image represents is the error rate of 1 transceiver. The blue part indicates a low error rate, while red a high error rate\\
 Y axys: the voltage received by the transceiver\\
 X axys: Unit Intervals, which essentially means that the signal is brought out of phase by a percentage of one clock cycle}
 \label{fig:eyescan-test}

@@ -58,17 +58,17 @@ Figures \ref{fig:1kb-buffer-throughput} and \ref{fig:64kb-buffer-throughput} sho
 \begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/results/libfabric_throughput_analysis_1K.png}
-    \caption{Network performance with a 1 KB buffer. \textbf{Left:} message frequency, \textbf{Right:} Data Throughput. \textbf{Top:} plots with error ranges, \textbf{Bottom:} median values.}
+    \caption[Network performance with a 1 KB buffer]{Network performance with a 1 KB buffer. \textbf{Left:} message frequency, \textbf{Right:} Data Throughput. \textbf{Top:} plots with error ranges, \textbf{Bottom:} median values.}
     \label{fig:1kb-buffer-throughput}
 \end{subfigure}
 \vspace{0.2cm}
 \begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/results/libfabric_throughput_analysis_64K.png}
-    \caption{Network performance with a 64 KB buffer. \textbf{Left:} message frequency, \textbf{Right:} Data Throughput. \textbf{Top:} plots with error ranges, \textbf{Bottom:} median values.}
+    \caption[Network performance with a 64 KB buffer]{Network performance with a 64 KB buffer. \textbf{Left:} message frequency, \textbf{Right:} Data Throughput. \textbf{Top:} plots with error ranges, \textbf{Bottom:} median values.}
     \label{fig:64kb-buffer-throughput}
 \end{subfigure}
-\caption{The error rate of the smaller 1KB buffers is relatively high, while for the 64KB buffers the effect is much more contained.}
+\caption[Throughput comparison of 1KB and 64KB buffer]{The error rate of the smaller 1KB buffers is relatively high, while for the 64KB buffers the effect is much more contained.}
 \label{fig:throughput-of-the-extremes-1K-64K}
 \end{figure}
 
@@ -82,7 +82,7 @@ An interesting observation can be made about smaller buffers achieving the expec
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/results/libfabric_performance_comparison.png}
-\caption{Throughput comparison for LIBFABRIC-RDMA across all buffer sizes. Left: frequency; Right: throughput.}
+\caption[Throughput comparison for LIBFABRIC-RDMA across all buffer sizes]{Throughput comparison for LIBFABRIC-RDMA across all buffer sizes. Left: frequency; Right: throughput.}
 \label{fig:libfabric-mean-throughput-comparison}
 \end{figure}
 
@@ -93,7 +93,7 @@ For ASYNCMSG-TCP, the results (Figure \ref{fig:tcp-mean-throughput-comparison}) 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/results/tcp_performance_comparison.png}
-\caption{Throughput comparison for ASYNCMSG-TCP across all buffer sizes. Left: frequency; Right: throughput.}
+\caption[Throughput comparison for ASYNCMSG-TCP across all buffer sizes]{Throughput comparison for ASYNCMSG-TCP across all buffer sizes. Left: frequency; Right: throughput.}
 \label{fig:tcp-mean-throughput-comparison}
 \end{figure}
 
@@ -116,7 +116,7 @@ As a reminder, in FULL mode, each link is not subdivided into \acs{E-link}s.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/results/tohost-tbed-setup.png}
-\caption{Testbed configuration. F-EMU firmware is installed on the felix-15 machine, felix-tohost is running on the felix-14 machine which also sends the monitoring data to Prometheus.}
+\caption[Testbed configuration]{Testbed configuration. F-EMU firmware is installed on the felix-15 machine, felix-tohost is running on the felix-14 machine which also sends the monitoring data to Prometheus.}
 \label{fig:tbed-setup}
 \end{figure}
 
@@ -136,7 +136,7 @@ Figure~\ref{fig:cpu-usage} illustrates the CPU usage per chunk size. The percent
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/results/cpu-usage-chunk-size-1MHz.png}
-\caption{CPU usage per chunk size at 1 MHz. 100\% corresponds to one physical CPU core.}
+\caption[CPU usage per chunk size at 1 MHz]{CPU usage per chunk size at 1 MHz. 100\% corresponds to one physical CPU core.}
 \label{fig:cpu-usage}
 \end{figure}
 
@@ -145,5 +145,5 @@ The execution of \texttt{felix-tohost} was analyzed using \texttt{perf}, and fro
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/results/flamegraph.png}
-\caption{Flamegraph of \texttt{felix-tohost}. It highlights four main processes, each corresponding to one \acs{DMA} buffer, along with a smaller fifth process dedicated to \acs{TTC}.}\label{fig:felix-tohost-flamegraph}
+\caption[Flamegraph of felix-tohost]{Flamegraph of \texttt{felix-tohost}. It highlights four main processes, each corresponding to one \acs{DMA} buffer, along with a smaller fifth process dedicated to \acs{TTC}.}\label{fig:felix-tohost-flamegraph}
 \end{figure}
