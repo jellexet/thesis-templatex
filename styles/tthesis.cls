@@ -34,7 +34,7 @@ float=htbp
 \usepackage{tocbibind} 
 \usepackage[labelfont=bf]{caption}[2004/07/16] % format of captions
 
-\usepackage[backend=biber,style=numeric,sorting=nty]{biblatex}
+\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
 \addbibresource{biblio.bib}
 
 \usepackage{rotating}

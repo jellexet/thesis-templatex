@@ -13,7 +13,7 @@ The \acf{CERN} convention \cite{cern-convention} signed in 1953 declares that it
 
 Situated on the Franco-Swiss border near Geneva, \ac{CERN}'s hosts a chain of increasingly powerful accelerators and purpose-built detectors that operate at energies mirroring the universe's earliest moments. Major experiments such as \acs{ATLAS} \cite{atlas-experiment}, \acs{CMS} \cite{cms-experiment}, \acs{ALICE} \cite{alice-experiment}, and \acs{LHCb} \cite{lhcb-experiment} rely on the \ac{LHC} \cite{Lebrun:1284331} for their data collection. Meanwhile, projects like \acs{CLOUD} \cite{Kirkby:1310801}, \acs{ISOLDE} \cite{isolde-facility}, and NA62 \cite{Martellotti:2056863} explore complementary aspects of particle physics, expanding our knowledge on the Standard Model, which in short, is our best explanation on how the basic building blocks of matter interact \cite{standard-model}.
 
-Beyond contributions to fundamental science, \ac{CERN} has a rich history of technological innovation, perhaps the most famous example is the creation of the World Wide Web in 1989 \cite{www-proposal}. Advances in data analysis, accelerator technology, and detector development have also impacted fields such as medical imaging, materials science, and network engineering.
+Beyond contributions to fundamental science, \ac{CERN} has a rich history of technological innovation, perhaps the most famous example is the creation of the World Wide Web in 1989 \cite{www-proposal}. Advances in data analysis, accelerator technology, and detector development have also impacted fields such as medical imaging, materials science, and network engineering \cite{cern-tech-impact}.
 
 \clearpage
 \section{\acs{LHC}}
@@ -103,7 +103,7 @@ This layer is composed of \acs{L0Calo}, \acs{L0Muon} (\acs{L0} stands for Level 
 
 \begin{definition}
 \label{def:daq}
-A data acquisition system \acs{DAQ} aggregates detector data, relays trigger outcomes, and writes all accepted events to durable storage.
+A data acquisition system \acs{DAQ} aggregates detector data, relays trigger outcomes, and writes all accepted events to permanent storage.
 \end{definition}
 
 It is not clear in the picture, but what happens in the Readout block is that the Data Handler can receive data only from the \acs{FELIX} card \cite{tdaq}, also the \acs{FELIX} card is directly linked to the Detectors via an optical interface, other than the \acs{L0} Triggers. The \acs{FELIX} card receives data fragments from the detectors, sends them to the Data Handlers that re-organizes those fragments for detector-specific operations that will be performed by the Dataflow.
@@ -112,8 +112,7 @@ The Dataflow system \cite{tdaq} as shown in the previous Figure~\ref{fig:tdaq} i
 
 \subsection{Event Filter}
 
-The Event Filter system \cite{tdaq} consists of a CPU-based processing farm and a \acf{HTT} \cite{htt} co-processor. The main function of the EF system is to refine the trigger objects in order to get down to the final
-output rate of 10 KHz. Events will be rejected as early as possible during their processing. The Event Filter decisions will be communicated to the Dataflow, which will then transfer the accepted events to permanent storage.
+The Event Filter system \cite{tdaq} consists of a CPU-based processing farm and a \acf{HTT} \cite{htt} co-processor. The EF system runs more elaborative algorithms that take the data form the entire detector to reduce the trigger rate by another order of maginitude to get it down to the final output rate of 10 KHz. Events will be rejected as early as possible during their processing. The Event Filter decisions will be communicated to the Dataflow, which will then transfer the accepted events to permanent storage.
 
 \clearpage
 \section{\acs{FELIX}}
@@ -134,7 +133,7 @@ Within the \acs{T-DAQ} architecture, \acs{FELIX} offers an interface between det
 \subsubsection{\acs{ATLAS} Phase II}
 
 The \acs{ATLAS} Phase II upgrade \cite{Affolder:2799535} adapts the experiment to make use of the \acs{HL-LHC}'s higher luminosity. 
-More precisely, the \acs{HL-LHC} will deliver 10 times more data compared to the previous run.  To meet the challenges \acs{ATLAS} will include a new \acf{HGTD} \cite{hgtd-phase2-upgrade} for a better time measurement, a new all-silicon acf{ITk} \cite{atlas-itk-pixel-detector}, and a new \acs{T-DAQ} system capable of handling data arriving at 1 MHz.
+More precisely, the \acs{HL-LHC} will deliver 10 times more data compared to the previous run.  To meet the challenges \acs{ATLAS} will include a new \acf{HGTD} \cite{hgtd-phase2-upgrade} for a better time measurement, a new all-silicon \acf{ITk} \cite{atlas-itk-pixel-detector}, and a new \acs{T-DAQ} system capable of handling data arriving at 1 MHz.
 
 \subsubsection{\acs{FELIX} in Phase II}
 

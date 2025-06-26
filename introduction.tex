@@ -6,22 +6,29 @@ This document is the result of six months of work at \acs{CERN}, in the \acs{FEL
 
 Modern \acl{HEP} experiments, such as those conducted at \acf{CERN}, produce massive quantities of data, necessitating \acf{DAQ} systems capable of high throughput, high scalability, and low latency. As the \acf{LHC} transitions to its High-Luminosity phase \acs{HL-LHC}, the demands on \acs{DAQ} infrastructure have increased, creating the need for new hardware and software solutions. This thesis addresses these challenges by focusing on the readout part inside a \acl{DAQ} system, specifically, the \acs{FELIX} platform and the network library \texttt{netio3}.
 
+\section{Context}
+
+The \acs{HL-LHC} will have higher collision rates and increased data volumes, requiring new hardware and software solutions to handle over 150~TB/s of data. Inside the \acl{T-DAQ} infrastructure of the \acs{ATLAS} experiment there is the \acs{FELIX} platform, a data router that connects detector electronics with data processing systems by converting detector-specific protocols into a standard network protocol.
+\texttt{netio3} is the network library that powers the networking of the \acs{FELIX} project.\\
+The \acs{FELIX} platform itself is divided in three main components: the hardware, the firmware and the software. The hardware consists of a \acs{PCIe} card that is installed in a server, the firmware runs on a \acs{FPGA} on the card and is responsible for the data acquisition and processing, while the software provides an interface for users to interact with the system.
+
 \section{Objectives}
 
 The primary objective of this thesis is to contribute to the development of new features of the \acs{FELIX} readout system, the enhancement and optimization of existing ones, testing and assembly of the hardware, and a performance evaluation of the entire system ensuring it meets the requirements of the \acs{HL-LHC} era.
+New features include a way to send configuration data to frontend electronics and a monitoring system.
 
 \section{Thesis Structure}
 
 \begin{itemize}
-    \item \textbf{Chapter 2:} This chapter provides an overview of \acs{CERN}, its experiments and the role of \acs{FELIX}; it presents where we currently are and better details what will be the future requirements.
+    \item \textbf{Chapter 2} provides an overview of \acs{CERN}, its experiments and the role of \acs{FELIX}; it presents where we currently are and better details what will be the future requirements.
     
-    \item \textbf{Chapter 3:} This chapter dives into the \acs{FELIX} project in its entirety, detailing the hardware, firmware and software components. At the end of the chapter are the personal contributions to the topic.
+    \item \textbf{Chapter 3} dives into the \acs{FELIX} project in its entirety, detailing the hardware, firmware and software components. At the end of the chapter are the personal contributions to the topic.
     
-    \item \textbf{Chapter 4:} This chapter focuses on the \texttt{felix-star} software suite, detailing its most important components. It also includes the personal contributions to the topic.
+    \item \textbf{Chapter 4} focuses on the \texttt{felix-star} software suite, detailing its most important components. It also includes the personal contributions to the topic.
     
-    \item \textbf{Chapter 5:} This chapter presents the \texttt{netio3} network library, making a distinction between the backend and frontend part. Personal contributions end the chapter.
+    \item \textbf{Chapter 5} presents the \texttt{netio3} network library, making a distinction between the backend and frontend part. Personal contributions end the chapter.
     
-    \item \textbf{Chapter 6:} This chapter contains the results of the hardware testing and benchmarking of the FLX-182-1B cards, and the performance evaluation of software.
+    \item \textbf{Chapter 6} contains the results of the hardware testing and benchmarking of the FLX-182-1B cards, and the performance evaluation of software.
     
-    \item \textbf{Chapter 7:} This chapter concludes the thesis with a summary of the work done and future developments.
+    \item \textbf{Chapter 7} concludes the thesis with a summary of the work done and future developments.
 \end{itemize}

@@ -54,13 +54,15 @@ Below a visual aid that illustrates the \texttt{felix-star} software architectur
 \label{def:FID}
 \acs{FELIX}-identifier:
 
-\begin{lstlisting}[caption={FELIX Identifier Fields - 64 bits}, label={lst:felix_identifier}]
-+------------+-------------+--------------+---------+--------------+-----------+
-|   4 bits   |    8 bits   |   16 bits    | 14 bits |   14 bits    |  8 bits   |
-+------------+-------------+--------------+---------+--------------+-----------+
-| Version ID | Detector ID | Connector ID | Link ID | Transport ID | Stream ID |
-+------------+-------------+--------------+---------+--------------+-----------+
-\end{lstlisting}
+\begin{table}[htbp]
+\centering
+\caption[FELIX Identifier Fields - 64 bits]{FELIX Identifier Fields - 64 bits.\label{lst:felix_identifier}}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+4 bits & 8 bits & 16 bits & 14 bits & 14 bits & 8 bits \\ \hline
+Version ID & Detector ID & Connector ID & Link ID & Transport ID & Stream ID \\ \hline
+\end{tabular}
+\end{table}
 
 \end{definition}
 
@@ -174,7 +176,7 @@ Lastly, \acs{ERS} provides an interface to export and store the loggings.
 
 \subsection{Trickle Configuration - Software Architecture}
 
-\texttt{Trickle configuration} \cite{felix-star-trickle-configuration} has been implemented as a layer on top of the existing (but enhanced for the purpose) buffer and device handler in the \texttt{felix-toflx} direction. In the image~\ref{fig:trickle-software-architecture} below there is a simple representation of the software architecture, while a complete UML diagram is in Figure~\ref{fig:complete-monitoring-uml} in the Appendix A~\ref{ch:appendix}. As per usual there is the possibility to run trickle on the real hardware or as an emulator; the emulators in the \texttt{felix-star} suite are mainly used for regression testing, for debugging the actual hardware is preferred, but that is not a rule.
+\texttt{Trickle configuration} \cite{felix-star-trickle-configuration} has been implemented as a layer on top of the existing (but enhanced for the purpose) buffer and device handler in the \texttt{felix-toflx} direction. In the image~\ref{fig:trickle-software-architecture} below there is a simple representation of the software architecture, while a complete UML diagram is in Figure~\ref{fig:complete-monitoring-uml} in the Appendix~\ref{ch:appendix}. As per usual there is the possibility to run trickle on the real hardware or as an emulator; the emulators in the \texttt{felix-star} suite are mainly used for regression testing, for debugging the actual hardware is preferred, but that is not a rule.
 
 \begin{figure}[htbp]
 \centering
