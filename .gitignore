@@ -22,3 +22,4 @@
 .*.swp
 *.synctex.gz
 .directory
+!images/**/*.pdf
