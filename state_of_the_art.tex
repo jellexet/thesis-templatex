@@ -9,7 +9,7 @@
 \label{fig:science-gateway}
 \end{figure}
 
-The \acf{CERN} convention \cite{cern-convention} signed in 1953 declares that its scientific work shall be publicly shared and dedicated to peaceful advancement. At the time of writing, \ac{CERN} comprises 24 member states, with scientists from over 110 countries collaborating to decipher the fundamental structure of the universe.
+The \acf{CERN} convention \cite{cern-convention} signed in 1953 declares that its scientific work shall be publicly shared and dedicated to peaceful advancement. At the time of writing, \ac{CERN} comprises 25 member states, with scientists from over 110 countries collaborating to decipher the fundamental structure of the universe.
 
 Situated on the Franco-Swiss border near Geneva, \ac{CERN}'s hosts a chain of increasingly powerful accelerators and purpose-built detectors that operate at energies mirroring the universe's earliest moments. Major experiments such as \acs{ATLAS} \cite{atlas-experiment}, \acs{CMS} \cite{cms-experiment}, \acs{ALICE} \cite{alice-experiment}, and \acs{LHCb} \cite{lhcb-experiment} rely on the \ac{LHC} \cite{Lebrun:1284331} for their data collection. Meanwhile, projects like \acs{CLOUD} \cite{Kirkby:1310801}, \acs{ISOLDE} \cite{isolde-facility}, and NA62 \cite{Martellotti:2056863} explore complementary aspects of particle physics, expanding our knowledge on the Standard Model, which in short, is our best explanation on how the basic building blocks of matter interact \cite{standard-model}.
 
@@ -74,7 +74,7 @@ As the name suggests, a \acf{T-DAQ} system is composed of a Trigger and a \acf{D
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.68\textwidth]{images/introduction/tdaq.png}
+\includegraphics[width=0.68\textwidth]{images/introduction/Baseline_TDAQ_Phase-II_Architecture.pdf}
 \caption[Overview of the T-DAQ architecture]{Overview of the \acs{T-DAQ} architecture. Level-0 Trigger, DAQ (Readout and Dataflow subsystems),
 and Event Filter are the three layers that compose the architecture. Here are not shown direct connections between each Level-0 trigger component and the Readout to avoid clutter. Image source: \protect\cite{tdaq}}
 \label{fig:tdaq}
@@ -144,8 +144,8 @@ More precisely, the \acs{HL-LHC} will deliver 10 times more data compared to the
 \label{fig:felix-block-diagram}
 \end{figure}
 
-\acs{FELIX} for the Phase II readout, will be linking upgraded front-end electronics to commercial servers through \acs{FPGA}-based \acs{PCIe} cards. It will be translating detector-specific protocols into standard network packets, basically allowing the Detectors to commnicate with the Data Handlers.\\
-This last part is the main answer of why \acs{FELIX} is needed in the \acs{T-DAQ} architecture. The detectors have to be radiation hardened, and to do so they use custom \acl{FE} electronics developed for the purpose at \acs{CERN}, like \acl{lpGBT} \cite{lpgbt} that uses its own protocol, but the rest of the underlying architecture uses normal network protocols since they are shielded from radiations, thus creating the need for \acs{FELIX} in order to communicate.\\
+\acs{FELIX} for the Phase II readout, will be linking upgraded front-end electronics to commercial servers through \acs{FPGA}-based \acs{PCIe} cards. It will be translating detector-specific protocols into standard network packets, allowing the detectors to communicate with the Data Handlers.\\
+This last part is the main answer of why \acs{FELIX} is needed in the \acs{T-DAQ} architecture. The detectors have to be radiation hardened, and to do so they use custom \acl{FE} electronics developed for the purpose at \acs{CERN}, like \acl{lpGBT} \cite{lpgbt} that uses its own protocol, but the rest of the underlying architecture uses normal network protocols since they are shielded from radiations; \acs{FELIX} is in between the two layers allowing them to communicate.\\
 The new \acs{FELIX} can handle event rates in excess of 1 MHz and data streams beyond 150~TB/s, and allows for:
 \begin{itemize}
     \item \textbf{Scalability}: Commodity server hardware reduces the cost and simplifies maintenance compared to purely custom designs.

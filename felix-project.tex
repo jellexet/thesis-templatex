@@ -8,7 +8,10 @@ Bidirectional communication is supported, allowing data to flow from software ba
 \clearpage
 \section{Hardware}
 
-Two hardware implementations are currently under developement: FLX-182 for prototyping and currently in use, and FLX-155 as the candidate card for \acs{ATLAS} Phase-II operations, although currently the older FELIX-712 is  being used in production, but it is not under developement anymore.
+Two hardware implementations are currently under developement: 
+FLX-182 for prototyping and currently used to test for new upcoming features;
+FLX-155 is the candidate card for \acs{ATLAS} Phase-II operations and upgrade over the FLX-182 prototype;
+FLX-712, is the older version of the \acs{FELIX} card, it has been developed for Phase-I and is being used in production; it is not under developement anymore and no new features are being tested with this card.
 
 \subsection{FLX-182}
 
@@ -29,7 +32,8 @@ The FLX-182 \cite{Ilic:2873569} (Figure \ref{fig:FLX-182-combined}) is a Phase-I
 \label{fig:LTI}
 \end{figure}
 
-This card requires a 16-lane \acs{PCIe} slot (preferably Gen4) configured with x8x8 bifurcation. Power is supplied through a \acs{PCIe} 6+2 pin cable, and the card's form factor necessitates two adjacent \acs{PCIe} slots for bracket installation. The operating system is Petalinux, and it is contained in a micro-SD card, which also contains the \acl{PL} image for the \acs{FPGA}. The \acs{PL} can be reprogrammed by either updating the SD card contents or using the onboard \ac{JTAG} controller, accessible via the USB-C port on the front panel.
+This card requires a 16-lane \acs{PCIe} slot (preferably Gen4) configured with x8x8 bifurcation. Power is supplied through a \acs{PCIe} 6+2 pin cable, and the card's form factor necessitates two adjacent \acs{PCIe} slots for bracket installation. 
+The operating system is Petalinux. The OS and the \acl{PL} image for the \acs{FPGA} are embedded into a micro-SD card. The \acs{PL} can be reprogrammed by either updating the SD card contents or using the onboard \ac{JTAG} controller, accessible via the USB-C port on the front panel.
 
 \begin{figure}[H]
 \centering
@@ -69,7 +73,7 @@ The FLX-155 will be 1cm shorter than the FLX-182 and will require similar instal
 \begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/felix/flx155_top.jpg}
-    \caption{FLX-155 top view.}
+    \caption{FLX-155 front view.}
     \label{fig:FLX-155-top}
 \end{subfigure}
 
@@ -78,7 +82,7 @@ The FLX-155 will be 1cm shorter than the FLX-182 and will require similar instal
 \begin{subfigure}[b]{0.7\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/felix/flx155_bot.jpg}
-    \caption{FLX-155 bottom view.}
+    \caption{FLX-155 rear view.}
     \label{fig:FLX-155-bot}
 \end{subfigure}
 \caption{FLX-155 hardware.}
@@ -167,7 +171,7 @@ The driver supports concurrency and synchronization, using spinlocks to ensure t
 
 \subsection{Felix Distribution}
 
-Felix Distribution \cite{felix-distribution} is a repository in which all the \acs{FELIX} related software is contained.  As a logical consequence, \acs{FELIX} software is a number of projects that are separately developed.\\
+Felix Distribution \cite{felix-distribution} is a repository in which all the \acs{FELIX} related software is contained.  As a logical consequence, \acs{FELIX} software is a collection of projects that are separately developed.\\
 Below is a non-comprehensive list of components of Felix Distribution --- followed by a brief description --- focusing only on modules relevant to the thesis and Phase II.
 
 \textbf{elinkconfig}\\
@@ -257,16 +261,16 @@ The assembly of the cards required specialized equipment, while programming the 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/contributions/BIST.png}
-\caption[Builtin Selftest screenshot]{Builtin Selftest. The DHCP server is needed to give an IP to the card, which is connected to the server via Ethernet cable. The \acs{FELIX} card exposes this website which allows to check if all the active components in the \acs{PCB} are reachable and prepares the card for the eyescan test.}
+\caption[Builtin Selftest screenshot]{Builtin Selftest. The DHCP server is needed to give an IP to the card; an Ethernet cable connects the card to the server. The \acs{FELIX} card exposes this website which allows to check if all the active components in the \acs{PCB} are reachable and prepares the card for the eyescan test.}
 \label{fig:bist}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/contributions/eyescan.png}
-\caption[Sample of the eyescan of a GTY transceiver]{Sample of the eyescan of a GTY transceiver. Those transceivers receive the signals from the Firefly \protect\cite{firefly-optical-transceiver} modules and make them available to the FPGA. The GTY transceivers live inside the FPGA produced by AMD. What this image represents is the error rate of 1 transceiver. The blue part indicates a low error rate, while red a high error rate\\
-Y axys: the voltage received by the transceiver\\
-X axys: Unit Intervals, which essentially means that the signal is brought out of phase by a percentage of one clock cycle}
+\caption[Sample of the eyescan of a GTY transceiver]{Sample of the eyescan of a GTY transceiver. Those transceivers receive the signals from the Firefly \protect\cite{firefly-optical-transceiver} modules and make them available to the FPGA. The GTY transceivers live inside the FPGA produced by AMD. This image represents the error rate of 1 transceiver. The blue part indicates a low error rate, while red a high error rate\\
+Y axis: the voltage received by the transceiver\\
+X axis: Unit Intervals, which essentially means that the signal is brought out of phase by a percentage of one clock cycle}
 \label{fig:eyescan-test}
 \end{figure}
 

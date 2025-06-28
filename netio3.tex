@@ -1,11 +1,12 @@
 \chapter{Netio3}
 \label{chap:netio3}
 
-Netio3 \cite{netio3-docs} is a transport-agnostic networking library originally created for the Phase-2 \acs{FELIX} system, offering both TCP and \acs{RDMA} communication pathways.  It is organized into two modules: the \texttt{netio3-backend} and \texttt{the netio3-frontend}.  The backend is responsible for raw data transmission and reception over the network and does not contain any \acs{FELIX}-specific logic, making it reusable in other projects. The frontend builds on this by providing buffered I/O for efficient data coalescence, a publish/subscribe API and data formatting.  Under the hood, TCP transport is implemented by the \acs{ATLAS} \acs{T-DAQ} asyncmsg library, while \acs{RDMA} operations use the \texttt{libfabric} \cite{libfabric} library.  Both transports follow a connection-oriented, message-based paradigm.
+Netio3 \cite{netio3-docs} is a transport-agnostic networking library originally created for the Phase-2 \acs{FELIX} system, offering both TCP and \acs{RDMA} communication pathways.  It is organized into two modules: the \texttt{netio3-backend} and the \texttt{netio3-frontend}.  The backend is responsible for raw data transmission and reception over the network and does not contain any \acs{FELIX}-specific logic, making it reusable in other projects. The frontend builds on this by providing buffered I/O for efficient data coalescence, a publish/subscribe API and data formatting.  Under the hood, TCP transport is implemented by the \acs{ATLAS} \acs{T-DAQ} \texttt{asyncmsg} \cite{asyncmsg} library, while \acs{RDMA} operations use the \texttt{libfabric} \cite{libfabric} library.  Both transports follow a connection-oriented, message-based paradigm.
+\texttt{asyncmsg} is a message (where the msg part come from) based wrapper of Boost::ASIO.
 
 \section{Netio3 backend}
 
-Both the asyncmsg and the \texttt{libfabric} backend use an event-driven model in the form of an event loop. Events can be callbacks from the underlying network library notifying the application about new connections, incoming data or user defined callbacks added through signals and timers. The event loop is single threaded, thus guaranteeing that all events are executed sequentially. Each event is associated with a callback that contains the user code that is executed when the event is triggered.
+Both the \texttt{asyncmsg} and the \texttt{libfabric} backend use an event-driven model in the form of an event loop. Events can be callbacks from the underlying network library notifying the application about new connections, incoming data or user defined callbacks added through signals and timers. The event loop is single threaded, thus guaranteeing that all events are executed sequentially. Each event is associated with a callback that contains the user code that is executed when the event is triggered.
 
 \subsection{Eventloop implementation}
 
@@ -32,7 +33,7 @@ For the \texttt{libfabric} backend, opening and closing connections is an expens
 \subsection{Asyncmsg backend}
 \label{subsec:asyncmsg}
 
-The asyncmsg backend is written to guarantee thread safety.
+The \texttt{asyncmsg} backend is written to guarantee thread safety.
 
 \subsubsection{Sending data}
 
