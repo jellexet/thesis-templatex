@@ -114,6 +114,7 @@ Triggers may examine particle counts, reconstructed energy, momenta, or other in
 The Trigger layer that forms a first-level hardware based trigger includes \cite{tdaq} \acs{L0Calo}, \acs{L0Muon} (\acs{L0} stands for Level 0, which is a term used for components detached from the main detector that perform a first filtering of the events), the Global Trigger, and the Central Trigger Subsystem (\acs{CTP}). Essentially, \acs{L0Calo} filters for the energies and positions of charged and neutral particles, \acs{L0Muon} is used to filter for muons, and the \acs{MUCTPI}'s task is to interface \acs{L0Muon} with \acs{CTP}. The Global Trigger \cite{tdaq} uses full-granularity calorimeter information to perform offline-like algorithms, refines the trigger objects calculated by \acs{L0Calo} and \acs{L0Muon}, calculates event-level quantities, and executes topological algorithms. The \acs{CTP} \cite{tdaq} forms triggers based on combinations of inputs or conditions received from the Global Trigger and other sources; it applies pre-scale factors and introduces deadtime when necessary to avoid saturation in the front-end and readout systems. Ultimately, it makes the final decision on whether the event is accepted, driving the \acs{TTC} network to start the readout process of the detectors.
 
 \subsection{\acs{DAQ} - Readout and Dataflow}
+\label{subsec:daq}
 
 \begin{definition}
 \label{def:daq}
@@ -153,7 +154,7 @@ The new \acs{FELIX} system can handle event rates in excess of 1 MHz and data st
 
 \subsubsection{Scale and Implementation of the \acs{FELIX} System}
 
-The \acs{ATLAS} Phase-II Readout System is responsible for collecting data from all detector subsystems and preparing it for processing by the Dataflow and Event Filter layers. It is made up of two main parts: \acs{FELIX} and the \acf{DH}.
+As briefly explained before (Subsection~\ref{subsec:daq}) the \acs{ATLAS} Phase-II Readout System is responsible for collecting data from all detector subsystems and preparing it for processing by the Dataflow and Event Filter layers. It is made up of two main parts: \acs{FELIX} and the \acf{DH}.
 
 \paragraph{FELIX.}
 \acf{FELIX} acts as the bridge between the detector front-end electronics and the computing infrastructure. It connects directly to the detectors through high-speed optical links and converts their data into a format that can be handled by standard network equipment.
