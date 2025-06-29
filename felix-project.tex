@@ -1,17 +1,22 @@
 \chapter{\acs{FELIX} project}
 
-The new \acs{FELIX} platform is part of the \acs{ATLAS} experiment upgrade at \ac{CERN}. By functioning as a high-throughput data router, \acs{FELIX} interfaces detector-specific front-end electronics with a standard network infrastructure. The first goal of the \acs{FELIX} project was to replace diverse, custom-made hardware readout solutions with a unified platform that relies on \acf{COTS} components. With this approach, tasks once handled by such custom hardware are now managed by software modules that subscribe to \acs{FELIX} cards inside off-the-shelf servers.
+The first goal of the \acs{FELIX} project is to replace diverse, custom-made hardware readout solutions with a unified platform that relies on \acf{COTS} components. With this approach, tasks once handled by such custom hardware are now managed by software modules that subscribe to \acs{FELIX} cards inside off-the-shelf servers.
 
 From an architectural perspective, \acs{FELIX} is built around a custom \acs{PCIe} card installed in a host server. Incoming data from detector front-ends reaches system memory via \acf{DMA}. Software on the host then distributes these data streams to network-connected clients.\\
-Bidirectional communication is supported, allowing data to flow from software back to the front-end electronics. The \texttt{netio3} network library allows to also use TCP/IP if needed, other than \acf{RoCE} as network protocols. This chapter examines the \acs{FELIX} project covering hardware, firmware and software design.
+Bidirectional communication is supported, allowing data to flow from software back to the front-end electronics. The \texttt{netio3} network library allows using TCP/IP if needed, in addition to \acf{RoCE} as a supported network protocol. This chapter examines the \acs{FELIX} project covering its hardware, firmware and software design.
 
 \clearpage
 \section{Hardware}
 
-Two hardware implementations are currently under developement: 
-FLX-182 for prototyping and currently used to test for new upcoming features;
-FLX-155 is the candidate card for \acs{ATLAS} Phase-II operations and upgrade over the FLX-182 prototype;
-FLX-712, is the older version of the \acs{FELIX} card, it has been developed for Phase-I and is being used in production; it is not under developement anymore and no new features are being tested with this card.
+Three hardware implementations are currently relevant:
+
+\begin{itemize}
+    \item \textbf{FLX-182}: used for prototyping and testing new features;
+    
+    \item \textbf{FLX-155}: candidate card for \acs{ATLAS} Phase-II operations and an upgrade over FLX-182;
+    
+    \item \textbf{FLX-712}: older version developed for Phase-I, used in production, but no longer under development or tested for new features.
+\end{itemize}
 
 \subsection{FLX-182}
 
@@ -55,12 +60,12 @@ The operating system is Petalinux. The OS and the \acl{PL} image for the \acs{FP
 \end{figure}
 
 \subsection{FLX-155}
-
-The FLX-155 (Figure \ref{fig:FLX-155}) is the designated candidate for \acs{ATLAS} Phase-II operations, with advancement over the FLX-182 prototype like the support for a more recent \acs{PCIe} standard, and double the optical transciever links. Its specifications include:
+\label{subsec:FLX-155}
+The FLX-155 (Figure \ref{fig:FLX-155}) is the designated candidate for \acs{ATLAS} Phase-II operations, with advancement over the FLX-182 prototype like the support for a more recent \acs{PCIe} standard, and double the optical transceiver links. Its specifications include:
 
 \begin{itemize}
     \item AMD Versal Premium VP-1552 SoC
-    \item Support for up to 48 duplex links rated at up  to 25 Gb/s via FireFly Y12 optical transceivers
+    \item Support for up to 48 duplex links rated at up  to 25 Gb/s via FireFly optical transceivers
     \item \acs{PCIe} Gen5 connectivity
     \item \acs{LTI} interface via a dedicated FireFly B04 module
     \item Optional 400 GbE interface capability (not utilized in ATLAS)
@@ -116,7 +121,7 @@ An \acs{E-link} is a virtual lane inside a physical optical link. By using multi
 \subsection{\acf{lpGBT}}
 \label{subsec:felix-lpgbt}
 
-The \acf{lpGBT} \cite{lpgbt} is an extension of the \acf{GBT} project and is a radiation tolerant \acs{ASIC} that can be used to implement multipurpose high speed bidirectional optical links for high-energy physics experiment with 2.56~Gb/s downlinks (readout to front-end) and 5.12~Gb/s or 10.24~Gb/s uplinks (front-end to readout) depending on the selected operation mode. The aim of \acs{lpGBT} is to allow a single bidirectional link to be used simultaneously for data readout, trigger data, timing, experiment control and monitoring.
+The \acf{lpGBT} \cite{lpgbt} is an evolution of the \acf{GBT} project and is a radiation tolerant \acs{ASIC} that can be used to implement multipurpose high speed bidirectional optical links for high-energy physics experiment with 2.56~Gb/s downlinks (readout to front-end) and 5.12~Gb/s or 10.24~Gb/s uplinks (front-end to readout) depending on the selected operation mode. The aim of \acs{lpGBT} is to allow a single bidirectional link to be used simultaneously for data readout, trigger data, timing, experiment control and monitoring.
 
 \begin{figure}[H]
 \centering
@@ -167,19 +172,18 @@ The cmem\_rcc \cite{cmem-rcc} package, well established within the \acs{ATLAS} e
 
 cmem\_rcc supports two allocation strategies: (1) on-demand allocation of individual buffers, and (2) pre-allocation of a large contiguous memory region at driver load time, from which user applications can request fragments as needed.
 
-The driver supports concurrency and synchronization, using spinlocks to ensure thread safety on \ac{SMP} systems. Additional features include support for \ac{NUMA}-aware allocations and compatibility with 64-bit architectures. For \ac{FELIX}-specific use cases, cmem\_rcc also provides memory mapping options compatible with \acs{RDMA} drivers \cite{cmem-rcc}.
+The driver supports concurrency and synchronization, using spinlocks to ensure thread safety on \ac{SMP} systems \cite{cmem-rcc}.
 
 \subsection{Felix Distribution}
 
 Felix Distribution \cite{felix-distribution} is a repository in which all the \acs{FELIX} related software is contained.  As a logical consequence, \acs{FELIX} software is a collection of projects that are separately developed.\\
-Below is a non-comprehensive list of components of Felix Distribution --- followed by a brief description --- focusing only on modules relevant to the thesis and Phase II.
+Below is a non-comprehensive list of components of Felix Distribution --- followed by a brief description --- focusing only on modules relevant to the thesis.
 
 \textbf{elinkconfig}\\
 The \texttt{elinkconfig} module is responsible for the configuration and management of e-links. This module provides utilities to enable and disable \acs{E-link}s define, modify and query the settings of each e-link.
 
 \textbf{felix-bus-fs}\\
-felix-bus-fs translates \acs{FELIX} specific IDs (see Definition~\ref{def:FID}) into generic network information.
-The \texttt{felix-bus-fs} module is a virtual file system for the \texttt{felix-bus} application, exposing the information as files within the Linux file system. In the next chapter there will be a more detailed explanation of what \texttt{felix-bus} does (see Section~\ref{sec:felix_bus}).
+\texttt{felix-bus} translates \acs{FELIX} specific IDs (see Definition~\ref{def:FID}) into generic network information by exposing the information as files within the Linux file system. In the next chapter there will be a more detailed explanation of what \texttt{felix-bus} does (see Section~\ref{sec:felix_bus}).
 
 \textbf{felix-star}\\
 The \texttt{felix-star} is the primary readout application and I will expand more on this module in the next chapter \emph{felix-star} (Chapter~\ref{chap:felix_star}).
@@ -191,13 +195,13 @@ The \texttt{felix-star} is the primary readout application and I will expand mor
 The \texttt{felix-monitor} module is responsible for monitoring the status and performance of the \acs{FELIX} system. It collects and reports \acs{FELIX} specific metrics, and more general ones like data throughput, and error rates.
 
 \textbf{flxcard}\\
-The \texttt{flxcard} module serves as the primary hardware abstraction layer for the \acs{FELIX} \acs{PCIe} cards installed in the host system. It provides a low-level \acs{API} for direct communication with the hardware.
+The \texttt{flxcard} module is the user-space driver library, and serves as the primary hardware abstraction layer for the \acs{FELIX} \acs{PCIe} cards installed in the host system.
 
 \textbf{ftools}\\
 The \texttt{ftools} module comprises a suite of utility programs and scripts designed to perform common --- and often low-level --- tasks in the \acs{FELIX} environment, generally used for testing and debugging \acs{FELIX} dataflow and control operations including interaction with remote peers.
 
 \textbf{netio3}\\
-\texttt{netio3} will be expanded upon in the next chapter \emph{Netio3} (Chapter~\ref{chap:netio3}). It is the new network library that replaces the previous one, \texttt{netio-next}.
+\texttt{netio3} will be expanded upon in the next chapter \emph{Netio3} (Chapter~\ref{chap:netio3}).
 
 \clearpage
 \section{ Personal Contributions}
@@ -208,7 +212,7 @@ The primary hardware contribution involved the testing and assembly of the FLX-1
 \begin{enumerate}
     \item \textbf{Component Verification}
     \begin{itemize}
-        \item Visually inspected the most importat discrete components (e.g. resistors, capacitors)
+        \item Visually inspected the most important discrete components (e.g. resistors, capacitors)
         \item Measured those components using a multimeter
     \end{itemize}
 
@@ -219,7 +223,7 @@ The primary hardware contribution involved the testing and assembly of the FLX-1
 
     \item \textbf{FPGA Programming}
     \begin{itemize}
-        \item Uploaded the firmware onto the FPGA
+        \item Uploaded the programmable logic test firmware onto the FPGA and flash memory
     \end{itemize}
 
     \item \textbf{Mechanical Assembly}
@@ -251,6 +255,8 @@ The primary hardware contribution involved the testing and assembly of the FLX-1
 
 The assembly of the cards required specialized equipment, while programming the power delivery controller was performed using an Aardvark I2C/SPI host adapter. The \acs{FPGA} was configured with Vivado \cite{vivado}. Electrical signal verification and validation of the front panel and active components involved the use of an oscilloscope, a power supply unit, and a function generator. Additionally, a server running with a \acs{DHCP} server was utilized to test the fiber connections, and a \acs{PCIe} loopback test card was employed to ensure proper \acs{PCIe} functionality.
 
+\clearpage
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/contributions/felix-card-testing.jpg}
@@ -268,9 +274,9 @@ The assembly of the cards required specialized equipment, while programming the 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/contributions/eyescan.png}
-\caption[Sample of the eyescan of a GTY transceiver]{Sample of the eyescan of a GTY transceiver. Those transceivers receive the signals from the Firefly \protect\cite{firefly-optical-transceiver} modules and make them available to the FPGA. The GTY transceivers live inside the FPGA produced by AMD. This image represents the error rate of 1 transceiver. The blue part indicates a low error rate, while red a high error rate\\
+\caption[Sample of the eyescan of a GTY transceiver]{Sample of the eyescan of a GTY transceiver. Those transceivers receive the signals from the Firefly \protect\cite{firefly-optical-transceiver} modules and make them available to the FPGA. The GTY transceivers live inside the FPGA produced by AMD. This image represents the error rate of one transceiver. The blue part indicates a low error rate, while red a high error rate\\
 Y axis: the voltage received by the transceiver\\
-X axis: Unit Intervals, which essentially means that the signal is brought out of phase by a percentage of one clock cycle}
+X axis: Unit Intervals fractions, which essentially means that the signal is brought out of phase by a percentage of one clock cycle. A unit interval corresponds to a clock period.}
 \label{fig:eyescan-test}
 \end{figure}
 

@@ -8,7 +8,7 @@
 All \texttt{felix-star} applications are managed by an orchestrator application. At the moment such application is \texttt{supervisord} \cite{supervisord}— which also is under consideration for Phase-II.\\
 \texttt{Supervisor} \cite{supervisord} is a client/server system that allows its users to monitor and control a number of processes on UNIX-like operating systems. \texttt{supervisord} is the server part of Supervisor and it is responsible for starting child programs, responding to commands from clients, restarting crashed or exited subprocesseses, logging its subprocess stdout and stderr output, and generating and handling “events” corresponding to points in subprocess lifetimes.
 
-The to-host direction in \texttt{felix-star} refers to data processed and sent from the \acs{FELIX} card to client applications, according to link subscriptions (uplink direction). In the from-host (or to-flx) direction, messages that are destined to enabled links are sent to the \acs{FELIX} card, which routes them to the front-end hardware (downlink direction). felix-bus (Section~\ref{sec:felix_bus}) advertises active links managed by a \acs{FELIX} host, so that client applications can look them up and know what addresses are available to send data.
+The to-host direction in \texttt{felix-star} refers to data processed and sent from the \acs{FELIX} card to client applications, according to link subscriptions (uplink direction). In the from-host (or to-flx) direction, messages that are destined to enabled links are sent to the \acs{FELIX} card, which routes them to the front-end hardware (downlink direction). felix-bus (Section~\ref{sec:felix_bus}) advertises active links managed by a \acs{FELIX} host, so that client applications can look them up and know what addresses are available to receive and send data.
 
 Communication between \texttt{felix-star} processes and network peers is handled by the \texttt{netio3} library.\\
  Two communication modes are supported:
@@ -265,7 +265,7 @@ To address these limitations, the architecture was refactored to apply the \text
 \label{fig:monitoring-software-architecture}
 \end{figure}
 
-\textbf{Monitor} is the class that is used by the \texttt{felix-star} applications to produce monitoring data. It is an abstract base class that defines the interface for monitoring. It has a pure virtual method \texttt{write\_message(const nlohmann::json\&)} that must be implemented by subclasses. The \texttt{Monitor} class is responsible for collecting monitoring data and delegating the writing of that data to a \texttt{Writer} instance. The concrete implementations are defined depending on the direction, thus there are \emph{ToHostMonitor} and \emph{FromHostMonitor} .The choice of the \texttt{Writer} implementation is determined at runtime based on user configuration, allowing the same monitoring logic to be reused with different output strategies.
+\textbf{Monitor} is the class that is used by the \texttt{felix-star} applications to produce monitoring data. It is an abstract base class that defines the interface for monitoring. It has a pure virtual method \texttt{write\_message(const nlohmann::json\&)} that must be implemented by subclasses. The \texttt{Monitor} class is responsible for collecting monitoring data and delegating the writing of that data to a \texttt{Writer} instance. The concrete implementations are defined depending on the direction, thus there are \emph{ToHostMonitor} and \emph{FromHostMonitor}. The choice of the \texttt{Writer} implementation is determined at runtime based on user configuration, allowing the same monitoring logic to be reused with different output strategies.
 
 \textbf{Writer} is the abstract base class for the three concrete implementations of the monitoring output strategies. Each of the concrete classes implements the \texttt{write\_message(const nlohmann::json\&)} method, which defines how the monitoring data is written to the desired output or destination. The concrete implementations of this class include:
 
@@ -274,6 +274,8 @@ To address these limitations, the architecture was refactored to apply the \text
     \item \textbf{PrometheusWriter}: Exposes metrics in a format consumable by Prometheus (Figure~\ref{fig:felix-tohost-monitoring}, Figure~\ref{fig:felix-tohost-single-elink}).
     \item \textbf{WebISWriter}: Used to send monitoring data to \acs{IS}, a monitoring tool used internally in \acs{ATLAS} (Figure~\ref{fig:felix-tohost-is}).
 \end{itemize}
+
+\clearpage
 
 \begin{figure}[H]
 \centering
