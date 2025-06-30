@@ -7,7 +7,7 @@ All the recovered cards are now delivered to the institutes and functioning prop
 
 \section{Performance measurements: netio3}
 \label{sec:netio3-perf}
-The network performance evaluation focused on two key parameters: Throughput and \ac{RTT}. The experiments were conducted in a controlled testbed environment using servers connected via a 200 Gbit/s Ethernet link. The hardware specifications of the servers are detailed below:
+The network performance evaluation focused on two key parameters: Throughput and \ac{RTT}. The experiments were conducted in a controlled testbed environment using servers connected via a 200 Gbit/s Ethernet link through a switch. The hardware specifications of the servers are detailed below:
 
 \clearpage
 \begin{lstlisting}[caption={Network interface information}, label={lst:network}]
@@ -42,15 +42,17 @@ RANGE                                 SIZE  STATE REMOVABLE BLOCK
 0x0000000000000000-0x000000187fffffff  98G online       yes  0-48
 \end{lstlisting}
 
-The receiving machine was equipped with an older FLX-712 card, while the sending machine utilized the new FLX-182-1B prototype developed for Phase II. This emulates the \texttt{felix-tohost} direction. The statics have been collected from the sending part; the reason was because the sending part interrupts the connection, and the statistics collection could be stopped at the same time.
+Statics have been collected from the sending part; the reason was because the sending part interrupts the connection, and the statistics collection could be stopped at the same time.
+
+\subsection{Throughput}
 
 The throughput tests were conducted using the two \textit{netio3-backends} LIBFABRIC-RDMA and ASYNCMSG-TCP. To manage the high number of tests, an Ansible \cite{ansible} playbook was developed. The output of the playbook was processed using a custom Python script, which also generated the graphs using the Matplotlib \cite{matplotlib} library. The tests involved varying the buffer size --- ranging from 1 KB to 64 KB  (in ATLAS production are used buffers of 64 KB) --- and the number of buffers. The same buffer size and number of buffers were used for both the sender and receiver. 
 
 The sender transmits buffers sequentially, employing a polling mechanism to determine when the next buffer could be sent. The receiver, in turn, simply ackowledges and discards the incoming messages without further processing, as the primary objective was to measure throughput. A total of 70 combinations of buffer sizes and counts were tested for LIBFABRIC-RDMA, while only 28 combinations were evaluated for ASYNCMSG-TCP due to diminishing returns observed in preliminary tests.
 
-\subsection{Analysis}
+\subsubsection{Analysis}
 
-Figures \ref{fig:1kb-buffer-throughput} and \ref{fig:64kb-buffer-throughput} shows the measurements for the two extreme cases: a 1 KB buffer and a 64 KB buffer.
+Figures \ref{fig:1kb-buffer-throughput} and \ref{fig:64kb-buffer-throughput} show the LIBFABRIC-RDMA backend measurements for the two extreme cases: a 1 KB buffer and a 64 KB buffer.
 
 \begin{figure}[htbp]
 \centering
@@ -71,12 +73,11 @@ Figures \ref{fig:1kb-buffer-throughput} and \ref{fig:64kb-buffer-throughput} sho
 \label{fig:throughput-of-the-extremes-1K-64K}
 \end{figure}
 
-The results indicate that smaller buffers (e.g., 1 KB) exhibit higher error rates due to the overhead associated with connection establishment, which is significant relative to the transmission time for small messages. In contrast, larger buffers (e.g., 64 KB) exhibit a small variance, as the connection overhead becomes negligible compared to the transmission time.
+The results indicate that smaller buffers (e.g., 1 KB) exhibit a large variation of throughput due to the overhead associated with connection establishment, which is significant relative to the transmission time for small messages. In contrast, larger buffers (e.g., 64 KB) exhibit a small variance, as the connection overhead becomes negligible compared to the transmission time.
 
 To mitigate the impact of these variations (especially for smaller buffers), the median throughput was used for comparison.
 
-Figure \ref{fig:libfabric-mean-throughput-comparison} presents the throughput comparison for LIBFABRIC-RDMA across all buffer sizes. The results highlight that buffers smaller than 8 KB and a fewer number of buffers than 16 should be avoided. For larger buffers, the behavior aligns with expectations. 
-An interesting observation can be made about smaller buffers achieving the expected rate.
+Figure \ref{fig:libfabric-mean-throughput-comparison} presents the throughput comparison for LIBFABRIC-RDMA across all buffer sizes. The results highlight that buffers smaller than 8 KB and a fewer number of buffers than 16 should be avoided if the goal is maximum throughput. For larger buffers, the behavior aligns with expectations. 
 
 \begin{figure}[htbp]
 \centering
@@ -85,7 +86,7 @@ An interesting observation can be made about smaller buffers achieving the expec
 \label{fig:libfabric-mean-throughput-comparison}
 \end{figure}
 
-The throughput results also demonstrate that the 200 Gbps bandwidth is quickly saturated when using larger buffers. Notably, the network library can handle 64 KB buffers at 100 MHz, meeting the requirements for Phase II production.
+The throughput results also demonstrate that the 200 Gbps bandwidth is quickly saturated when using larger buffers. Notably, the network library meets the requirements of 1MHz for Phase II production with a number of buffers \geq 32 and for buffer sizes \leq 16KB (which is far bigger than what will be used at those rates in production).
 
 For ASYNCMSG-TCP, the results (Figure \ref{fig:tcp-mean-throughput-comparison}) reveal that smaller buffers consistently achieve higher rates, regardless of the number of buffers. The throughput is significantly lower than LIBFABRIC-RDMA, with rates ranging from 70 to 90 kHz and a maximum throughput below 10 Gbps. This performance disparity shows once again that LIBFABRIC-RDMA can handle larger amount of data compared to ASYNCMSG-TCP.
 
@@ -98,7 +99,69 @@ For ASYNCMSG-TCP, the results (Figure \ref{fig:tcp-mean-throughput-comparison}) 
 
 The decision to limit the number of buffers and sizes tested for ASYNCMSG-TCP was based on the observed saturation of bandwidth for LIBFABRIC-RDMA and the lack of performance improvement for ASYNCMSG-TCP with larger buffers. These findings conclusively demonstrate that LIBFABRIC-RDMA outperforms ASYNCMSG-TCP in terms of data throughput.
 
-Given those results, why is TCP included as an option? One of the reasons is that it is less computationally demanding than \acs{RDMA}, so it is a better choice where the computing power is limited (L1 Calorimeter for example). The other reason derives from internal needs of \acs{ATLAS} and how its monitoring works. In order to monitor the entirety of \acs{ATLAS}' \acl{FE} electronics many elinks need to be used, in that case using LIBFABRIC-RDMA would require creating a \acs{DMA} buffer for each of them, plus sometimes the network library is used to send configurations to \acs{FE} electronics, meaning that the buffers need to be big enough for such scenarios. It comes by itself that the amount of memory needed is very large, and that memory would not be used efficiently, also the use case of the monitoring does not require high performance, thus ASYNCMSG-TCP is ideal.
+Given those results, why is TCP included as an option? There are technical reasons and internal ones. Technically, the pros for TCP over RDMA include simplicity, a smaller memory footprint, opening connections is less costly and, as mentioned before, memory stability during the send operation. 
+The internal reasons for using TCP in \acs{ATLAS} derive on how its monitoring works. In order to monitor the entirety of \acs{ATLAS}' \acl{FE} electronics many elinks need to be used, in that case using LIBFABRIC-RDMA would require creating a \acs{DMA} buffer for each of them, plus sometimes the network library is used to send configurations to \acs{FE} electronics, meaning that the buffers need to be big enough for such scenarios. It comes by itself that the amount of memory needed is very large, and that memory would not be used efficiently, also the use case of the monitoring does not require high performance, thus ASYNCMSG-TCP is ideal.
+
+\subsection{\acf{RTT}}
+
+The \acl{RTT} tests were conducted using the two \textit{netio3-backends} LIBFABRIC-RDMA and ASYNCMSG-TCP with the \texttt{epoll} event-loop and \texttt{BOOST::ASIO} event-loop. The test has been manually performed on the two servers previously described using a client and server application developed for the purpose. The output was processed using a custom Python script, which also generated the graphs using the Matplotlib \cite{matplotlib} library. The tests involved sending 25 messages of 64 bytes in size and measuring the \acl{RTT}.
+
+\subsubsection{Analysis}
+
+Figure~\ref{fig:rtt-tcp-rdma} illustrates the average \acs{RTT} of 64-byte messages transmitted using ASYNCMSG-TCP and LIBFABRIC-RDMA backends, with both epoll and BOOST:ASIO event loops. The results show that LIBFABRIC-RDMA achieves significantly lower \acs{RTT} compared to the ASYNCMSG-TCP implementation, regardless of the event loop used. Furthermore using the BOOST:ASIO eventloop consistently outperforms epoll; the reason derives from the implementation of the eventloop, in which the underlying is always \texttt{BOOSt::ASIO}, while the \texttt{epoll} offers a better interface but has to transfer the messages from its thread to the \texttt{BOOST::ASIO} thread.
+For ASYNCMSG-TCP, using BOOST:ASIO nearly halves the average \acs{RTT}; the performance increase is noticeable, at the cost of a worse interface and less control.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/results/rtt.png}
+\caption[RTT plot]{RTT plot of ASYNCMSG-TCP and LIBFABRIC-RDMA backends. The unit of measurement is in microseconds.}
+\label{fig:rtt-tcp-rdma}
+\end{figure}
+
+Table~\ref{tab:rtt-comparison} summarizes the previous analysis.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Setup} & \textbf{Mean (µs)} & \textbf{Std Dev (µs)} \\
+\hline
+(epoll) ASYNCMSG-TCP & 321.56 & 34.17 \\
+(BOOST:ASIO) ASYNCMSG-TCP & 185.88 & 20.40 \\
+(epoll) LIBFABRIC-RDMA & 56.58 & 10.31 \\
+(BOOST:ASIO) LIBFABRIC-RDMA & 60.45 & 18.91 \\
+\hline
+\end{tabular}
+\caption{RTT comparison for ASYNCMSG-TCP and LIBFABRIC-RDMA.}
+\label{tab:rtt-comparison}
+\end{table}
+
+LIBFABRIC-RDMA comes with a high connection establishment cost. In the previous analysis the \acs{RTT} of the connection establishment has been considered an outlier and not used in the plot. Figure~\ref{fig:rtt-rdma-outlier} shows the effects of the outlier on the LIBFABRIC-RDMA backend \acs{RTT}. The outliers (323 µs for \texttt{epoll} and 329 µs for \texttt{BOOST::ASIO}) skew the average \acs{RTT} and increase the standard deviation over 25 messages.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/results/rtt-RDMA-outliers.png}
+\caption[RDMA RTT plot, with outliers]{RTT plot of LIBFABRIC-RDMA backend with and without the connection establishment outlier. The unit of measurement is in microseconds.}
+\label{fig:rtt-rdma-outlier}
+\end{figure}
+
+Table~\ref{tab:rtt-outlier} summarizes the previous analysis.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Setup} & \textbf{Mean (µs)} & \textbf{Std Dev (µs)} & \textbf{Outlier (µs)} \\
+\hline
+(epoll) LIBFABRIC-RDMA (w/ outlier) & 67.24 & 43.94 & 323 \\
+(epoll) LIBFABRIC-RDMA (w/o outlier) & 56.58 & 10.31 & -- \\
+(BOOST:ASIO) LIBFABRIC-RDMA (w/ outlier) & 71.20 & 42.68 & 329 \\
+(BOOST:ASIO) LIBFABRIC-RDMA (w/o outlier) & 60.45 & 18.91 & -- \\
+\hline
+\end{tabular}
+\caption{Effect of outlier on LIBFABRIC-RDMA RTT.}
+\label{tab:rtt-outlier}
+\end{table}
 
 \clearpage
 \section{Performance measurements: felix-tohost}
