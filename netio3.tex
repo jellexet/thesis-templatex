@@ -2,7 +2,6 @@
 \label{chap:netio3}
 
 Netio3 \cite{netio3-docs} is a transport-agnostic networking library originally created for the Phase-2 \acs{FELIX} system, offering both TCP and \acs{RDMA} communication pathways.  It is organized into two modules: the \texttt{netio3-backend} and the \texttt{netio3-frontend}.  The backend is responsible for raw data transmission and reception over the network and does not contain any \acs{FELIX}-specific logic, making it reusable in other projects. The frontend builds on this by providing buffered I/O for efficient data coalescence, a publish/subscribe API and data formatting.  Under the hood, TCP transport is implemented by the \acs{ATLAS} \acs{T-DAQ} \texttt{asyncmsg} \cite{asyncmsg} library, while \acs{RDMA} operations use the \texttt{libfabric} \cite{libfabric} library.  Both transports follow a connection-oriented, message-based paradigm.
-\texttt{asyncmsg} is a message (where the msg part come from) based wrapper of Boost::ASIO.
 
 \section{Netio3 backend}
 
@@ -15,6 +14,8 @@ There are two different event loop implementations: One based on the Linux kerne
 
 \subsection{Libfabric backend}
 \label{subsec:libfabric}
+
+\texttt{libfabric} \cite{libfabric} is a library that provides a high-performance, low-latency communication interface for distributed applications. It abstracts the underlying network hardware and protocols, allowing developers to write portable code that can run on different network technologies without worrying about the specifics of the network stack. \texttt{libfabric} is especially useful when there are multiple systems using different network hardware and protocols, like in \acs{ATLAS}, because without it, one would to write separate code for each network type; instead \texttt{libfabric} offers a programming interface called the OpenFabrics Interfaces (OFI). When an application wants to send data, it makes calls to \texttt{libfabric} using this standard interface. \texttt{libfabric} then translates these calls into the specific commands needed for whatever network hardware is actually installed in the system. The library supports various transport protocols, including TCP and \acs{RDMA}.
 
 \subsubsection{Sending data}
 
@@ -33,7 +34,8 @@ For the \texttt{libfabric} backend, opening and closing connections is an expens
 \subsection{Asyncmsg backend}
 \label{subsec:asyncmsg}
 
-The \texttt{asyncmsg} backend is written to guarantee thread safety.
+\texttt{asyncmsg} is a message based wrapper of Boost::ASIO, developed by the \acs{ATLAS} \acs{T-DAQ} group. It provides a high-level interface for asynchronous message passing over TCP/IP networks, allowing applications to send and receive non-blocking messages (what asynchronous means).\\
+The \texttt{asyncmsg} backend is thread safe.
 
 \subsubsection{Sending data}
 
@@ -46,10 +48,10 @@ Also for receiving data the user is not required to register memory regions, thu
 
 \section{Netio3 Frontend}
 
-The netio3 frontend is built on top of netio3 backend to handle communications in a distributed system for data acquisition. The frontend introduces features such as data coalescence, a publish/subscribe \acs{API}, and a buffer formatting mechanisms.
+The netio3 frontend is built on top of netio3 backend to handle communications in a distributed system for data acquisition. The frontend introduces features such as data coalescence, a publish/subscribe \acs{API}, and a buffer formatting mechanism.
 
-\textbf{Data Coalescence} is one of the core features provided by the netio3 frontend, which consist of a buffering layer that aggregates multiple small messages into larger network packets.\\
-This feature is useful in scenarios with bursty or fine-grained message patterns, as it avereges the cost of network transmission over multiple messages.
+\textbf{Data Coalescence} is one of the core features provided by the netio3 frontend, which consists of a buffering layer that aggregates multiple small messages into larger network packets.\\
+This feature is useful in scenarios with bursty or fine-grained message patterns, as it averages the cost of network transmission over multiple messages.
 
 \clearpage
 \section{Personal Contributions}
@@ -75,20 +77,22 @@ The enhancement involved designing a new, more efficient header and updating the
 \end{figure}
 
 This optimization works because data in the same \texttt{block} is guaranteed to have the same \acs{FID}.
-Supposing messages of 20 bytes --- by being conservative in the estimate --- the first header will contain all the optional fields, meaning that the first message will be:
+Supposing messages of 16 bytes, which is around the size of a typical message coming from \acs{ITk}, and for making calculations easier (16 is a divisor of 1024 which is the size of a \texttt{block} in bytes); the first header will contain all the optional fields, meaning that the first message will be:
 \[
-13 [\text{bytes}] + 20 [\text{bytes}] = 33 \, [\text{bytes}]
+13 [\text{bytes}] + 16 [\text{bytes}] = 29 \, [\text{bytes}]
+    header        +      payload
 \]
 The next headers are guaranteed to have the same \acs{FID}, so they will be:
 \[
-4 [\text{bytes}] + 20 [\text{bytes}] = 24\, [\text{bytes}]
+4 [\text{bytes}] + 16 [\text{bytes}] = 20\, [\text{bytes}]
+    header       +       payload
 \]
-A block will thus contain 42 messages:
+A block, which is 1KB, will contain 64 messages of 16 bytes each; with the new header the total size of the network buffer is:
 \[
-1 [\text{messages}] \times 33 [\text{bytes}] + (41 [\text{messages}] \times 24 [\text{bytes}]) = 1017 \, [\text{bytes}]
+1 [\text{messages}] \times 29 [\text{bytes}] + (63 [\text{messages}] \times 20 [\text{bytes}]) = 1289 \, [\text{bytes}]
 \]
-while before a block could contain 31 messages:
+while using the previous header, the network buffer size was:
 \[
-31 [\text{messages}] \times 33 [\text{bytes}] = 1023\, [\text{bytes}]
+64 [\text{messages}] \times 29 [\text{bytes}] = 1856\, [\text{bytes}]
 \]
-In a conservative estimate, with the new formatting a block can contain \text{30\%} more messages, 31 messages before against 42 messages now.
+In a typical scenario, with the new formatting the network buffer would be able to contain over \text{40\%} more messages within the same size, which corresponds to a notable increase in throughput.

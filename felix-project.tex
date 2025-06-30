@@ -33,7 +33,7 @@ The FLX-182 \cite{Ilic:2873569} (Figure \ref{fig:FLX-182-combined}) is a Phase-I
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/felix/lti.jpg}
-\caption[LTI]{The ATLAS \acf{LTI} is a replacement of the legacy \acf{TTC}.\\ \texttt{Timing}: Distribution of the \acs{LHC} bunch clock (the same clock source for entire system).\\\texttt{Trigger}: Decision from the trigger system indicating whether the data for a given event should be sent to the readout.\\ \texttt{Control}: Sends synchronization/configuration commands, subdetectors raise Busy signal to indicated that the internal buffers are filling up.\\Image source \protect\cite{lti}.}
+\caption[LTI]{The ATLAS \acf{LTI} is a replacement of the legacy \acf{TTC}.\\ \texttt{Timing}: Distribution of the \acs{LHC} bunch clock (the same clock source for entire system).\\\texttt{Trigger}: Decision from the trigger system indicating whether the data for a given event should be sent to the readout.\\ \texttt{Control}: Sends synchronization/configuration commands, subdetectors raise a Busy signal to indicated that the internal buffers are filling up.\\Image source \protect\cite{lti}.}
 \label{fig:LTI}
 \end{figure}
 
@@ -61,11 +61,11 @@ The operating system is Petalinux. The OS and the \acl{PL} image for the \acs{FP
 
 \subsection{FLX-155}
 \label{subsec:FLX-155}
-The FLX-155 (Figure \ref{fig:FLX-155}) is the designated candidate for \acs{ATLAS} Phase-II operations, with advancement over the FLX-182 prototype like the support for a more recent \acs{PCIe} standard, and double the optical transceiver links. Its specifications include:
+The FLX-155 (Figure \ref{fig:FLX-155}) is the designated candidate for \acs{ATLAS} Phase-II operations, with advancement over the FLX-182 prototype like the support for a more recent \acs{PCIe} standard, and double the number of optical transceiver links. Its specifications include:
 
 \begin{itemize}
     \item AMD Versal Premium VP-1552 SoC
-    \item Support for up to 48 duplex links rated at up  to 25 Gb/s via FireFly optical transceivers
+    \item Support for up to 48 duplex links rated at up to 25 Gb/s via FireFly optical transceivers
     \item \acs{PCIe} Gen5 connectivity
     \item \acs{LTI} interface via a dedicated FireFly B04 module
     \item Optional 400 GbE interface capability (not utilized in ATLAS)
@@ -99,7 +99,7 @@ The FLX-155 will be 1cm shorter than the FLX-182 and will require similar instal
 \label{sec:felix-firmware}
 
 The \acs{FELIX} firmware handles physical layer connectivity, data buffering, and communication with the host through the \ac{PCIe} interface. There are different firmware "flavours" that are used depending on what \acl{FE} is using the \acs{FELIX} card.\\
-Below a comprehensive list of all the firmware types depending on the protocol the \acs{FELIX} card needs to communicate with.
+Below is a comprehensive list of all the firmware types depending on the protocol the \acs{FELIX} card needs to communicate with.
 
 \subsection{\acl{GBT} and Versatile Link}
 \label{subsec:felix-gbt}
@@ -108,7 +108,7 @@ The \ac{GBT} chipset, combined with the Versatile Link optical technology \cite{
 
 \begin{definition}
 \label{def:elink}
-An \acs{E-link} is a virtual lane inside a physical optical link. By using multiple \acs{E-link}s it is possible to transmit multiple data streams in parallel.
+An \acs{E-link} is a virtual lane inside a physical optical link. By using multiple \acs{E-link}s, it is possible to transmit multiple data streams in parallel.
 \end{definition}
 
 \begin{figure}[H]
@@ -121,7 +121,7 @@ An \acs{E-link} is a virtual lane inside a physical optical link. By using multi
 \subsection{\acf{lpGBT}}
 \label{subsec:felix-lpgbt}
 
-The \acf{lpGBT} \cite{lpgbt} is an evolution of the \acf{GBT} project and is a radiation tolerant \acs{ASIC} that can be used to implement multipurpose high speed bidirectional optical links for high-energy physics experiment with 2.56~Gb/s downlinks (readout to front-end) and 5.12~Gb/s or 10.24~Gb/s uplinks (front-end to readout) depending on the selected operation mode. The aim of \acs{lpGBT} is to allow a single bidirectional link to be used simultaneously for data readout, trigger data, timing, experiment control and monitoring.
+The \acf{lpGBT} \cite{lpgbt} is an evolution of the \acf{GBT} project and is a radiation tolerant \acs{ASIC} that can be used to implement multipurpose high speed bidirectional optical links for high-energy physics experiment, with 2.56<del>Gb/s downlinks (readout to front-end) and 5.12</del>Gb/s or 10.24~Gb/s uplinks (front-end to readout), depending on the selected operation mode. The aim of \acs{lpGBT} is to allow a single bidirectional link to be used simultaneously for data readout, trigger data, timing, experiment control and monitoring.
 
 \begin{figure}[H]
 \centering
@@ -133,7 +133,7 @@ The \acf{lpGBT} \cite{lpgbt} is an evolution of the \acf{GBT} project and is a r
 \subsection{FULL Mode}
 \label{subsec:felix-fullmode}
 
-The FULL mode protocol \cite{fullmode} is used for \acl{FE} electronics with no radiation constraints, and it requires less \acs{FPGA} resources compared to \acs{GBT}. FULL mode provides a single, wide data stream without using the \acs{E-link} substructures or the handshaking mechanisms in \acs{GBT}/\acs{lpGBT}, allowing a data rate of 9.6~Gb/s. After 8b/10b encoding, this yields a peak uplink payload of 7.68~Gb/s.\\
+The FULL mode protocol \cite{fullmode} is used for \acl{FE} electronics with no radiation constraints, and it requires less \acs{FPGA} resources compared to \acs{GBT}. FULL mode provides a single, wide data stream without using the \acs{E-link} substructures or the handshaking mechanisms in \acs{GBT}/\acs{lpGBT}, and allows a data rate of 9.6~Gb/s. After 8b/10b encoding, this yields a peak uplink payload of 7.68~Gb/s.\\
 Downstream traffic at 9.6~Gb/s transmits timing signals (such as the 40.079~MHz \acs{LHC} clock) and control data from the \acf{LTI}.\\
 Early releases of FULL mode reused GBT-compatible downlinks for legacy \acf{TTC} messaging.
 
@@ -162,7 +162,7 @@ All the software for the \acs{FELIX} project is open source and hosted on Gitlab
 
 \subsubsection{flx\_driver}
 
-The \texttt{flx} driver~\cite{felix-driver} is a device driver, developed for Linux, for \acs{PCIe}-based hardware. It is responsible for detecting \acs{FELIX} cards, managing hardware interrupts, and exposing a set of \texttt{ioctl} interfaces for user-space interaction. Within the \acs{ATLAS} software framework, the \texttt{flx} driver is typically deployed in conjunction with the \texttt{cmem\_rcc} driver, and optionally, the \texttt{io\_rcc} driver, to provide support for cross-device communication and memory management.
+The \texttt{flx} driver~\cite{felix-driver} is a device driver developed for Linux for \acs{PCIe}-based hardware. It is responsible for detecting \acs{FELIX} cards, managing hardware interrupts, and exposing a set of \texttt{ioctl} interfaces for user-space interaction. Within the \acs{ATLAS} software framework, the \texttt{flx} driver is typically deployed in conjunction with the \texttt{cmem\_rcc} driver, and optionally, the \texttt{io\_rcc} driver, to provide support for cross-device communication and memory management.
 
 \subsubsection{cmem\_rcc}
 
@@ -176,11 +176,11 @@ The driver supports concurrency and synchronization, using spinlocks to ensure t
 
 \subsection{Felix Distribution}
 
-Felix Distribution \cite{felix-distribution} is a repository in which all the \acs{FELIX} related software is contained.  As a logical consequence, \acs{FELIX} software is a collection of projects that are separately developed.\\
+Felix Distribution \cite{felix-distribution} is a repository in which all the \acs{FELIX}-related software is contained. As a logical consequence, \acs{FELIX} software is a collection of projects that are separately developed.\\
 Below is a non-comprehensive list of components of Felix Distribution --- followed by a brief description --- focusing only on modules relevant to the thesis.
 
 \textbf{elinkconfig}\\
-The \texttt{elinkconfig} module is responsible for the configuration and management of e-links. This module provides utilities to enable and disable \acs{E-link}s define, modify and query the settings of each e-link.
+The \texttt{elinkconfig} module is responsible for the configuration and management of e-links. This module provides utilities to enable and disable \acs{E-link}s define, modify, and query the settings of each e-link.
 
 \textbf{felix-bus-fs}\\
 \texttt{felix-bus} translates \acs{FELIX} specific IDs (see Definition~\ref{def:FID}) into generic network information by exposing the information as files within the Linux file system. In the next chapter there will be a more detailed explanation of what \texttt{felix-bus} does (see Section~\ref{sec:felix_bus}).
@@ -192,7 +192,7 @@ The \texttt{felix-star} is the primary readout application and I will expand mor
 \texttt{felix-client} is the client application that \acs{FELIX} software users (like for example the Detector software developers) use to communicate with server applications of \texttt{felix-star}.
 
 \textbf{felix-monitor}\\
-The \texttt{felix-monitor} module is responsible for monitoring the status and performance of the \acs{FELIX} system. It collects and reports \acs{FELIX} specific metrics, and more general ones like data throughput, and error rates.
+The \texttt{felix-monitor} module is responsible for monitoring the status and performance of the \acs{FELIX} system. It collects and reports \acs{FELIX}-specific metrics, as well as more general ones like data throughput and error rates.
 
 \textbf{flxcard}\\
 The \texttt{flxcard} module is the user-space driver library, and serves as the primary hardware abstraction layer for the \acs{FELIX} \acs{PCIe} cards installed in the host system.
@@ -204,7 +204,7 @@ The \texttt{ftools} module comprises a suite of utility programs and scripts des
 \texttt{netio3} will be expanded upon in the next chapter \emph{Netio3} (Chapter~\ref{chap:netio3}).
 
 \clearpage
-\section{ Personal Contributions}
+\section{Personal Contributions}
 
 \subsection{Hardware Testing and Assembly}
 The primary hardware contribution involved the testing and assembly of the FLX-182-1B cards. I subjected the cards to a series of previously defined tests:
@@ -253,14 +253,14 @@ The primary hardware contribution involved the testing and assembly of the FLX-1
 
 \subsubsection{Tools}
 
-The assembly of the cards required specialized equipment, while programming the power delivery controller was performed using an Aardvark I2C/SPI host adapter. The \acs{FPGA} was configured with Vivado \cite{vivado}. Electrical signal verification and validation of the front panel and active components involved the use of an oscilloscope, a power supply unit, and a function generator. Additionally, a server running with a \acs{DHCP} server was utilized to test the fiber connections, and a \acs{PCIe} loopback test card was employed to ensure proper \acs{PCIe} functionality.
+The assembly of the cards required specialized equipment, and programming the power delivery controller was performed using an Aardvark I2C/SPI host adapter. The \acs{FPGA} was configured with Vivado \cite{vivado}. Electrical signal verification and validation of the front panel and active components involved the use of an oscilloscope, a power supply unit, and a function generator. Additionally, a server running with a \acs{DHCP} server was utilized to test the fiber connections, and a \acs{PCIe} loopback test card was employed to ensure proper \acs{PCIe} functionality.
 
 \clearpage
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/contributions/felix-card-testing.jpg}
-\caption[Visual aid of FELIX card testing]{Testing a FELIX card. The PSU on the right with on top a fan to help cooling the \acs{FPGA}. Also on the right detached the Aardvark host adapter. The function generator is on top of the oscilloscope, with the probes attached to the electrical triggers. The \acs{PCIe} loopback scan is barely visibile behind the acquamarine colored fiber-optic cables, just on top of the mounted fan. What is not visible is the fibers connecting in a loopback the Firefly \protect\cite{firefly-optical-transceiver} optical transceiver modules, the JTAG and UART cables.}
+\caption[Visual aid of FELIX card testing]{Testing a FELIX card. The PSU on the right, with a fan on top to help cool the \acs{FPGA}. Also on the right detached the Aardvark host adapter. The function generator is on top of the oscilloscope, with the probes attached to the electrical triggers. The \acs{PCIe} loopback scan is barely visible behind the aquamarine-colored fiber-optic cables, just on top of the mounted fan. What is not visible is the fibers connecting in a loopback the Firefly \protect\cite{firefly-optical-transceiver} optical transceiver modules, the JTAG and UART cables.}
 \label{fig:felix-testing}
 \end{figure}
 
@@ -274,7 +274,7 @@ The assembly of the cards required specialized equipment, while programming the 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/contributions/eyescan.png}
-\caption[Sample of the eyescan of a GTY transceiver]{Sample of the eyescan of a GTY transceiver. Those transceivers receive the signals from the Firefly \protect\cite{firefly-optical-transceiver} modules and make them available to the FPGA. The GTY transceivers live inside the FPGA produced by AMD. This image represents the error rate of one transceiver. The blue part indicates a low error rate, while red a high error rate\\
+\caption[Sample of the eyescan of a GTY transceiver]{Sample of the eyescan of a GTY transceiver. Those transceivers receive the signals from the Firefly \protect\cite{firefly-optical-transceiver} modules and make them available to the FPGA. The GTY transceivers live inside the FPGA produced by AMD. This image represents the error rate of one transceiver. The blue part indicates a low error rate, while red indicates a high error rate\\
 Y axis: the voltage received by the transceiver\\
 X axis: Unit Intervals fractions, which essentially means that the signal is brought out of phase by a percentage of one clock cycle. A unit interval corresponds to a clock period.}
 \label{fig:eyescan-test}
@@ -289,6 +289,7 @@ There is an official table listing the most critical discrete components on the 
 \centering
 \caption[Reference value of resistors]{Key power rail sensor resistors and feedback impedance measurements for FLX-182-1B.}
 \label{tab:pcb-rail-measurements}
+\resizebox{\linewidth}{!}{%
 \begin{tabular}{|l|l|l|l|l|}
 \hline
 \textbf{Module} & \textbf{RefDes} & \textbf{Power Rail} & \textbf{Sensor Resistor (Ohm)} & \textbf{Reference (Ohm)} \\
@@ -302,10 +303,15 @@ LTM4638 & U6  & SYS18    & R939 270.6  & 270.6 \\
 LTM4638 & U5  & SYS33    & R936 101.9  & 101.9 \\
 LTM4642 & U84 & SYS25    & R938 5.89k  & 5.89k \\
 \hline
-\end{tabular}
+\end{tabular}%
+}
+\end{table}
 
 \vspace{1em}
 
+\begin{table}[ht]
+\centering
+\resizebox{\linewidth}{!}{%
 \begin{tabular}{|l|l|l|l|}
 \hline
 \textbf{Power Rail} & \textbf{FB Impedance RefDes} & \textbf{Measured Impedance} & \textbf{Notes} \\
@@ -316,10 +322,13 @@ DDR4 VTT     & R795  & 4.102k        & TPS51200 U58 \\
 VCC5V        & R929  & 6.26k         & TPSM5601R5 U52 \\
 VCC5VM       & R930  & 125.6         & U74 \\
 \hline
-\end{tabular}
+\end{tabular}%
+}
+\caption{Power rail impedance measurements.}
+\label{tab:impedance}
 \end{table}
 
-Due to the high density of components and their sizes, precisely locating them was challenging, and doing it consistently across different cards and production batches proved difficult. Furthermore, not all components needed the same type of inspection. Some discrete components required just visual inspection while other required one or more measurements. To help with the task, I developed a visual aid to translate the tables into an image, thus streamlining the inspection process. Components were color-coded according to the type of inspection required.
+Due to the high density of components and their sizes, precisely locating them was challenging, and doing so consistently across different cards and production batches proved difficult. Furthermore, not all components needed the same type of inspection. Some discrete components required just visual inspection while other required one or more measurements. To help with the task, I developed a visual aid to translate the tables into an image, thus streamlining the inspection process. Components were color-coded according to the type of inspection required.
 
 \begin{figure}[H]
 \centering
@@ -346,4 +355,4 @@ A significant challenge involved isolating faults in malfunctioning cards. In tw
 
 Upon diagnosing the issues, I prepared detailed documentation to guide technicians in repairing the affected cards and replacing the faulty components.
 
-Not all problem diagnosis was conducted in autonomy; I collaborated with hardware engineers at \acf{BNL}.
+Not all problem diagnosis was conducted independently; I collaborated with hardware engineers at \acf{BNL}.

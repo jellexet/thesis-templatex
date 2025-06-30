@@ -2,12 +2,12 @@
 
 \section{Hardware testing}
 
-A total of 40 FLX-182-1B cards, in 3 different batches, were subjected hardware validation and testing. During this process, 10 cards were found to be non-functional due to a range of issues, including component failures and configuration errors. Through the aformentioned diagnostics and interventions, 8 of the faulty cards were fully or partially recovered and restored to operational status.\\
+A total of 40 FLX-182-1B cards, in 3 different batches, were subjected to hardware validation and testing. During this process, 10 cards were found to be non-functional due to a range of issues, including component failures and configuration errors. Through the aforementioned diagnostics and interventions, 8 of the faulty cards were fully or partially recovered and restored to operational status.\\
 All the recovered cards are now delivered to the institutes and functioning properly.
 
 \section{Performance measurements: netio3}
 \label{sec:netio3-perf}
-The network performance evaluation focused on two key parameters: Throughput and \ac{RTT}. The experiments were conducted in a controlled testbed environment using servers connected via a 200 Gbit/s Ethernet link through a switch. The hardware specifications of the servers are detailed below:
+The network performance evaluation focused on two key parameters: Throughput and \ac{RTT}. The experiments were conducted in a controlled testbed environment using servers connected via a 200 Gbit/s Ethernet link through a switch. The hardware specifications of the servers are the same for both, and they are detailed below:
 
 \clearpage
 \begin{lstlisting}[caption={Network interface information}, label={lst:network}]
@@ -48,7 +48,7 @@ Statics have been collected from the sending part; the reason was because the se
 
 The throughput tests were conducted using the two \textit{netio3-backends} LIBFABRIC-RDMA and ASYNCMSG-TCP. To manage the high number of tests, an Ansible \cite{ansible} playbook was developed. The output of the playbook was processed using a custom Python script, which also generated the graphs using the Matplotlib \cite{matplotlib} library. The tests involved varying the buffer size --- ranging from 1 KB to 64 KB  (in ATLAS production are used buffers of 64 KB) --- and the number of buffers. The same buffer size and number of buffers were used for both the sender and receiver. 
 
-The sender transmits buffers sequentially, employing a polling mechanism to determine when the next buffer could be sent. The receiver, in turn, simply ackowledges and discards the incoming messages without further processing, as the primary objective was to measure throughput. A total of 70 combinations of buffer sizes and counts were tested for LIBFABRIC-RDMA, while only 28 combinations were evaluated for ASYNCMSG-TCP due to diminishing returns observed in preliminary tests.
+The sender transmits buffers sequentially, employing a polling mechanism to determine when the next buffer could be sent. The receiver, in turn, simply acknowledges and discards the incoming messages without further processing, as the primary objective was to measure throughput. A total of 70 combinations of buffer sizes and counts were tested for LIBFABRIC-RDMA, while only 28 combinations were evaluated for ASYNCMSG-TCP due to diminishing returns observed in preliminary tests.
 
 \subsubsection{Analysis}
 
@@ -56,14 +56,14 @@ Figures \ref{fig:1kb-buffer-throughput} and \ref{fig:64kb-buffer-throughput} sho
 
 \begin{figure}[htbp]
 \centering
-\begin{subfigure}[b]{0.7\textwidth}
+\begin{subfigure}[b]{0.85\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/results/libfabric_throughput_analysis_1K.png}
     \caption[Network performance with a 1 KB buffer]{Network performance with a 1 KB buffer. \textbf{Left:} message frequency, \textbf{Right:} Data Throughput. \textbf{Top:} plots with error ranges, \textbf{Bottom:} median values.}
     \label{fig:1kb-buffer-throughput}
 \end{subfigure}
 \vspace{0.2cm}
-\begin{subfigure}[b]{0.7\textwidth}
+\begin{subfigure}[b]{0.85\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/results/libfabric_throughput_analysis_64K.png}
     \caption[Network performance with a 64 KB buffer]{Network performance with a 64 KB buffer. \textbf{Left:} message frequency, \textbf{Right:} Data Throughput. \textbf{Top:} plots with error ranges, \textbf{Bottom:} median values.}
@@ -86,7 +86,7 @@ Figure \ref{fig:libfabric-mean-throughput-comparison} presents the throughput co
 \label{fig:libfabric-mean-throughput-comparison}
 \end{figure}
 
-The throughput results also demonstrate that the 200 Gbps bandwidth is quickly saturated when using larger buffers. Notably, the network library meets the requirements of 1MHz for Phase II production with a number of buffers \geq 32 and for buffer sizes \leq 16KB (which is far bigger than what will be used at those rates in production).
+The throughput results also demonstrate that the 200 Gbps bandwidth is quickly saturated when using larger buffers. Notably, the network library meets the requirements of 1MHz for Phase II production with a number of buffers $\geq$ 32 and for buffer sizes $\leq$ 16KB (which is far bigger than what will be used at those rates in production).
 
 For ASYNCMSG-TCP, the results (Figure \ref{fig:tcp-mean-throughput-comparison}) reveal that smaller buffers consistently achieve higher rates, regardless of the number of buffers. The throughput is significantly lower than LIBFABRIC-RDMA, with rates ranging from 70 to 90 kHz and a maximum throughput below 10 Gbps. This performance disparity shows once again that LIBFABRIC-RDMA can handle larger amount of data compared to ASYNCMSG-TCP.
 
@@ -149,6 +149,7 @@ Table~\ref{tab:rtt-outlier} summarizes the previous analysis.
 
 \begin{table}[ht]
 \centering
+\resizebox{\linewidth}{!}{%
 \begin{tabular}{|l|c|c|c|}
 \hline
 \textbf{Setup} & \textbf{Mean (µs)} & \textbf{Std Dev (µs)} & \textbf{Outlier (µs)} \\
@@ -158,7 +159,8 @@ Table~\ref{tab:rtt-outlier} summarizes the previous analysis.
 (BOOST:ASIO) LIBFABRIC-RDMA (w/ outlier) & 71.20 & 42.68 & 329 \\
 (BOOST:ASIO) LIBFABRIC-RDMA (w/o outlier) & 60.45 & 18.91 & -- \\
 \hline
-\end{tabular}
+\end{tabular}%
+}
 \caption{Effect of outlier on LIBFABRIC-RDMA RTT.}
 \label{tab:rtt-outlier}
 \end{table}
@@ -183,18 +185,25 @@ As a reminder, in FULL mode, each link is not subdivided into \acs{E-link}s.
 \label{fig:tbed-setup}
 \end{figure}
 
-The monitoring system described in Section~\ref{sec:felix_monitoring} was employed to record the performance evaluation, in particular the Prometheus-Grafana solution. The test was conducted by gradually increasing the \emph{chunk} size while maintaining a steady rate of 1 MHz (that is the requirement for Phase II). This behavior is illustrated in the dashboard window titled "Average Chunk Size" (Image~\ref{fig:tohost-perf}), where the average chunk size ramps, with incremental steps, from 16 bytes to 2 KB. Starting at a chunk size of 1 KB, by looking at the \emph{E-link Chunk Rate} graph it appears that performance issues begin to arise.\\
-What in reality is shown in the image is not a performance issue, but it is the reach of the physiological limit of FULL mode. To recall, the Subsection~\ref{subsec:felix-fullmode} explains that FULL mode has a maximum theoretical throughput of about 7.68 Gbps per link (after encoding, which is our case), and in the graph it is shown that the \acs{DMA} buffers are not getting filled up (\emph{Free Space in DMA Buffer} graph), there is no backpressure in the network (\emph{Network Resources} graph) and the chunks are not being truncated (\emph{Chunks Truncated} graphs). at a rate of 1MHz, sending 1KB of data per chunk means that the throughput is about 8.2 Gbps, and at 2KB it is about 16.4 Gbps, which is above the maximum throughput of the link, thus the link chunk rate diminishes untill reaching 7.68 Gbps throughput.\\ 
-To recap, in figure~\ref{fig:tohost-perf} is shown that \texttt{felix-tohost} and the card \texttt{FLX-182-1B} can handle without signs of distress data rates that reach the technological limit of FULL mode.
+The monitoring system described in Section~\ref{sec:felix_monitoring} was employed to record the performance evaluation, in particular the Prometheus-Grafana solution. The test was conducted by gradually increasing the \emph{chunk} size while maintaining a steady rate of 1 MHz (that is the requirement for Phase II). This behavior is illustrated in the dashboard window titled "Average Chunk Size" (Image~\ref{fig:tohost-perf-760B}), where the average chunk size ramps, with incremental steps, from 16 bytes to 760 bytes. Image~\ref{fig:tohost-perf-2k} shows that starting at a chunk size of 1 KB, by looking at the \emph{E-link Chunk Rate} graph it appears that performance issues begin to arise.\\
+What in reality is shown in the image is not a performance issue, but it is the reach of the physiological limit of FULL mode. To recall, the Subsection~\ref{subsec:felix-fullmode} explains that FULL mode has a maximum theoretical throughput of about 7.68 Gbps per link (after encoding, which is our case), and in the graphs it is shown that the \acs{DMA} buffers are not getting filled up (\emph{Free Space in DMA Buffer} graph), there is no backpressure in the network (\emph{Network Resources} graph) and the chunks are not being truncated (\emph{Chunks Truncated} graphs). At a rate of 1MHz, sending 1KB of data per chunk means that the throughput is about 8.2 Gbps, and at 2KB it is about 16.4 Gbps, which is above the maximum throughput of the link, thus the link chunk rate diminishes until reaching 7.68 Gbps throughput.\\ 
+To recap, Figure~\ref{fig:tohost-perf-760B} shows that \texttt{felix-tohost} can handle without signs of distress data rates that reach the technological limit of FULL mode, while Figure~\ref{fig:tohost-perf-2k} shows what happens when trying to surpass the throughput limit of FULL mode (The frequency rate of the \acs{E-link}s lowers).
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{images/results/tohost-perf.png}
-\caption{Grafana monitoring: stress test at 1 MHz rate up to 2 KB chunks.}
-\label{fig:tohost-perf}
+\includegraphics[width=\textwidth]{images/results/tohost-perf-760B.png}
+\caption{Grafana monitoring: stress test at 1 MHz rate up to 760 byte chunks.}
+\label{fig:tohost-perf-760B}
 \end{figure}
 
-Figure~\ref{fig:cpu-usage} illustrates the CPU usage per chunk size. The percentage value represents the average CPU usage over a 30-second period. 760 bytes chunk size is around the theoretical maximum that FULL mode can handle; the CPU usage with 760 bytes sized messages is about 765\%; There are two \acs{FELIX} cards mounted on a server, thus doubling the total CPU requirements; this brings to the conclusion that the host machine must have a minimum of 16 cores in order to run \emph{felix-tohost} with the theoretical maximum chunk size at a 1MHz rate.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/results/tohost-perf-2k.png}
+\caption{Grafana monitoring: stress test at 1 MHz rate up to 2 KB chunks.}
+\label{fig:tohost-perf-2k}
+\end{figure}
+
+Figure~\ref{fig:cpu-usage} illustrates the CPU usage per chunk size. The percentage value represents the average CPU usage over a 30-second period. 760 bytes chunk size is around the theoretical maximum that FULL mode can handle at 1 MHz; the CPU usage with 760 bytes sized messages is about 765\%; There are two \acs{FELIX} cards mounted on a server, thus doubling the total CPU requirements; this brings to the conclusion that the host machine must have a minimum of 16 cores of an equivalent CPU to the \emph{AMD EPYC 9354P} in order to run \emph{felix-tohost} with the theoretical maximum chunk size at a 1MHz rate.
 
 \begin{figure}[htbp]
 \centering
@@ -203,7 +212,7 @@ Figure~\ref{fig:cpu-usage} illustrates the CPU usage per chunk size. The percent
 \label{fig:cpu-usage}
 \end{figure}
 
-The execution of \texttt{felix-tohost} was analyzed using \texttt{perf}, and from the output a FlameGraph \cite{flamegraph} was generated (Figure~\ref{fig:felix-tohost-flamegraph}). The FlameGraph, an interactive \emph{svg} file viewable in a web browser, shows that a significant portion of the execution time is spent on functions such as \emph{decode\_subchunk\_headers}, \emph{post\_subchunk}, and \emph{check\_block\_integrity}, as well as chunk-copying operations. This flamegraph shows hotpost areas in the code that can potentially be optimized, serving as a starting point for future developments (see Subsection~\ref{subsec:felix-tohost-improvement}).
+The execution of \texttt{felix-tohost} was analyzed using \texttt{perf}, and from the output a FlameGraph \cite{flamegraph} was generated (Figure~\ref{fig:felix-tohost-flamegraph}). The FlameGraph, an interactive \emph{svg} file viewable in a web browser, shows that a significant portion of the execution time is spent on functions such as \emph{decode\_subchunk\_headers}, \emph{post\_subchunk}, and \emph{check\_block\_integrity}, as well as chunk-copying operations. This flamegraph shows hotspot areas in the code that can potentially be optimized, serving as a starting point for future developments (see Subsection~\ref{subsec:felix-tohost-improvement}).
 
 \begin{figure}[htbp]
 \centering
