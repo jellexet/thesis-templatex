@@ -194,7 +194,7 @@ To recap, in figure~\ref{fig:tohost-perf} is shown that \texttt{felix-tohost} an
 \label{fig:tohost-perf}
 \end{figure}
 
-Figure~\ref{fig:cpu-usage} illustrates the CPU usage per chunk size. The percentage value represents the average CPU usage over a 30-second period. 760 bytes chunk size is around the theoretical maximum that FULL mode can handle; the CPU usage with 760 bytes sized messages is about 700\%; There are two \acs{FELIX} cards mounted on a server, thus doubling the total CPU requirements; this brings to the conclusion that the host machine must have a minimum of 14 cores in order to run \emph{felix-tohost} with the theoretical maximum chunk size at a 1MHz rate.
+Figure~\ref{fig:cpu-usage} illustrates the CPU usage per chunk size. The percentage value represents the average CPU usage over a 30-second period. 760 bytes chunk size is around the theoretical maximum that FULL mode can handle; the CPU usage with 760 bytes sized messages is about 765\%; There are two \acs{FELIX} cards mounted on a server, thus doubling the total CPU requirements; this brings to the conclusion that the host machine must have a minimum of 16 cores in order to run \emph{felix-tohost} with the theoretical maximum chunk size at a 1MHz rate.
 
 \begin{figure}[htbp]
 \centering
@@ -208,5 +208,5 @@ The execution of \texttt{felix-tohost} was analyzed using \texttt{perf}, and fro
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/results/flamegraph.png}
-\caption[Flamegraph of felix-tohost]{Flamegraph of \texttt{felix-tohost} reading from one device. It highlights four main processes, each corresponding to one \acs{DMA} buffer, along with a smaller fifth process dedicated to \acs{TTC}.}\label{fig:felix-tohost-flamegraph}
+\caption[Flamegraph of felix-tohost]{Flamegraph of \texttt{felix-tohost} reading from one device (PCIe endpoint). It highlights four main processes, each corresponding to one \acs{DMA} buffer, along with a smaller fifth process dedicated to \acs{TTC}.}\label{fig:felix-tohost-flamegraph}
 \end{figure}
