@@ -159,7 +159,7 @@ As briefly explained before (Subsection~\ref{subsec:daq}) the \acs{ATLAS} Phase-
 \paragraph{FELIX.}
 \acf{FELIX} acts as the bridge between the detector front-end electronics and the computing infrastructure. It connects directly to the detectors through high-speed optical links and converts their data into a format that can be handled by standard network equipment.
 
-Each \acs{FELIX} server hosts two custom \acs{PCIe} cards (FLX-155). The FLX-155 will be presented later in more detail (Section~\ref{subsec:FLX-155}). The card is designed around AMD Versal \acs{FPGA}s. These cards support up to 48 optical links each, and the number of active links depends on the specific detector and the bandwidth needed. For example, the \acs{ITk} Strips detector uses cards with up to 336 logical links per card.
+Each \acs{FELIX} server hosts two custom \acs{PCIe} cards (FLX-155). The FLX-155 will be presented later in more detail (Section~\ref{subsec:FLX-155}). The card is designed around AMD Versal \acs{FPGA}s. These cards support up to 48 optical links each, and the number of active links depends on the specific detector and the bandwidth needed. For example, the \acs{ITk} Strips detector uses 1824, 10G optical links, across 76 FELIX cards each with 24-link.
 
 Once the data is received, \acs{FELIX} uses a high-speed 200~Gb/s network interface to send it to the next stage: the Data Handler servers.
 

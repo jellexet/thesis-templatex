@@ -2413,8 +2413,8 @@
     <bcf:citekey order="49" intorder="1">nsw</bcf:citekey>
     <bcf:citekey order="50" intorder="1">Ilic:2873569</bcf:citekey>
     <bcf:citekey order="51" intorder="1">firefly-optical-transceiver</bcf:citekey>
-    <bcf:citekey order="52" intorder="1">lti</bcf:citekey>
-    <bcf:citekey order="53" intorder="1">lti</bcf:citekey>
+    <bcf:citekey order="52" intorder="1">alti</bcf:citekey>
+    <bcf:citekey order="53" intorder="1">alti</bcf:citekey>
     <bcf:citekey order="54" intorder="1">gbt-versatile-link</bcf:citekey>
     <bcf:citekey order="55" intorder="1">gbt-versatile-link</bcf:citekey>
     <bcf:citekey order="56" intorder="1">gbt-versatile-link</bcf:citekey>
@@ -2463,6 +2463,12 @@
     <bcf:citekey order="99" intorder="1">matplotlib</bcf:citekey>
     <bcf:citekey order="100" intorder="1">matplotlib</bcf:citekey>
     <bcf:citekey order="101" intorder="1">flamegraph</bcf:citekey>
+    <bcf:citekey order="102" intorder="1">protodune</bcf:citekey>
+    <bcf:citekey order="103" intorder="1">protodune</bcf:citekey>
+    <bcf:citekey order="103" intorder="2">Martellotti:2056863</bcf:citekey>
+    <bcf:citekey order="104" intorder="1">sphenix</bcf:citekey>
+    <bcf:citekey order="105" intorder="1">spidr4</bcf:citekey>
+    <bcf:citekey order="106" intorder="1">timepix4</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">

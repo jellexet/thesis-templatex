@@ -25,7 +25,7 @@ The FLX-182 \cite{Ilic:2873569} (Figure \ref{fig:FLX-182-combined}) is a Phase-I
 \begin{itemize}
     \item AMD Versal Prime VP-1802 \acf{SoC}
     \item FireFly optical transceivers supporting up to 24 duplex links at 25 Gb/s \cite{firefly-optical-transceiver}
-    \item \acf{LTI} (See Figure~ref{LTI} below)
+    \item \acf{LTI} (Figure~ref{fig:ALTI} shows the \acs{ATLAS} \acl{LTI})
     \item Electrical trigger interface
     \item \acs{PCIe} Gen4 connectivity
 \end{itemize}
@@ -33,8 +33,8 @@ The FLX-182 \cite{Ilic:2873569} (Figure \ref{fig:FLX-182-combined}) is a Phase-I
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/felix/lti.jpg}
-\caption[LTI]{The ATLAS \acf{LTI} is a replacement of the legacy \acf{TTC}.\\ \texttt{Timing}: Distribution of the \acs{LHC} bunch clock (the same clock source for entire system).\\\texttt{Trigger}: Decision from the trigger system indicating whether the data for a given event should be sent to the readout.\\ \texttt{Control}: Sends synchronization/configuration commands, subdetectors raise a Busy signal to indicated that the internal buffers are filling up.\\Image source \protect\cite{lti}.}
-\label{fig:LTI}
+\caption[ATLAS Local Trigger Interface]{The ATLAS \acl{LTI} is a replacement of the legacy \acf{TTC}.\\ \texttt{Timing}: Distribution of the \acs{LHC} bunch clock (the same clock source for entire system).\\\texttt{Trigger}: Decision from the trigger system indicating whether the data for a given event should be sent to the readout.\\ \texttt{Control}: Sends synchronization/configuration commands, subdetectors raise a Busy signal to indicated that the internal buffers are filling up.\\Image source \protect\cite{alti}.}
+\label{fig:ALTI}
 \end{figure}
 
 This card requires a 16-lane \acs{PCIe} slot (preferably Gen4) configured with x8x8 bifurcation. Power is supplied through a \acs{PCIe} 6+2 pin cable, and the card's form factor necessitates two adjacent \acs{PCIe} slots for bracket installation. 

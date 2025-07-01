@@ -186,8 +186,9 @@ As a reminder, even though I still referred to them as \acs{E-link}s, in FULL mo
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{images/results/elilnkconfig.png}
-\caption[elinkconfig]{The elinkconfig tool used to configure the \acs{E-link}s of a \acs{FELIX} card. Here I was configuring the links of the FLX-182 mounted on \emph{pc-tbed-felix-14}. On the left the configuration tab for links for the tohost data direction (which is used in the test), on the right for the fromhost direction. The overlaying window is used to upload the desired configuration to the desired PCIe endpoint (FLX-device 0 or 1).}
+\includegraphics[width=\textwidth]{images/results/elinkconfig.png}
+\caption[elinkconfig]{The elinkconfig tool used to configure the \acs{E-link}s of a \acs{FELIX} card. Here I was configuring the links of the FLX-182 mounted on \emph{pc-tbed-felix-14}. On the left the configuration tab for links for the tohost data direction (which is used in the test), on the right for the fromhost direction. When configuring the \acs{E-link}s, it is possible to decide on which \acs{DMA} to write. This elinkconfig view is specific to the FULL mode firmware, for other firmware versions the layout may differ.
+The overlaying window is used to upload the desired configuration to the desired \acs{PCIe} endpoint (FLX-device 0 or 1).}
 \label{fig:elinkconfig}
 \end{figure}
 
@@ -223,5 +224,7 @@ The execution of \texttt{felix-tohost} was analyzed using \texttt{perf}, and fro
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/results/flamegraph.png}
-\caption[Flamegraph of felix-tohost]{Flamegraph of \texttt{felix-tohost} reading from one device (PCIe endpoint). It highlights four main processes, each corresponding to one \acs{DMA} buffer, along with a smaller fifth process dedicated to \acs{TTC}.}\label{fig:felix-tohost-flamegraph}
+\caption[Flamegraph of felix-tohost]{Flamegraph of \texttt{felix-tohost} reading from one device (PCIe endpoint). It highlights four main processes, each corresponding to one \acs{DMA} buffer, along with a smaller fifth process dedicated to \acs{TTC}. 
+Hotspots in \emph{decode\_subchunk\_headers}, \emph{post\_subchunk}, \emph{check\_block\_integrity}, and copy operations.}
+\label{fig:felix-tohost-flamegraph}
 \end{figure}
