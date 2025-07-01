@@ -46,9 +46,9 @@ Statics have been collected from the sending part; the reason was because the se
 
 \subsection{Throughput}
 
-The throughput tests were conducted using the two \textit{netio3-backends} LIBFABRIC-RDMA and ASYNCMSG-TCP. The tests involve a sender and a receiver. The sender sends a message to the receiver. The message, on the sender side is just a buffer with random data. The receiver has its own buffers, that will fill with the messages received from the network by the sender. The sender and receiver executables allow to change, for each, the number of buffers and their size. For the test have been used buffer sizes ranging from 1 KB to 64 KB  (in ATLAS production are used buffers of 64 KB), and a number of buffers that ranges from 1 to 512. The same buffer size and number of buffers were used for both the sender and receiver.\\
-For more detail, the sender transmits buffers sequentially, employing a polling mechanism to determine when the next buffer could be sent. The receiver, in turn, simply acknowledges and does nothing with the incoming data, as the primary objective was to measure throughput. A total of 70 combinations of buffer sizes and counts were tested for LIBFABRIC-RDMA, while only 28 combinations were evaluated for ASYNCMSG-TCP due to diminishing returns observed in preliminary tests.\\
-To manage the high number of tests, an Ansible \cite{ansible} playbook was developed. The output of the playbook was processed using a custom Python script, which also generated the graphs using the Matplotlib \cite{matplotlib} library.\\
+The throughput tests were conducted using two \textit{netio3-backends}: LIBFABRIC-RDMA and ASYNCMSG-TCP. Each test involved a sender and a receiver. The sender transmits a buffer containing random data from RAM memory to the receiver. On the receiver side, dedicated buffers are filled with the incoming messages from the sender. Both the sender and receiver executables allow configuration of the number and size of buffers. For these tests, buffer sizes ranged from 1 KB to 64 KB (with 64 KB being the size used in ATLAS production), and the number of buffers ranged from 1 to 512. The same buffer size and number of buffers were used for both sender and receiver.\\
+More specifically, the sender transmits buffers sequentially, using a polling mechanism to determine when the next buffer can be sent. The receiver simply acknowledges receipt and does not process the data, as the primary objective was to measure throughput. A total of 70 combinations of buffer sizes and counts were tested for LIBFABRIC-RDMA, while only 28 combinations were evaluated for ASYNCMSG-TCP due to diminishing returns observed in preliminary tests.\\
+To manage the large number of tests, an Ansible \cite{ansible} playbook was developed. The output was processed using a custom Python script, which also generated the graphs using the Matplotlib \cite{matplotlib} library.\\
 
 \subsubsection{Analysis}
 
@@ -58,18 +58,22 @@ Figures \ref{fig:1kb-buffer-throughput} and \ref{fig:64kb-buffer-throughput} sho
 \centering
 \begin{subfigure}[b]{\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{images/results/libfabric_throughput_analysis_1K.png}
-    \caption[Network performance with a 1 KB buffer]{Network performance with a 1 KB buffer. \textbf{Left:} Buffer frequency, \textbf{Right:} Buffer Throughput. \textbf{Top:} plots with error bars, \textbf{Bottom:} median values.}
+    \makebox[\textwidth][c]{
+        \scalebox{1.3}[1]{\includegraphics[width=\textwidth]{images/results/libfabric_throughput_analysis_1K.png}}
+    }
+    \caption[Network performance with a 1 KB buffer]{Network performance with a 1 KB buffer. \textbf{Left:} Buffer frequency, \textbf{Right:} Buffer Throughput. \textbf{Top:} plots with variance, \textbf{Bottom:} median values.}
     \label{fig:1kb-buffer-throughput}
 \end{subfigure}
 \vspace{0.2cm}
 \begin{subfigure}[b]{\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{images/results/libfabric_throughput_analysis_64K.png}
-    \caption[Network performance with a 64 KB buffer]{Network performance with a 64 KB buffer. \textbf{Left:} Buffer frequency, \textbf{Right:} Buffer Throughput. \textbf{Top:} plots with error bars, \textbf{Bottom:} median values.}
+    \makebox[\textwidth][c]{
+        \scalebox{1.3}[1]{\includegraphics[width=\textwidth]{images/results/libfabric_throughput_analysis_64K.png}}
+    }
+    \caption[Network performance with a 64 KB buffer]{Network performance with a 64 KB buffer. \textbf{Left:} Buffer frequency, \textbf{Right:} Buffer Throughput. \textbf{Top:} plots with variance, \textbf{Bottom:} median values.}
     \label{fig:64kb-buffer-throughput}
 \end{subfigure}
-\caption[Throughput comparison of 1KB and 64KB buffer]{The error rate of the smaller 1KB buffers is relatively high, while for the 64KB buffers the effect is much more contained.}
+\caption[Throughput comparison of 1KB and 64KB buffer]{The variance of the smaller 1KB buffers is relatively high, while for the 64KB buffers the effect is much more contained.}
 \label{fig:throughput-of-the-extremes-1K-64K}
 \end{figure}
 
@@ -81,7 +85,9 @@ Figure \ref{fig:libfabric-mean-throughput-comparison} presents the throughput co
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{images/results/libfabric_performance_comparison.png}
+\makebox[\textwidth][c]{
+        \scalebox{1.3}[1.3]{\includegraphics[width=\textwidth]{images/results/libfabric_performance_comparison.png}}
+}
 \caption[Throughput comparison for LIBFABRIC-RDMA across all buffer sizes]{Throughput comparison for LIBFABRIC-RDMA across all buffer sizes. Left: frequency; Right: throughput.}
 \label{fig:libfabric-mean-throughput-comparison}
 \end{figure}
@@ -91,12 +97,14 @@ For ASYNCMSG-TCP, the results (Figure \ref{fig:tcp-mean-throughput-comparison}) 
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{images/results/tcp_performance_comparison.png}
+\makebox[\textwidth][c]{
+        \scalebox{1.3}[1.3]{\includegraphics[width=\textwidth]{images/results/tcp_performance_comparison.png}}
+}
 \caption[Throughput comparison for ASYNCMSG-TCP across all buffer sizes]{Throughput comparison for ASYNCMSG-TCP across all buffer sizes. Left: frequency; Right: throughput.}
 \label{fig:tcp-mean-throughput-comparison}
 \end{figure}
 
-The decision to limit the number of buffers and sizes tested for ASYNCMSG-TCP was based on the observed saturation of bandwidth for LIBFABRIC-RDMA and the lack of performance improvement for ASYNCMSG-TCP with larger buffers. These findings conclusively demonstrate that LIBFABRIC-RDMA outperforms ASYNCMSG-TCP in terms of data throughput.
+The decision to limit the number of buffers and sizes tested for ASYNCMSG-TCP was based on the observed saturation of bandwidth for LIBFABRIC-RDMA and the lack of performance improvement for ASYNCMSG-TCP with larger buffers. These findings conclusively demonstrate that LIBFABRIC-RDMA outperforms\\ ASYNCMSG-TCP in terms of data throughput.
 
 Given those results, why is TCP included as an option? There are technical reasons and internal ones. Technically, the pros for TCP over RDMA include simplicity, a smaller memory footprint, opening connections is less costly and, as mentioned before, memory stability during the send operation. 
 The internal reasons for using TCP in \acs{ATLAS} derive on how its monitoring works. In order to monitor the entirety of \acs{ATLAS}' \acl{FE} electronics many elinks need to be used, in that case using LIBFABRIC-RDMA would require creating a \acs{DMA} buffer for each of them, plus sometimes the network library is used to send configurations to \acs{FE} electronics, meaning that the buffers need to be big enough for such scenarios. It comes by itself that the amount of memory needed is very large, and that memory would not be used efficiently, also the use case of the monitoring does not require high performance, thus ASYNCMSG-TCP is ideal.
@@ -107,7 +115,7 @@ The \acl{RTT} tests were conducted using the two \textit{netio3-backends} LIBFAB
 
 \subsubsection{Analysis}
 
-Figure~\ref{fig:rtt-tcp-rdma} illustrates the average \acs{RTT} of 64-byte messages transmitted using ASYNCMSG-TCP and LIBFABRIC-RDMA backends, with both epoll and \texttt{BOOST::ASIO} event loops. The results show that LIBFABRIC-RDMA achieves significantly lower \acs{RTT} compared to the ASYNCMSG-TCP implementation, regardless of the event loop used. Furthermore using the \texttt{BOOST::ASIO} eventloop consistently outperforms epoll; the reason derives from the implementation of the eventloop, in which the underlying is always \texttt{BOOST::ASIO}, while the \texttt{epoll} offers a better interface but has to transfer the messages from its thread to the \texttt{BOOST::ASIO} thread.
+Figure~\ref{fig:rtt-tcp-rdma} illustrates the average \acs{RTT} of 64-byte messages transmitted using\\ ASYNCMSG-TCP and LIBFABRIC-RDMA backends, with both epoll and \texttt{BOOST::ASIO} event loops. The results show that LIBFABRIC-RDMA achieves significantly lower \acs{RTT} compared to the ASYNCMSG-TCP implementation, regardless of the event loop used. Furthermore using the \texttt{BOOST::ASIO} eventloop consistently outperforms epoll; the reason derives from the implementation of the eventloop, in which the underlying is always \texttt{BOOST::ASIO}, while the \texttt{epoll} offers a better interface but has to transfer the messages from its thread to the \texttt{BOOST::ASIO} thread.
 For ASYNCMSG-TCP, using \texttt{BOOST::ASIO} nearly halves the average \acs{RTT}; the performance increase is noticeable, at the cost of a worse interface and less control.
 
 \begin{figure}[htbp]
@@ -171,10 +179,10 @@ Table~\ref{tab:rtt-outlier} summarizes the previous analysis.
 Figure~\ref{fig:tbed-setup} below illustrates the setup for the test.\\
 \emph{pc-tbed-felix-15} mounts the currently used in production \emph{FLX-712} with the \emph{F-EMU} firmware, which is used to generate emulated data in the FULLMODE format; this data is routed via network to the other server, \emph{pc-tbed-felix-14}.
 On the same machine (\emph{pc-tbed-felix-15}) runs \emph{felix-test-swrod}, which is a software that subscribes to the \acs{E-link}s through \texttt{felix-tohost}, which in turn publishes the data when available.\\
-On \emph{pc-tbed-felix-14} is mounted an \emph{FLX-182-1B} card (that I personally tested and validated), with FULLMODE firmware. The \acs{FELIX} card receives the emulated FULL mode data via network and writes it into the enabled \acs{DMA} buffers through \acs{E-link}s. It can be configured which \acs{E-link} writes in which \acs{DMA} buffer using the \emph{elinkconfig} tool (Fiure~\ref{fig:elinkconfig}). In the context of this test, all the 12 \acs{E-link}s, per device\footnote{The FELIX card, when inserted in a PCIe socket appears to the Operatin System as two PCIe devices}, have been used, specifically 3 links per \acs{DMA} buffer. On the same host machine runs \texttt{felix-tohost}, which, as mentioned, reads the data from the \acs{DMA} buffers (with three threads per buffer in this test), and publishes it to \emph{felix-test-swrod}; \texttt{felix-tohost} posts the monitoring data to a pre-decided port; a Prometheus instance, running on Docker on my local machine, scrapes the data knowing the IP address and port, and a Grafana instance queries Prometheus for that data and creates the Dashboard seen in Figure~\ref{fig:tohost-perf}. On \emph{pc-tbed-felix-14}, there is also the \acl{TTC} emulator, which provides the clock that gives the pace to the FULLMODE emulator; in this test, the emulator trigger signals were set at 1 MHz.\\
-It is relavant to introduce a technical hardware and firmware implementation of the \acs{FELIX} card. When a \acs{FELIX} card is inserted into the \acs{PCIe} socket, it presents itself as two \acs{PCIe} endpoints, which appear to the Operating System as two separate devices. This is useful because each device can have its own \acs{DMA} buffer and control logic. For this reason, in order to use a \acs{FELIX} card, the BIOS has to set the \acs{PCIe} socket with bifurcation, which essentially splits the 16 lanes of the \acs{PCIe} slot into two 8-lanes segments, and this is the explanation of the two \acs{PCIe} devices. For the test \texttt{felix-tohost} has been run using the two devices exposed by the FLX-182.\\
+On \emph{pc-tbed-felix-14} is mounted an \emph{FLX-182-1B} card (that I personally tested and validated), with FULLMODE firmware. The \acs{FELIX} card receives the emulated FULL mode data via network and writes it into the enabled \acs{DMA} buffers through \acs{E-link}s. It can be configured which \acs{E-link} writes in which \acs{DMA} buffer using the \emph{elinkconfig} tool (Fiure~\ref{fig:elinkconfig}). In the context of this test, all the 12 \acs{E-link}s, per device\footnote{The FELIX card, when inserted in a PCIe socket appears to the Operating System as two PCIe devices}, have been used, specifically 3 links per \acs{DMA} buffer. On the same host machine runs \texttt{felix-tohost}, which, as mentioned, reads the data from the \acs{DMA} buffers (with three threads per buffer in this test), and publishes it to \emph{felix-test-swrod}; \texttt{felix-tohost} posts the monitoring data to a pre-decided port; a Prometheus instance, running on Docker on my local machine, scrapes the data knowing the IP address and port, and a Grafana instance queries Prometheus for that data and creates the Dashboard seen in Figure~\ref{fig:tohost-perf-760B} and Figure~\ref{fig:tohost-perf-2k}. On \emph{pc-tbed-felix-14}, there is also the \acl{TTC} emulator, which provides the clock that gives the pace to the FULLMODE emulator; in this test, the emulator trigger signals were set at 1 MHz.\\
+It is relevant to introduce a technical hardware and firmware implementation of the \acs{FELIX} card. When a \acs{FELIX} card is inserted into the \acs{PCIe} socket, it presents itself as two \acs{PCIe} endpoints, which appear to the Operating System as two separate devices. This is useful because each device can have its own \acs{DMA} buffer and control logic. For this reason, in order to use a \acs{FELIX} card, the BIOS has to set the \acs{PCIe} socket with bifurcation, which essentially splits the 16 lanes of the \acs{PCIe} slot into two 8-lane segments, and this is the explanation of the two \acs{PCIe} devices. For the test \texttt{felix-tohost} has been run using the two devices exposed by the FLX-182.\\
 For what concerns the \emph{netio3} network library, LIBFABRIC-RDMA was used.\\
-The test consisted of sending data through all 12 links distributed across 4 \acs{DMA} buffers (3 links per \acs{DMA} buffer) at a steady 1 MHz rate, but changing the \emph{chunk} size. For reading each DMA buffer have been used 3 threads.\\
+The test consisted of sending data through all 12 links distributed across 4 \acs{DMA} buffers (3 links per \acs{DMA} buffer) at a steady 1 MHz rate, but changing the \emph{chunk} size. For reading each DMA buffer, three threads have been used.\\
 As a reminder, even though I still referred to them as \acs{E-link}s, in FULL mode, each \acs{E-link} corresponds to a full optical link.
 
 \begin{figure}[htbp]
@@ -196,19 +204,19 @@ The monitoring system described in Section~\ref{sec:felix_monitoring} was employ
 What in reality is shown in the image is not a performance issue, but it is the reach of the technical throughput limit of FULL mode. To recall, the Subsection~\ref{subsec:felix-fullmode} explains that FULL mode has a maximum theoretical throughput of about 7.68 Gbps per link (after encoding, which is our case), and in the graphs it is shown that the \acs{DMA} buffers are not getting filled up (\emph{Free Space in DMA Buffer} graph), there is no backpressure in the network (\emph{Network Resources} graph) and the chunks are not being truncated (\emph{Chunks Truncated} graphs). At a rate of 1MHz, sending 1KB of data per chunk means that the throughput is about 8.2 Gbps, and at 2KB it is about 16.4 Gbps, which is above the maximum throughput of the link, thus the link chunk rate diminishes until reaching 7.68 Gbps throughput.\\ 
 To recap, Figure~\ref{fig:tohost-perf-760B} shows that \texttt{felix-tohost} can handle without signs of distress data rates that reach the technological limit of FULL mode, while Figure~\ref{fig:tohost-perf-2k} shows what happens when trying to surpass the throughput limit of FULL mode (The frequency rate of the \acs{E-link}s lowers).
 
-\begin{figure}[htbp]
+\begin{sidewaysfigure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/results/tohost-perf-760B.png}
 \caption{Grafana monitoring: stress test at 1 MHz rate up to 760 byte chunks.}
 \label{fig:tohost-perf-760B}
-\end{figure}
+\end{sidewaysfigure}
 
-\begin{figure}[htbp]
+\begin{sidewaysfigure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/results/tohost-perf-2k.png}
 \caption{Grafana monitoring: stress test at 1 MHz rate up to 2 KB chunks.}
 \label{fig:tohost-perf-2k}
-\end{figure}
+\end{sidewaysfigure}
 
 Figure~\ref{fig:cpu-usage} illustrates the CPU usage per chunk size. The percentage value represents the average CPU usage over a 30-second period. 760 bytes chunk size is around the theoretical maximum that FULL mode can handle at 1 MHz; the CPU usage with 760 bytes sized messages is about 765\%; There are two \acs{FELIX} cards mounted on a server, thus doubling the total CPU requirements; this brings to the conclusion that the host machine must have a minimum of 16 cores of an equivalent CPU to the \emph{AMD EPYC 9354P} in order to run \emph{felix-tohost} with the theoretical maximum chunk size at a 1MHz rate.
 

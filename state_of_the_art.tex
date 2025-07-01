@@ -159,12 +159,12 @@ As briefly explained before (Subsection~\ref{subsec:daq}) the \acs{ATLAS} Phase-
 \paragraph{FELIX.}
 \acf{FELIX} acts as the bridge between the detector front-end electronics and the computing infrastructure. It connects directly to the detectors through high-speed optical links and converts their data into a format that can be handled by standard network equipment.
 
-Each \acs{FELIX} server hosts two custom \acs{PCIe} cards (FLX-155). The FLX-155 will be presented later in more detail (Section~\ref{subsec:FLX-155}). The card is designed around AMD Versal \acs{FPGA}s. These cards support up to 48 optical links each, and the number of active links depends on the specific detector and the bandwidth needed. For example, the \acs{ITk} Strips detector uses 1824, 10G optical links, across 76 FELIX cards each with 24-link.
+Each \acs{FELIX} server is equipped with two custom \acs{PCIe} cards (FLX-155), which will be described in detail in Section~\ref{subsec:FLX-155}. Each FLX-155 card is built around an AMD Versal \acs{FPGA} and supports up to 48 optical links. The actual number of active links depends on the specific detector and its bandwidth requirements. For instance, the \acs{ITk} Strips detector uses 1,824 10~Gb/s optical links, distributed across 76 FELIX cards, each being a 24-links card.
 
 Once the data is received, \acs{FELIX} uses a high-speed 200~Gb/s network interface to send it to the next stage: the Data Handler servers.
 
 \paragraph{Data Handlers.}
-The Data Handlers are a set of dedicated servers that receive data from \acs{FELIX} and perform two main tasks. First, they rebuild complete detector "fragments" by combining data that belongs to the same event. Then, they pass those fragments to the Dataflow system for further processing.
+The Data Handlers are a set of dedicated servers that receive data from \acs{FELIX} and perform two main tasks. First, they aggregate data into larger "fragments" by combining data that belongs to the same event. Then, they pass those fragments to the Dataflow system for further processing.
 
 Depending on the detector, the \acs{DH} may work in two different modes. For some detectors—like \acs{ITk}, \acs{HGTD}, and New Small Wheel \cite{nsw}, the data arrives in small pieces from many sources, and the \acs{DH} must perform "fragment building." This requires more computing power, as it involves grouping, formatting, and validating the data. For other detectors that already send pre-formatted fragments, the \acs{DH} simply acts as a relay.
 

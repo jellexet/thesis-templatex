@@ -38,13 +38,12 @@ float=htbp
 \addbibresource{biblio.bib}
 
 \usepackage{rotating}
-
 \usepackage{amsthm}
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
 \theoremstyle{remark}
 \newtheorem*{remark}{Remark}
-\usepackage{graphicx}
+\usepackage{graphicx, adjustbox}
 \usepackage{subcaption}
 
 % tables

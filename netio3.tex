@@ -5,11 +5,11 @@ Netio3 \cite{netio3-docs} is a transport-agnostic networking library originally 
 
 \section{Netio3 backend}
 
-Both the \texttt{asyncmsg} and the \texttt{libfabric} backend use an event-driven model in the form of an event loop. Events can be callbacks from the underlying network library notifying the application about new connections, incoming data or user defined callbacks added through signals and timers. The event loop is single threaded, thus guaranteeing that all events are executed sequentially. Each event is associated with a callback that contains the user code that is executed when the event is triggered.
+Both the \texttt{asyncmsg} and the \texttt{libfabric} backend are implemented with the Reactor design pattern, by using an event-driven model in the form of an event loop. Events can be callbacks from the underlying network library notifying the application about new connections, incoming data or user defined callbacks added through signals and timers. The event loop is single threaded, thus guaranteeing that all events are executed sequentially. Each event is associated with a callback that contains the user code that is executed when the event is triggered.
 
 \subsection{Eventloop implementation}
 
-There are two different event loop implementations: One based on the Linux kernel epoll system call (EpollEventLoop), and one based on Boost::ASIO::io\_service (AsioEventLoop). Both backends (The two versions are described below) are compatible with either event loop implementation. The same event loop can be used to power multiple backends.
+There are two different event loop implementations: One based on the Linux kernel epoll system call (EpollEventLoop), and one based on \texttt{Boost::ASIO::io\_service} (AsioEventLoop). Both backends (The two versions are described below) are compatible with either event loop implementation. The same event loop can be used to power multiple backends.
 
 
 \subsection{Libfabric backend}
@@ -19,9 +19,9 @@ There are two different event loop implementations: One based on the Linux kerne
 
 \subsubsection{Sending data}
 
-\texttt{libfabric} aims to provide maximum performance. One way to achieve high performance is to avoid data copies. This is done by registering memory regions with an \acs{RDMA} device. Memory registration is an operation that basically pins that memory region only for an \acs{RDMA} device, since sending data to an \acs{RDMA} device from outside registered memory regions is not possible. This also requires the guarantee that after initiating a send operation, the data is not modified until the operation is completed.\\
+One way to achieve high performance is to avoid data copies. This is done by registering memory regions with an \acs{RDMA} device. Memory registration is an operation that pins\footnote{pinning a memory region means that the operating system does not to move that data to different physical locations or swap it to disk.} that memory region only for an \acs{RDMA} device, since sending data to an \acs{RDMA} device from outside registered memory regions is not possible. The real advantage of RDMA is that the network hardware can directly access physical memory addresses (both for reading and writing), bypassing the CPU entirely for data transfers.\\
 
-For \texttt{buffered sending}, a given number of buffers is allocated in memory, and then they are registered with \texttt{libfabric}.\\
+For \texttt{buffered sending}, a given number of buffers is allocated in memory, and registered with \texttt{libfabric}.\\
 For memory coherency and to avoid data corruption, a buffer can never be modified after send\_buffer is called and before receiving the completion message. Matching send operations with completions is done internally.
 
 For \texttt{zero-copy sending}, are registered two memory regions: one main memory region containing the data, and one region containing the additional header information (16 bytes per send operation).  Matching the send operations with completions is not supported by the library and has to be managed by the user.
@@ -34,7 +34,7 @@ For the \texttt{libfabric} backend, opening and closing connections is an expens
 \subsection{Asyncmsg backend}
 \label{subsec:asyncmsg}
 
-\texttt{asyncmsg} is a message based wrapper of Boost::ASIO, developed by the \acs{ATLAS} \acs{T-DAQ} group. It provides a high-level interface for asynchronous message passing over TCP/IP networks, allowing applications to send and receive non-blocking messages (what asynchronous means).\\
+\texttt{asyncmsg} is a message based wrapper of \texttt{Boost::ASIO}, developed by the \acs{ATLAS} \acs{T-DAQ} group. It provides a high-level interface for asynchronous message passing over TCP/IP networks, allowing applications to send and receive non-blocking messages (what asynchronous means).\\
 The \texttt{asyncmsg} backend is thread safe.
 
 \subsubsection{Sending data}
@@ -77,37 +77,49 @@ The enhancement involved designing a new, more efficient header and updating the
 \end{figure}
 
 This optimization works because data in the same \texttt{block} is guaranteed to have the same \acs{FID} since a \texttt{block} is encoded with data coming only from one \acs{E-link}.\\
-See Figure~\ref{fig:bock-format} to recall the \texttt{block} format that helps follow the next calculations.\\
-Supposing the \texttt{block} is filled, to be conservative with the size, messages of 26 bytes, which is bigger than the size of a typical message coming from \acs{ITk}. A \texttt{block}, as shown in Figure~\ref{fig:bock-format} has always a block-header of 4 bytes (32 bits), and for every other message (\texttt{chunks} and \texttt{subchunks}) there is a header of 4 bytes. With these assumptions a \texttt{block} would contain:
-The first header will contain all the optional fields, meaning that the first message will be:
+See Figure~\ref{fig:block-format} to recall the \texttt{block} format that helps follow the next calculations.\\
+Supposing the \texttt{block} is filled, to be conservative with the size, messages of 26 bytes, which is bigger than the size of a typical message coming from \acs{ITk}. A \texttt{block}, as shown in Figure~\ref{fig:block-format} has always a block-header of 4 bytes (32 bits), and for every other message (\texttt{chunks} and \texttt{subchunks}) there is a header of 4 bytes.
+
+We calculate the number of total 26-byte \texttt{chunks} that fit into a \texttt{block} using:
+
 \[
-(1024 [\text{bytes}] - 4 [\text{bytes}]) / (26 [\text{bytes}] + 4 [\text{bytes}]) =   34 [\text{messages/chunks}]
+\frac{1024~\text{bytes} - 4~\text{bytes}}{26~\text{bytes} + 4~\text{bytes}} = 34~\text{chunks}
 \]
 
+Generalizing this:
+
 \[
-(\text{block size} - \text{block header}) / (\text{chunk size} + \text{chunk header}) =   \text{n chunks in a block}
+\frac{\text{block size} - \text{block header}}{\text{chunk size} + \text{chunk header}} = \text{number of chunks in a block}
 \]
 
-Calculated the number of total 26 byte \texttt{chunks} in a \texttt{block} to be 34, now let's calculate how much space they would occupy once moved into the network buffer with both the old and the new buffer formatting.\\
-Starting with the old formatting, every chunck would be preceded by a 13-byte header, wich means that 34 messages into the buffer would occupy:
+We determined that 34 chunks fit into a block. Now, we compute how much space they occupy in the network buffer using both the old and new buffer formatting schemes.
+
+\paragraph{Old Buffer Format}
+
+Each chunk is preceded by a 13-byte header, so:
+
 \[
-(13 [\text{bytes}] + 26 [\text{bytes}]) x 34 = 1326 [\text{bytes}]
+(13~\text{bytes} + 26~\text{bytes}) \cdot 34 = 1326~\text{bytes}
 \]
 
-With the newly implemented buffer formatted, the first message in the buffer would occupy:
+\paragraph{New Buffer Format}
+
+The first chunk has a full header:
 
 \[
-13 [\text{bytes}] + 26 [\text{bytes}] = 39 [\text{bytes}]
+13~\text{bytes} + 26~\text{bytes} = 39~\text{bytes}
 \]
 
-The next headers are guaranteed to have the same \acs{FID}, so the would occupy:
+The remaining 33 chunks share the same \ac{FID} and only require a 4-byte header each:
+
 \[
-(4 [\text{bytes}] + 26 [\text{bytes}]) x 33 = 990 [\text{bytes}]
+(4~\text{bytes} + 26~\text{bytes}) \cdot 33 = 990~\text{bytes}
 \]
 
-Making the total occupancy for the new format:
+Total buffer occupancy:
+
 \[
-39 [\text{bytes}] + 990 [\text{bytes}] = 1029 [\text{bytes}]
+39~\text{bytes} + 990~\text{bytes} = 1029~\text{bytes}
 \]
 
 In a conservative scenario with the new formatting, the network buffer would occupy $\approx$\text{25\%} less space.
