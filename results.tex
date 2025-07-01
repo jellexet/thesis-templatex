@@ -46,9 +46,9 @@ Statics have been collected from the sending part; the reason was because the se
 
 \subsection{Throughput}
 
-The throughput tests were conducted using the two \textit{netio3-backends} LIBFABRIC-RDMA and ASYNCMSG-TCP. To manage the high number of tests, an Ansible \cite{ansible} playbook was developed. The output of the playbook was processed using a custom Python script, which also generated the graphs using the Matplotlib \cite{matplotlib} library. The tests involved varying the buffer size --- ranging from 1 KB to 64 KB  (in ATLAS production are used buffers of 64 KB) --- and the number of buffers. The same buffer size and number of buffers were used for both the sender and receiver. 
-
-The sender transmits buffers sequentially, employing a polling mechanism to determine when the next buffer could be sent. The receiver, in turn, simply acknowledges and discards the incoming messages without further processing, as the primary objective was to measure throughput. A total of 70 combinations of buffer sizes and counts were tested for LIBFABRIC-RDMA, while only 28 combinations were evaluated for ASYNCMSG-TCP due to diminishing returns observed in preliminary tests.
+The throughput tests were conducted using the two \textit{netio3-backends} LIBFABRIC-RDMA and ASYNCMSG-TCP. The tests involve a sender and a receiver. The sender sends a message to the receiver. The message, on the sender side is just a buffer with random data. The receiver has its own buffers, that will fill with the messages received from the network by the sender. The sender and receiver executables allow to change, for each, the number of buffers and their size. For the test have been used buffer sizes ranging from 1 KB to 64 KB  (in ATLAS production are used buffers of 64 KB), and a number of buffers that ranges from 1 to 512. The same buffer size and number of buffers were used for both the sender and receiver.\\
+For more detail, the sender transmits buffers sequentially, employing a polling mechanism to determine when the next buffer could be sent. The receiver, in turn, simply acknowledges and does nothing with the incoming data, as the primary objective was to measure throughput. A total of 70 combinations of buffer sizes and counts were tested for LIBFABRIC-RDMA, while only 28 combinations were evaluated for ASYNCMSG-TCP due to diminishing returns observed in preliminary tests.\\
+To manage the high number of tests, an Ansible \cite{ansible} playbook was developed. The output of the playbook was processed using a custom Python script, which also generated the graphs using the Matplotlib \cite{matplotlib} library.\\
 
 \subsubsection{Analysis}
 
@@ -56,17 +56,17 @@ Figures \ref{fig:1kb-buffer-throughput} and \ref{fig:64kb-buffer-throughput} sho
 
 \begin{figure}[htbp]
 \centering
-\begin{subfigure}[b]{0.85\textwidth}
+\begin{subfigure}[b]{\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/results/libfabric_throughput_analysis_1K.png}
-    \caption[Network performance with a 1 KB buffer]{Network performance with a 1 KB buffer. \textbf{Left:} message frequency, \textbf{Right:} Data Throughput. \textbf{Top:} plots with error ranges, \textbf{Bottom:} median values.}
+    \caption[Network performance with a 1 KB buffer]{Network performance with a 1 KB buffer. \textbf{Left:} Buffer frequency, \textbf{Right:} Buffer Throughput. \textbf{Top:} plots with error bars, \textbf{Bottom:} median values.}
     \label{fig:1kb-buffer-throughput}
 \end{subfigure}
 \vspace{0.2cm}
-\begin{subfigure}[b]{0.85\textwidth}
+\begin{subfigure}[b]{\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/results/libfabric_throughput_analysis_64K.png}
-    \caption[Network performance with a 64 KB buffer]{Network performance with a 64 KB buffer. \textbf{Left:} message frequency, \textbf{Right:} Data Throughput. \textbf{Top:} plots with error ranges, \textbf{Bottom:} median values.}
+    \caption[Network performance with a 64 KB buffer]{Network performance with a 64 KB buffer. \textbf{Left:} Buffer frequency, \textbf{Right:} Buffer Throughput. \textbf{Top:} plots with error bars, \textbf{Bottom:} median values.}
     \label{fig:64kb-buffer-throughput}
 \end{subfigure}
 \caption[Throughput comparison of 1KB and 64KB buffer]{The error rate of the smaller 1KB buffers is relatively high, while for the 64KB buffers the effect is much more contained.}
@@ -86,8 +86,7 @@ Figure \ref{fig:libfabric-mean-throughput-comparison} presents the throughput co
 \label{fig:libfabric-mean-throughput-comparison}
 \end{figure}
 
-The throughput results also demonstrate that the 200 Gbps bandwidth is quickly saturated when using larger buffers. Notably, the network library meets the requirements of 1MHz for Phase II production with a number of buffers $\geq$ 32 and for buffer sizes $\leq$ 16KB (which is far bigger than what will be used at those rates in production).
-
+The throughput results also demonstrate that the 200 Gbps bandwidth is quickly saturated when using larger buffers.
 For ASYNCMSG-TCP, the results (Figure \ref{fig:tcp-mean-throughput-comparison}) reveal that smaller buffers consistently achieve higher rates, regardless of the number of buffers. The throughput is significantly lower than LIBFABRIC-RDMA, with rates ranging from 70 to 90 kHz and a maximum throughput below 10 Gbps. This performance disparity shows once again that LIBFABRIC-RDMA can handle larger amount of data compared to ASYNCMSG-TCP.
 
 \begin{figure}[htbp]
@@ -108,8 +107,8 @@ The \acl{RTT} tests were conducted using the two \textit{netio3-backends} LIBFAB
 
 \subsubsection{Analysis}
 
-Figure~\ref{fig:rtt-tcp-rdma} illustrates the average \acs{RTT} of 64-byte messages transmitted using ASYNCMSG-TCP and LIBFABRIC-RDMA backends, with both epoll and BOOST:ASIO event loops. The results show that LIBFABRIC-RDMA achieves significantly lower \acs{RTT} compared to the ASYNCMSG-TCP implementation, regardless of the event loop used. Furthermore using the BOOST:ASIO eventloop consistently outperforms epoll; the reason derives from the implementation of the eventloop, in which the underlying is always \texttt{BOOSt::ASIO}, while the \texttt{epoll} offers a better interface but has to transfer the messages from its thread to the \texttt{BOOST::ASIO} thread.
-For ASYNCMSG-TCP, using BOOST:ASIO nearly halves the average \acs{RTT}; the performance increase is noticeable, at the cost of a worse interface and less control.
+Figure~\ref{fig:rtt-tcp-rdma} illustrates the average \acs{RTT} of 64-byte messages transmitted using ASYNCMSG-TCP and LIBFABRIC-RDMA backends, with both epoll and \texttt{BOOST::ASIO} event loops. The results show that LIBFABRIC-RDMA achieves significantly lower \acs{RTT} compared to the ASYNCMSG-TCP implementation, regardless of the event loop used. Furthermore using the \texttt{BOOST::ASIO} eventloop consistently outperforms epoll; the reason derives from the implementation of the eventloop, in which the underlying is always \texttt{BOOST::ASIO}, while the \texttt{epoll} offers a better interface but has to transfer the messages from its thread to the \texttt{BOOST::ASIO} thread.
+For ASYNCMSG-TCP, using \texttt{BOOST::ASIO} nearly halves the average \acs{RTT}; the performance increase is noticeable, at the cost of a worse interface and less control.
 
 \begin{figure}[htbp]
 \centering

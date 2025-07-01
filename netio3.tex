@@ -76,23 +76,38 @@ The enhancement involved designing a new, more efficient header and updating the
 \label{fig:new-buffer-format}
 \end{figure}
 
-This optimization works because data in the same \texttt{block} is guaranteed to have the same \acs{FID}.
-Supposing messages of 16 bytes, which is around the size of a typical message coming from \acs{ITk}, and for making calculations easier (16 is a divisor of 1024 which is the size of a \texttt{block} in bytes); the first header will contain all the optional fields, meaning that the first message will be:
+This optimization works because data in the same \texttt{block} is guaranteed to have the same \acs{FID} since a \texttt{block} is encoded with data coming only from one \acs{E-link}.\\
+See Figure~\ref{fig:bock-format} to recall the \texttt{block} format that helps follow the next calculations.\\
+Supposing the \texttt{block} is filled, to be conservative with the size, messages of 26 bytes, which is bigger than the size of a typical message coming from \acs{ITk}. A \texttt{block}, as shown in Figure~\ref{fig:bock-format} has always a block-header of 4 bytes (32 bits), and for every other message (\texttt{chunks} and \texttt{subchunks}) there is a header of 4 bytes. With these assumptions a \texttt{block} would contain:
+The first header will contain all the optional fields, meaning that the first message will be:
 \[
-13 [\text{bytes}] + 16 [\text{bytes}] = 29 \, [\text{bytes}]
-    header        +      payload
+(1024 [\text{bytes}] - 4 [\text{bytes}]) / (26 [\text{bytes}] + 4 [\text{bytes}]) =   34 [\text{messages/chunks}]
 \]
-The next headers are guaranteed to have the same \acs{FID}, so they will be:
+
 \[
-4 [\text{bytes}] + 16 [\text{bytes}] = 20\, [\text{bytes}]
-    header       +       payload
+(text{total block size} - \text{block header}) / (\text{chunk size} + \text{chunk header}) =   \text{number of 26 byte chunks in a block}
 \]
-A block, which is 1KB, will contain 64 messages of 16 bytes each; with the new header the total size of the network buffer is:
+
+Calculated the number of total 26 byte \texttt{chunks} in a \texttt{block} to be 34, now let's calculate how much space they would occupy once moved into the network buffer with both the old and the new buffer formatting.\\
+Starting with the old formatting, every chunck would be preceded by a 13-byte header, wich means that 34 messages into the buffer would occupy:
 \[
-1 [\text{messages}] \times 29 [\text{bytes}] + (63 [\text{messages}] \times 20 [\text{bytes}]) = 1289 \, [\text{bytes}]
+(13 [\text{bytes}] + 26 [\text{bytes}]) x 34 = 1326 [\text{bytes}]
 \]
-while using the previous header, the network buffer size was:
+
+With the newly implemented buffer formatted, the first message in the buffer would occupy:
+
 \[
-64 [\text{messages}] \times 29 [\text{bytes}] = 1856\, [\text{bytes}]
+13 [\text{bytes}] + 26 [\text{bytes}] = 39 [\text{bytes}]
 \]
-In a typical scenario, with the new formatting the network buffer would be able to contain over \text{40\%} more messages within the same size, which corresponds to a notable increase in throughput.
+
+The next headers are guaranteed to have the same \acs{FID}, so the would occupy:
+\[
+(4 [\text{bytes}] + 26 [\text{bytes}]) x 33 = 990 [\text{bytes}]
+\]
+
+Making the total occupancy for the new format:
+\[
+39 [\text{bytes}] + 990 [\text{bytes}] = 1029 [\text{bytes}]
+\]
+
+In a conservative scenario with the new formatting, the network buffer would occupy \apporox\text{25\%} less space.

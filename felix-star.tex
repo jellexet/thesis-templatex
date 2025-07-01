@@ -84,8 +84,15 @@ The default behaviour is to spawn a single reader thread per \acs{DMA} buffer, b
 
 \subsection{felix-tohost data format}
 
-Data packets arriving via the front-end links or virtual E-Links are referred to as “\texttt{chunks}” and can have an arbitrary size. Data inside the \acs{DMA} buffers is encoded in 1024-byte blocks. If a chunk is bigger than a block, or does not fit in the remaining space, it is divided in what is called a \texttt{subchunk}. Otherwise if a chunk does not completely fill a block, it is padded with zeroes and the whole block is sent after a timeout.\\
+Data packets arriving via the front-end links or virtual E-Links are referred to as “\texttt{chunks}” and can have an arbitrary size. Data inside the \acs{DMA} buffers is encoded in 1024-byte blocks (Figure~\ref{fig:block-format} show how a \texttt{felix-tohost} block is formatted). If a chunk is bigger than a block, or does not fit in the remaining space, it is divided in what is called a \texttt{subchunk}. Otherwise if a chunk does not completely fill a block, it is padded with zeroes and the whole block is sent after a timeout.\\
 The reason for encoding data in \texttt{blocks} and not use \texttt{chunks} directly is because having \texttt{blocks} makes it easier for the software to handle the data: having a data format with a fixed size makes the memory alignment easier (constraint introduced by \acs{PCIe}), and similarly a fixed size makes \acs{DMA} much easier. Also there is an advantage for error handling discussed below in Subsection~\ref{sec:felix_tohost_error_handling}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=textwidth]{images/felix/block-data-format.png}
+\caption[ToHost Block data format]{\acs{FELIX} ToHost Block format.}
+\label{fig:block-format}
+\end{figure}
 
 The typical processing sequence for felix-tohost is as follows:
 \begin{itemize}
