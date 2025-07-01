@@ -9,7 +9,7 @@ All the recovered cards are now delivered to the institutes and functioning prop
 \label{sec:netio3-perf}
 The network performance evaluation focused on two key parameters: Throughput and \ac{RTT}. The experiments were conducted in a controlled testbed environment using servers connected via a 200 Gbit/s Ethernet link through a switch. The hardware specifications of the servers are the same for both, and they are detailed below:
 
-\clearpage
+
 \begin{lstlisting}[caption={Network interface information}, label={lst:network}]
 [mshehu@pc-tbed-felix-15 ~]$ lspci | grep -E -i --color 'network|ethernet'
 41:00.0 Ethernet controller: Mellanox Technologies MT2910 Family [ConnectX-7]
@@ -165,7 +165,7 @@ Table~\ref{tab:rtt-outlier} summarizes the previous analysis.
 \label{tab:rtt-outlier}
 \end{table}
 
-\clearpage
+
 \section{Performance measurements: felix-tohost}
 
 \texttt{felix-tohost} represents the data direction from the Detectors to the T-DAQ infrastructure and between. The measurements that follow were conducted on the same device and host used for the \texttt{netio3} performance evaluation (Section~\ref{sec:netio3-perf}). 

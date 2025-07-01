@@ -256,19 +256,19 @@ The primary hardware contribution involved the testing and assembly of the FLX-1
 The assembly of the cards required specialized equipment, and programming the power delivery controller was performed using an Aardvark I2C/SPI host adapter. The \acs{FPGA} was configured with Vivado \cite{vivado}. Electrical signal verification and validation of the front panel and active components involved the use of an oscilloscope, a power supply unit, and a function generator. Additionally, a server running with a \acs{DHCP} server was utilized to test the fiber connections, and a \acs{PCIe} loopback test card was employed to ensure proper \acs{PCIe} functionality.
 
 \clearpage
-
-\begin{figure}[H]
+\begin{figure}[htbp]
+\begin{minipage}{0.9\textwidth}
 \centering
-\includegraphics[width=\textwidth]{images/contributions/felix-card-testing.jpg}
+\includegraphics[width=0.8\textwidth]{images/contributions/felix-card-testing.jpg}
 \caption[Visual aid of FELIX card testing]{Testing a FELIX card. The PSU on the right, with a fan on top to help cool the \acs{FPGA}. Also on the right detached the Aardvark host adapter. The function generator is on top of the oscilloscope, with the probes attached to the electrical triggers. The \acs{PCIe} loopback scan is barely visible behind the aquamarine-colored fiber-optic cables, just on top of the mounted fan. What is not visible is the fibers connecting in a loopback the Firefly \protect\cite{firefly-optical-transceiver} optical transceiver modules, the JTAG and UART cables.}
 \label{fig:felix-testing}
-\end{figure}
-
-\begin{figure}[H]
+\end{minipage}\hfill
+\begin{minipage}{0.9\textwidth}
 \centering
 \includegraphics[width=\textwidth]{images/contributions/BIST.png}
 \caption[Builtin Selftest screenshot]{Builtin Selftest. The DHCP server is needed to give an IP to the card; an Ethernet cable connects the card to the server. The \acs{FELIX} card exposes this website which allows to check if all the active components in the \acs{PCB} are reachable and prepares the card for the eyescan test.}
 \label{fig:bist}
+\end{minipage}
 \end{figure}
 
 \begin{figure}[H]
@@ -280,7 +280,7 @@ X axis: Unit Intervals fractions, which essentially means that the signal is bro
 \label{fig:eyescan-test}
 \end{figure}
 
-
+\clearpage
 \subsubsection{Challenges}
 
 There is an official table listing the most critical discrete components on the \ac{PCB}; an excerpt is provided below (without excessive detail):

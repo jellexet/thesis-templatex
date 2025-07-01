@@ -170,9 +170,7 @@ The \acs{ERS} \acs{API} offers multiple functions, each corresponding to a speci
 \acs{ERS} is thread-safe and is used for error reporting in multi-threaded applications.\\
 Lastly, \acs{ERS} provides an interface to export and store the logging output.
 
-\clearpage
 \section{Personal Contributions}
-
 
 \subsection{Trickle Configuration - Server}
 
@@ -255,7 +253,7 @@ A brief explanation of the classes involved in the client-side implementation of
     \item \textbf{FelixClient}: This is the class that implements the \acs{API} to interact with the \texttt{felix-star} applications. It is responsible for sending and receiving messages, and for managing the connection to the \texttt{felix-star} applications. In the context of \texttt{trickle configuration} it uses the \texttt{TrickleFormatter} generate trickle configurations in JSON format, and generate commands to send to the server, also as JSON strings.
 \end{itemize}
 
-\clearpage
+
 \subsection{Monitoring - Software Architecture}
 
 Initially, the \acs{FELIX} monitoring system was structured around a \texttt{Monitor} class, which provided a \texttt{write\_message()} method. This method was inherited and overridden by subclasses such as \texttt{FromHostMonitor} and \texttt{ToHostMonitor}. While this approach allowed for some specialization, it tightly coupled the monitoring logic with the output mechanism, making it difficult to introduce new output formats or destinations without modifying the core monitoring classes.
@@ -275,20 +273,19 @@ To address these limitations, the architecture was refactored to apply the \text
 
 \begin{itemize}
     \item \textbf{FIFOWriter}: Writes monitoring data to a UNIX FIFO (Figure~\ref{fig:fifo-monitoring}).
-    \item \textbf{PrometheusWriter}: Exposes metrics in a format consumable by Prometheus (Figure~\ref{fig:felix-tohost-monitoring}, Figure~\ref{fig:felix-tohost-single-elink}).
+    \item \textbf{PrometheusWriter}: Exposes metrics in a format consumable by Prometheus (Figure~\ref{fig:felix-tohost-monitoring}).
     \item \textbf{WebISWriter}: Used to send monitoring data to \acs{IS}, a monitoring tool used internally in \acs{ATLAS} (Figure~\ref{fig:felix-tohost-is}).
 \end{itemize}
 
 \clearpage
-
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.46\textwidth]{images/results/fifo-monitor.png}
 \caption[Monitoring FIFO example]{An example of what can be seen inside the UNIX FIFO. It's a JSON message containing the monitoring data.}
 \label{fig:fifo-monitoring}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/results/monitoring-merged.png}
 \caption[Grafana sample screenshot]{This is a sample screenshot of the combined Prometheus and Grafana solution. The sampling rate can be set in the docker image, in this case it is 5 seconds. Here, I was stress testing felix-tohost as shown by the size of the chunks and their \acs{E-link} rate well above 1.5 MHz. }

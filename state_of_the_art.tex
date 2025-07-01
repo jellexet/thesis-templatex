@@ -5,7 +5,7 @@
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/introduction/cern.jpg}
-\caption{On the left the Globe of Science and Innovation, in the center the CERN Science Gateway designed by Renzo Piano, on the right the blue square is Place des Particules. The rest of CERN's main site develops on the right of Place des Particules \protect\cite{cern_science_gateway}}
+\caption[CERN Science Gateway]{On the left the Globe of Science and Innovation, in the center the CERN Science Gateway designed by Renzo Piano, on the right the blue square is Place des Particules. The rest of CERN's main site develops on the right of Place des Particules \protect\cite{cern_science_gateway}}
 \label{fig:science-gateway}
 \end{figure}
 
@@ -166,10 +166,10 @@ Once the data is received, \acs{FELIX} uses a high-speed 200~Gb/s network interf
 \paragraph{Data Handlers.}
 The Data Handlers are a set of dedicated servers that receive data from \acs{FELIX} and perform two main tasks. First, they rebuild complete detector "fragments" by combining data that belongs to the same event. Then, they pass those fragments to the Dataflow system for further processing.
 
-Depending on the detector, the \acs{DH} may work in two different modes. For some detectors—like \acs{ITk}, \acs{HGTD}, and New Small Wheel, the data arrives in small pieces from many sources, and the \acs{DH} must perform "fragment building." This requires more computing power, as it involves grouping, formatting, and validating the data. For other detectors that already send pre-formatted fragments, the \acs{DH} simply acts as a relay.
+Depending on the detector, the \acs{DH} may work in two different modes. For some detectors—like \acs{ITk}, \acs{HGTD}, and New Small Wheel \cite{nsw}, the data arrives in small pieces from many sources, and the \acs{DH} must perform "fragment building." This requires more computing power, as it involves grouping, formatting, and validating the data. For other detectors that already send pre-formatted fragments, the \acs{DH} simply acts as a relay.
 
 \paragraph{Infrastructure and Constraints.}
-The entire Readout System will be installed in the USA15 underground counting room, which has strict limits on available space and cooling. There are 36 server racks available, each with a 15~kW power budget.
+The entire Readout System will be installed in the USA15 underground counting room, which has some limits on available space and cooling. There are 36 server racks available, each with a 15~kW power budget.
 
 In total, the system will include:
 \begin{itemize}
