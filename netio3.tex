@@ -1,7 +1,7 @@
 \chapter{Netio3}
 \label{chap:netio3}
 
-Netio3 \cite{netio3-docs} is a transport-agnostic networking library originally created for the Phase-2 \acs{FELIX} system, offering both TCP and \acs{RDMA} communication pathways.  It is organized into two modules: the \texttt{netio3-backend} and the \texttt{netio3-frontend}.  The backend is responsible for raw data transmission and reception over the network and does not contain any \acs{FELIX}-specific logic, making it reusable in other projects. The frontend builds on this by providing buffered I/O for efficient data coalescence, a publish/subscribe API and data formatting.  Under the hood, TCP transport is implemented by the \acs{ATLAS} \acs{T-DAQ} \texttt{asyncmsg} \cite{asyncmsg} library, while \acs{RDMA} operations use the \texttt{libfabric} \cite{libfabric} library.  Both transports follow a connection-oriented, message-based paradigm.
+Netio3 \cite{netio3-docs} is a transport-agnostic networking library originally created for the Phase-2 \acs{FELIX} system, offering both TCP and \acs{RDMA} communication pathways.  It is organized into two modules: the \texttt{netio3-backend} and the \texttt{netio3-frontend}.  The backend is responsible for data transmission and reception over the network and does not contain any \acs{FELIX}-specific logic, making it reusable in other projects. The frontend builds on this by providing buffered I/O for efficient data coalescence, a publish/subscribe API and data formatting.  Under the hood, TCP transport is implemented by the \acs{ATLAS} \acs{T-DAQ} \texttt{asyncmsg} \cite{asyncmsg} library, while \acs{RDMA} operations use the \texttt{libfabric} \cite{libfabric} library.  Both transports follow a connection-oriented, message-based paradigm.
 
 \section{Netio3 backend}
 
@@ -28,7 +28,7 @@ For \texttt{zero-copy sending}, are registered two memory regions: one main memo
 
 \subsubsection{Receiving data}
 
-As for sending data, receiving data also requires registering memory regions. When data is received, it is placed into an available buffer by \texttt{libfabric} and provided to the user via a receive-completion callback. After reading, the buffer is then returned to the \texttt{libfabric} backend and can be used for the next receive operation.\\
+As for sending data, receiving data also requires registering memory regions. When data is received, it is placed into an available buffer by the \acl{NIC} and provided to the user via a receive-completion callback. After reading, the buffer is then returned to the \texttt{libfabric} backend and can be used for the next receive operation.\\
 For the \texttt{libfabric} backend, opening and closing connections is an expensive operation.
 
 \subsection{Asyncmsg backend}
@@ -58,7 +58,7 @@ This feature is useful in scenarios with bursty or fine-grained message patterns
 
 \subsection{New network buffer format}
 
-The \texttt{felix-star} application processes uplink data by dividing it into 1\,KB \texttt{blocks}, decoding these blocks, and passing the decoded data to \texttt{netio3}, which adds a header for the uplink devices. 
+The \texttt{felix-star} application processes uplink data by dividing it into 1\,KB \texttt{blocks}, decoding these blocks, and passing the decoded data to \texttt{netio3}, which adds a header for the remote clients. 
 Previously, a fixed 13-byte header was used; for messages of 10 bytes (or smaller), the overhead ratio was inefficient.
 The enhancement involved designing a new, more efficient header and updating the encode/decode routines accordingly \cite{netio3-header-commit}.\\
 

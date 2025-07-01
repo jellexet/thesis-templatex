@@ -143,8 +143,8 @@ Within the \acs{T-DAQ} architecture, \acs{FELIX} offers an interface between det
 \label{fig:felix-block-diagram}
 \end{figure}
 
-\acs{FELIX} radout system will be linking upgraded front-end electronics to commercial servers through \acs{FPGA}-based \acs{PCIe} cards. It will be translating detector-specific protocols into standard network packets, allowing the detectors to communicate with the Data Handlers.\\
-This last part is the main answer of why \acs{FELIX} is needed in the \acs{T-DAQ} architecture. On-detector electronics must be radiation tolerant. For this purpose at \acs{CERN} have been developed custom electronics, like \acl{lpGBT} \cite{lpgbt} that uses its own protocol, but the rest of the underlying architecture uses normal network protocols since they are shielded from radiations; \acs{FELIX} is in between the two layers allowing them to communicate.\\
+\acs{FELIX} readout system will be linking upgraded front-end electronics to commercial servers through \acs{FPGA}-based \acs{PCIe} cards. It will be translating detector-specific protocols into standard network packets, allowing the detectors to communicate with the Data Handlers.\\
+This last part is the main answer of why \acs{FELIX} is needed in the \acs{T-DAQ} architecture. On-detector electronics must be radiation tolerant. For this purpose at \acs{CERN} have been developed custom electronics, like \acl{lpGBT} \cite{lpgbt} that uses its own protocol, but the rest of the underlying architecture uses normal network protocols since they are shielded from radiations; \acs{FELIX} is in between the two layers allowing them to communicate. Also \acs{FELIX} is necessary for distributing the clock signal of the \acs{LHC} to the front-end electronics.\\
 The new \acs{FELIX} system can handle event rates in excess of 1 MHz and data streams beyond 5~TB/s, and allows for:
 \begin{itemize}
     \item \textbf{Scalability}: Commodity server hardware reduces the cost and simplifies maintenance compared to purely custom designs.

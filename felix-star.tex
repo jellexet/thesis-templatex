@@ -185,7 +185,7 @@ Lastly, \acs{ERS} provides an interface to export and store the logging output.
 
 \subsection{Software Flow Example}
 \begin{enumerate}
-    \item Configuration data is received with \textit{send\_config}.
+    \item Configuration data is received from a remote client with a \textit{send\_config} command.
     \item \textit{start\_trickle} starts the "trickling" process.
     \item Host software encodes and writes the payload into the Trickle ring-buffer. The host may add padding for memory alignment (e.g., 4096-byte alignment), a requirement derived from the \acs{PCIe} standard.
     \item Firmware periodically reads from the buffer, sending configuration to the \acs{FE} electronics in between triggers.
