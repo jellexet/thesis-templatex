@@ -85,7 +85,7 @@ The first header will contain all the optional fields, meaning that the first me
 \]
 
 \[
-(text{total block size} - \text{block header}) / (\text{chunk size} + \text{chunk header}) =   \text{number of 26 byte chunks in a block}
+(\text{block size} - \text{block header}) / (\text{chunk size} + \text{chunk header}) =   \text{n chunks in a block}
 \]
 
 Calculated the number of total 26 byte \texttt{chunks} in a \texttt{block} to be 34, now let's calculate how much space they would occupy once moved into the network buffer with both the old and the new buffer formatting.\\
@@ -110,4 +110,4 @@ Making the total occupancy for the new format:
 39 [\text{bytes}] + 990 [\text{bytes}] = 1029 [\text{bytes}]
 \]
 
-In a conservative scenario with the new formatting, the network buffer would occupy \apporox\text{25\%} less space.
+In a conservative scenario with the new formatting, the network buffer would occupy $\approx$\text{25\%} less space.
