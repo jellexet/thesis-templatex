@@ -115,8 +115,7 @@ The \acl{RTT} tests were conducted using the two \textit{netio3-backends} LIBFAB
 
 \subsubsection{Analysis}
 
-Figure~\ref{fig:rtt-tcp-rdma} illustrates the average \acs{RTT} of 64-byte messages transmitted using\\ ASYNCMSG-TCP and LIBFABRIC-RDMA backends, with both epoll and \texttt{BOOST::ASIO} event loops. The results show that LIBFABRIC-RDMA achieves significantly lower \acs{RTT} compared to the ASYNCMSG-TCP implementation, regardless of the event loop used. Furthermore using the \texttt{BOOST::ASIO} eventloop consistently outperforms epoll; the reason derives from the implementation of the eventloop, in which the underlying is always \texttt{BOOST::ASIO}, while the \texttt{epoll} offers a better interface but has to transfer the messages from its thread to the \texttt{BOOST::ASIO} thread.
-For ASYNCMSG-TCP, using \texttt{BOOST::ASIO} nearly halves the average \acs{RTT}; the performance increase is noticeable, at the cost of a worse interface and less control.
+Figure~\ref{fig:rtt-tcp-rdma} illustrates the average \acs{RTT} of 64-byte messages transmitted using\\ ASYNCMSG-TCP and LIBFABRIC-RDMA backends, with both epoll and \texttt{BOOST::ASIO} event-loops. The results show that LIBFABRIC-RDMA achieves significantly lower \acs{RTT} compared to the ASYNCMSG-TCP implementation, regardless of the event-loop used. For ASYNCMSG-TCP, using \texttt{BOOST::ASIO} over \texttt{epoll} nearly halves the average \acs{RTT}. The reason derives from the implementation of the \texttt{asyncmsg} library. To recall Section~\ref{subsec:asyncmsg}, the library \texttt{asyncmsg} uses a \texttt{BOOST::ASIO} event-loop internally, so if \texttt{netio3-backend} is run with the \texttt{epoll} event-loop data has to be transferred between two threads. For \texttt{libfabric}, this is not the case. There, the \texttt{BOOST::ASIO} event-loop offers no benefits over the \texttt{epoll} event-loop and is has a more restrictive \acs{API}.
 
 \begin{figure}[htbp]
 \centering
