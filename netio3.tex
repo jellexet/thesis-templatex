@@ -1,11 +1,11 @@
 \chapter{Netio3}
 \label{chap:netio3}
 
-Netio3 \cite{netio3-docs} is a transport-agnostic networking library originally created for the Phase-2 \acs{FELIX} system, offering both TCP and \acs{RDMA} communication pathways.  It is organized into two modules: the \texttt{netio3-backend} and the \texttt{netio3-frontend}.  The backend is responsible for data transmission and reception over the network and does not contain any \acs{FELIX}-specific logic, making it reusable in other projects. The frontend builds on this by providing buffered I/O for efficient data coalescence, a publish/subscribe API and data formatting.  Under the hood, TCP transport is implemented by the \acs{ATLAS} \acs{T-DAQ} \texttt{asyncmsg} \cite{asyncmsg} library, while \acs{RDMA} operations use the \texttt{libfabric} \cite{libfabric} library.  Both transports follow a connection-oriented, message-based paradigm.
+Netio3 \cite{netio3-docs} is a transport-agnostic networking library originally created for the Phase-2 \acs{FELIX} system, offering both TCP and \acs{RDMA} communication pathways.  It is organized into two modules: the \texttt{netio3-backend} and the \texttt{netio3-frontend}.  The backend is responsible for data transmission and reception over the network and does not contain any \acs{FELIX}-specific logic, making it reusable in other projects. The frontend builds on this by providing buffered I/O for data coalescence, a publish/subscribe API and data formatting.  Under the hood, TCP transport is implemented by the \acs{ATLAS} \acs{T-DAQ} \texttt{asyncmsg} \cite{asyncmsg} library, while \acs{RDMA} operations use the \texttt{libfabric} \cite{libfabric} library.  Both transports follow a connection-oriented, message-based paradigm.
 
 \section{Netio3 backend}
 
-Both the \texttt{asyncmsg} and the \texttt{libfabric} backend are implemented with the Reactor design pattern, by using an event-driven model in the form of an event loop. Events can be callbacks from the underlying network library notifying the application about new connections, incoming data or user defined callbacks added through signals and timers. The event loop is single threaded, thus guaranteeing that all events are executed sequentially. Each event is associated with a callback that contains the user code that is executed when the event is triggered.
+Both the \texttt{asyncmsg} and the \texttt{libfabric} backend are implemented with the \emph{Reactor} design pattern, by using an event-driven model in the form of an event loop. Events can be callbacks from the underlying network library notifying the application about new connections, incoming data or user defined callbacks added through signals and timers. The event loop is single threaded, thus guaranteeing that all events are executed sequentially. Each event is associated with a callback that contains the user code that is executed when the event is triggered.
 
 \subsection{Eventloop implementation}
 
@@ -19,12 +19,12 @@ There are two different event loop implementations: One based on the Linux kerne
 
 \subsubsection{Sending data}
 
-One way to achieve high performance is to avoid data copies. This is done by registering memory regions with an \acs{RDMA} device. Memory registration is an operation that pins\footnote{pinning a memory region means that the operating system does not to move that data to different physical locations or swap it to disk.} that memory region only for an \acs{RDMA} device, since sending data to an \acs{RDMA} device from outside registered memory regions is not possible. The real advantage of RDMA is that the network hardware can directly access physical memory addresses (both for reading and writing), bypassing the CPU entirely for data transfers.\\
+One way to achieve high performance is to avoid data copies. This is done by registering memory regions with an \acs{RDMA} device. Memory registration is an operation that pins\footnote{pinning a memory region means that the operating system will not move that data to different physical locations or swap it to disk.} that memory region only for an \acs{RDMA} device, since sending data to an \acs{RDMA} device from outside registered memory regions is not possible. The real advantage of RDMA is that the network hardware can directly access physical memory addresses (both for reading and writing), bypassing the CPU entirely for data transfers.\\
 
 For \texttt{buffered sending}, a given number of buffers is allocated in memory, and registered with \texttt{libfabric}.\\
 For memory coherency and to avoid data corruption, a buffer can never be modified after send\_buffer is called and before receiving the completion message. Matching send operations with completions is done internally.
 
-For \texttt{zero-copy sending}, are registered two memory regions: one main memory region containing the data, and one region containing the additional header information (16 bytes per send operation).  Matching the send operations with completions is not supported by the library and has to be managed by the user.
+For \texttt{zero-copy sending}, two memory regions are registered: one main memory region containing the data, and one region containing the additional header information (a completion object of 16 bytes per send operation).  Matching the send operations with completions is not supported by the library and has to be managed by the user.
 
 \subsubsection{Receiving data}
 
@@ -122,4 +122,4 @@ Total buffer occupancy:
 39~\text{bytes} + 990~\text{bytes} = 1029~\text{bytes}
 \]
 
-In a conservative scenario with the new formatting, the network buffer would occupy $\approx$\text{25\%} less space.
+In a conservative scenario with the new formatting, the network buffer would fit $\approx$\text{25\%} more messages.

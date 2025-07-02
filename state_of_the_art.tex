@@ -60,7 +60,7 @@ Regular Long Shutdowns enable maintenance and upgrades to the \acs{LHC} and its 
 \clearpage
 \section{ATLAS Experiment}
 
-The \acs{ATLAS} detector \cite{atlas-experiment}, central to this thesis, is the largest general-purpose experiment at the \acs{LHC}. Comparable in size to a multistory building (44 m in length and 25 m in diameter), \acs{ATLAS} features multiple layers of specialized subsystems (detectors), each engineered to measure distinct particle properties. Key scientific goals include precision studies of the Higgs boson (discovered in 2012 \cite{atlas-higgs-discovery}) and searches for supersymmetric particles.
+The \acs{ATLAS} detector \cite{atlas-experiment} shown in Figures~\ref{fig:atlas-model} and \ref{fig:atlas}, central to this thesis, is the largest general-purpose experiment at the \acs{LHC}. Comparable in size to a multistory building (44 m in length and 25 m in diameter), \acs{ATLAS} features multiple layers of specialized subsystems (detectors), each engineered to measure distinct particle properties. Key scientific goals include precision studies of the Higgs boson (discovered in 2012 \cite{atlas-higgs-discovery}) and searches for supersymmetric particles.
 
 \begin{figure}[H]
 \centering
@@ -86,12 +86,12 @@ More precisely, the \acs{HL-LHC} will deliver 10 times more data compared to the
 \clearpage
 \section{\acf{T-DAQ}}
 
-As the name suggests, the \acs{ATLAS} \acf{T-DAQ} system is composed of a Trigger and a \acf{DAQ} system. Figure~\ref{fig:tdaq} provides a high level description of the \acs{T-DAQ} architecture showing the Detectors layer and the Event Filter layer tt the bottom. A more in-depth description of each architectural component is presented below.
+As the name suggests, the \acs{ATLAS} \acf{T-DAQ} system is composed of a Trigger and a \acf{DAQ} system. Figure~\ref{fig:tdaq} provides a high level description of the \acs{T-DAQ} architecture showing the Detectors layer and the Event Filter layer at the bottom. A more in-depth description of each architectural component is presented below.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.68\textwidth]{images/introduction/Baseline_TDAQ_Phase-II_Architecture.pdf}
-\caption[Overview of the T-DAQ architecture]{An overview of the \acs{T-DAQ} architecture is shown. The three main layers are color-coded: the Level-0 Trigger in pink, the DAQ subsystem (comprising the Readout and Dataflow subsystems) in green and yellow, and the Event Filter at the bottom in red. The detectors, shown in blue, are not part of the T-DAQ infrastructure but are included to provide context on how T-DAQ interfaces with other components of the \acs{ATLAS} experiment. Image source: \protect\cite{tdaq}}
+\caption[Overview of the T-DAQ architecture]{An overview of the \acs{T-DAQ} architecture is shown. The three main layers are color-coded: the Level-0 Trigger in pink, the DAQ subsystem (comprising the Readout and Dataflow subsystems) in green and yellow, and the Event Filter at the bottom in red. The detectors, shown in blue, are not part of the T-DAQ infrastructure but are included to provide context on how T-DAQ interfaces with other components of the \acs{ATLAS} experiment.}
 \label{fig:tdaq}
 \end{figure}
 
@@ -121,13 +121,13 @@ The Trigger layer that forms a first-level hardware based trigger includes \cite
 A data acquisition system \acs{DAQ} aggregates detector data, relays trigger outcomes, and writes all accepted events to permanent storage.
 \end{definition}
 
-In the Readout layer is shown that the Data Handler can receive data only from the \acs{FELIX} card \cite{tdaq}, also the \acs{FELIX} card is directly linked to the Detectors via an optical interface, other than the \acs{L0} Triggers. The \acs{FELIX} card receives data fragments from the detectors, sends them to the Data Handlers that re-organizes those fragments for detector-specific operations that will be performed by the Dataflow.
+Figure~\ref{fig:tdaq} shows that the Data Handler can receive data only from the \acs{FELIX} card \cite{tdaq}, also the \acs{FELIX} card is directly linked to the Detectors via an optical interface, other than the \acs{L0} Triggers. The \acs{FELIX} card receives data fragments from the detectors, sends them to the Data Handlers that re-organizes those fragments for detector-specific operations that will be performed by the Dataflow.
 
-The Dataflow system \cite{tdaq} as shown in the previous Figure~\ref{fig:tdaq} includes all components needed to aggregate the data fragments towards a full event-building, to buffer the events for the software trigger (Event Filter) and send the selected event to permanent storage.
+The Dataflow system \cite{tdaq} includes all components needed to aggregate the data fragments towards a full event-building, to buffer the events for the software trigger (Event Filter) and send the selected event to permanent storage.
 
 \subsection{Event Filter}
 
-The Event Filter system \cite{tdaq} consists of a CPU-based processing farm. The EF system runs more elaborate algorithms that take the data from the entire detector to reduce the trigger rate by another order of magnitude to get it down to the final output rate of 10 KHz. Events will be rejected as early as possible during their processing. The Event Filter decisions will be communicated to the Dataflow, which will then transfer the accepted events to permanent storage.
+The Event Filter system \cite{tdaq} consists of a CPU-based processing farm. The \acs{EF} system runs more elaborate algorithms that take the data from the entire detector to reduce the trigger rate by another order of magnitude to get it down to the final output rate of 10 KHz. Events will be rejected as early as possible during their processing. The Event Filter decisions will be communicated to the Dataflow, which will then transfer the accepted events to permanent storage.
 
 \clearpage
 \section{\acs{FELIX}}
@@ -145,7 +145,7 @@ Within the \acs{T-DAQ} architecture, \acs{FELIX} offers an interface between det
 
 \acs{FELIX} readout system will be linking upgraded front-end electronics to commercial servers through \acs{FPGA}-based \acs{PCIe} cards. It will be translating detector-specific protocols into standard network packets, allowing the detectors to communicate with the Data Handlers.\\
 This last part is the main answer of why \acs{FELIX} is needed in the \acs{T-DAQ} architecture. On-detector electronics must be radiation tolerant. For this purpose at \acs{CERN} have been developed custom electronics, like \acl{lpGBT} \cite{lpgbt} that uses its own protocol, but the rest of the underlying architecture uses normal network protocols since they are shielded from radiations; \acs{FELIX} is in between the two layers allowing them to communicate. Also \acs{FELIX} is necessary for distributing the clock signal of the \acs{LHC} to the front-end electronics.\\
-The new \acs{FELIX} system can handle event rates in excess of 1 MHz and data streams beyond 5~TB/s, and allows for:
+The new \acs{FELIX} system can handle event rates in excess of 1 MHz and data streams beyond 5~TB/s\footnote{The entire system composed of many servers can handle such data rate, not per single component}, and allows for:
 \begin{itemize}
     \item \textbf{Scalability}: Commodity server hardware reduces the cost and simplifies maintenance compared to purely custom designs.
     \item \textbf{System Flexibility}: Uniform support for various upgraded detector systems, including the new \acs{ITk} detector and \acs{HGTD}.

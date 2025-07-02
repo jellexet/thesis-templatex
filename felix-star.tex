@@ -84,7 +84,7 @@ The default behaviour is to spawn a single reader thread per \acs{DMA} buffer, b
 
 \subsection{felix-tohost data format}
 
-Data packets arriving via the front-end links or virtual E-Links are referred to as “\texttt{chunks}” and can have an arbitrary size. Data inside the \acs{DMA} buffers is encoded in 1024-byte blocks (Figure~\ref{fig:block-format} show how a \texttt{felix-tohost} block is formatted). If a chunk is bigger than a block, or does not fit in the remaining space, it is divided in what is called a \texttt{subchunk}. Otherwise if a chunk does not completely fill a block, it is padded with zeroes and the whole block is sent after a timeout.\\
+Data packets arriving via the front-end links or virtual E-Links are referred to as “\texttt{chunks}” and can have an arbitrary size. Data inside the \acs{DMA} buffers is encoded in 1024-byte \texttt{blocks} (Figure~\ref{fig:block-format} show how a \texttt{felix-tohost} block is formatted). If a \texttt{chunk} is bigger than a \texttt{block}, or does not fit in the remaining space, it is divided in what is called a \texttt{subchunk}. Otherwise if a \texttt{chunk} does not completely fill a \texttt{block}, it is padded with zeroes and the whole \texttt{block} is sent after a timeout.\\
 The reason for encoding data in \texttt{blocks} and not use \texttt{chunks} directly is because having \texttt{blocks} makes it easier for the software to handle the data: having a data format with a fixed size makes the memory alignment easier (constraint introduced by \acs{PCIe}), and similarly a fixed size makes \acs{DMA} much easier. Also there is an advantage for error handling discussed below in Subsection~\ref{sec:felix_tohost_error_handling}.
 
 \begin{figure}[htbp]
@@ -110,12 +110,12 @@ The typical processing sequence for felix-tohost is as follows:
 \label{sec:felix_tohost_error_handling}
 
 Depending on the results of integrity checks, \texttt{flx-tohost} will drop entire blocks in certain cases to maintain overall system reliability and prevent corrupted data from causing problems in onward processing.\\
-In the current production setup in \acs{ATLAS}, it is possible to receive corrupted data or data generated due to noise affecting the detector's electronics.
-This is possible thanks to the existence of \texttt{blocks}. If --- inside a block --- a \texttt{chunk}'s header is corrupted the payload size shown is often very big, but blocks have a fixed size of 1KB, so at most 1KB of data is lost and there is no need for more sophisticated error detection and correction mechanisms.
+In the current production setup in \acs{ATLAS}, it is possible to sometimes \acs{FELIX} receives corrupted data or data generated due to noise affecting the detector's electronics.
+If, inside a \texttt{block}, a \texttt{chunk}'s header is corrupted the payload size shown is often very big, but blocks have a fixed size of 1KB, so at most 1KB of data is lost and there is no need for more sophisticated error detection and correction mechanisms.
 
 \section{felix-toflx}
 \label{sec:felix_toflx}
-\texttt{felix-toflx} provides the complementary data path to \texttt{felix-tohost}.\\ \texttt{felix-tohost} receives data from the network for the enabled \acs{E-link}s, writes it into the designated \acs{DMA} buffers, and the \acs{FELIX} card then transfers this data to the corresponding \acl{FE}electronics via those \acs{E-link}s.
+\texttt{felix-toflx} provides the complementary data path to \texttt{felix-tohost}.\\ \texttt{felix-tohost} receives data from the network for the enabled \acs{E-link}s, writes it into the designated \acs{DMA} buffers, and the \acs{FELIX} card then transfers this data to the corresponding \acl{FE} electronics via those \acs{E-link}s.
 Similar to \texttt{felix-tohost}, this component supports both physical hardware (felix-toflx) and a simulation of it (felix-toflx2file).\\
 Unlike \texttt{felix-tohost} which uses publish/subscribe patterns, felix-toflx employs a send/receive pattern for network communication.
 
@@ -199,14 +199,14 @@ Lastly, \acs{ERS} provides an interface to export and store the logging output.
     \item \textit{stop\_trickle} stops the "trickling" process.
 \end{enumerate}
 
-\subsubsection{felix-trickle} is the name of the main executable (the source file is main\_trickle.cpp) that runs \texttt{trickle\ configuration} on a \acs{FELIX} card. It is responsible for instantiating a \emph{Trickle} instance with the configuration parameters, all the \acs{FELIX} devices installed on the host, and the \acs{DMA} buffers that will be written by the software and read by the firmware. It is responsible for starting or stopping the trickling process through the \emph{Trickle} instance, and for capturing and handling any kernel signals.
+\subsubsection{felix-trickle} is the name of the main executable (the source file is \texttt{main\_trickle.cpp}) that runs \texttt{trickle\ configuration} on a \acs{FELIX} card. It is responsible for creating an instance of the \emph{Trickle} clasee by passing to it the configuration parameters, a handler of the \acs{FELIX} devices installed on the host, and a handler of the \acs{DMA} buffers, that will be used by the software to write the configuration data, and by the firmware to read the configuration data and send it to the appropriate \acs{E-link}s. It is responsible for starting or stopping the trickling process through the \emph{Trickle} instance, and for capturing and handling any kernel signals (SIGINT, SIGTERM...).
 
-\subsubsection{felix-trickle2file} is the name of the main executable (the source file is main\_trickle2file.cpp) that runs \texttt{trickle configuration} in a simulated environment. It is used for regression testing and debugging purposes. It is responsible for instantiating a \emph{Trickle} instance with the configuration parameters, all the emulated \acs{FELIX} devices, and the \acs{DMA} buffers that in this case will be read by an emulator of the firmware and, if the user configured it, written to a file. It is responsible for starting or stopping the emulated trickling process through the \emph{Trickle} instance, and for capturing and handling any kernel signals.
+\subsubsection{felix-trickle2file} is the name of the main executable (the source file is \texttt{main\_trickle2file.cpp}) that runs \texttt{trickle configuration} in a simulated environment. It is used for regression testing and debugging purposes. It is responsible for creating an instance of the \emph{Trickle} class by passing to it the configuration parameters, the emulated \acs{FELIX} devices, and the \acs{DMA} buffers that in this case will be read by an emulator of the firmware and, if the user configured it, written to a file. It is responsible for starting or stopping the emulated trickling process through the \emph{Trickle} instance, and for capturing and handling any kernel signals pping the trickling process through the \emph{Trickle} instance, and for capturing and handling any kernel signals (SIGINT, SIGTERM...).
 
-\subsubsection{Trickle} is the class that based on the configuration parameters and the type of \acs{FELIX} being used (\emph{felix-trickle} or \emph{felix-trickle2file}), will be able to perform the trickling operation with the real hardware or an emulated one. It owns, by composition, \acs{FELIX} devices and \acs{DMA} buffers.\\
-It is responsible for setting the correct data format with which to fill the \acs{DMA} buffers; it is also responsible for allocating the memory for the \acs{DMA} buffers, to publish the data into the \emph{felix-bus} so that the \emph{felix-clients} can communicate with the application, and finally to instantiate a \emph{TrickleManager} instance for each \acs{FELIX} device and a \emph{Receiver} per buffer.
+\subsubsection{Trickle} is the class that based on the configuration parameters and the type of \acs{FELIX} being used (real hardware or emulator), will be able to perform the trickling operation with the real hardware or an emulated one. It owns, by composition, \acs{FELIX} devices and \acs{DMA} buffers.\\
+It is responsible for setting the correct data format with which to fill the \acs{DMA} buffers; it is also responsible for allocating the memory for the \acs{DMA} buffers, to publish the data into the \emph{felix-bus} so that the \emph{felix-clients} can communicate with the application, and finally to create a \emph{TrickleManager} instance for each \acs{FELIX} device, and a \emph{Receiver} for each buffer.
 
-\subsubsection{TrickleManager} is the class that implements the \acs{API} that allows to use \texttt{trickle configuration}. The \acs{API} is composed of the following functions:
+\subsubsection{TrickleManager} is the class that implements the \acs{API} that allows to use \texttt{trickle configuration}. \texttt{TrickleManager} implements the following functions:
 \begin{itemize}
     \item \texttt{connection\_established}: Implementation of the on-connection-established callback (exposed by \texttt{netio3} Chapter~\ref{chap:netio3}). 
     \item \texttt{connection\_closed}: Implementation of the on-connection-closed callback.
@@ -219,12 +219,13 @@ It is responsible for setting the correct data format with which to fill the \ac
     \item \texttt{throttle}: Throttles the trickling process.
 \end{itemize}
 
-It uses a \texttt{Receiver} (Subsection~\ref{subsubsec:receiver}) to receive commands in JSON format from a client, and each command uses one of the aforementioned functions.\\
+\texttt{TrickleManager} uses a \texttt{Receiver} (Subsection~\ref{subsubsec:receiver}) to receive commands in JSON format from a client.\\
 
-\texttt{select\_bcids} merits some explanation. In the \acl{LHC} there are two directions in which particles can circle; the particles are divided in "bunches" inside a beam, the collisions happen always between the same bunches in the crossing points that correspond to the four experiments presented in the introduction~\ref{sec:lhc-experiments}, and this collision will have an ID which is the \acl{BCID}. \emph{Trickle configuration} is supposed to send data in between triggers, which happen when the bunches cross, so with \emph{select\_bcids} one can theoretically select only the IDs preceding longer periods without collisions. The effect of selecting \acs{BCID}s is that of throttling, for which there is a function implemented in the \acs{API}, but both of them have been kept since they are two different concepts even though they have the same final effect.\\
+\texttt{select\_bcids} merits some explanation. In the \acl{LHC} there are two directions in which particles can circle; the particles are divided in "bunches" inside a beam, the collisions happen always between the same bunches in the crossing points that correspond to the four experiments presented in the introduction~\ref{sec:lhc-experiments}. This collision will have an ID which is the \acl{BCID}. \emph{Trickle configuration} is supposed to send data in between triggers, which happen when the bunches cross, so with \emph{select\_bcids} one can theoretically select only the IDs preceding longer periods without collisions. The effect of selecting \acs{BCID}s is that of throttling, for which there is a function implemented in the \acs{API}, but both of them have been kept since they are two different concepts even though they have the same final effect.\\
 A reference to a tool to simulate bunch crosses inside the \acs{LHC} \cite{bunch-crossing-tool}.
+\smallskip
 
-There are private implementations of the callback functions that are used to handle the events of opening/closing a connection and receiving data. There is also a function that adds padding to a \emph{trickle configuration} payload to ensure that the data is aligned to a 4096-byte boundary, which is a requirement of the latest \acs{PCIe} standard. The interesting part is that the padding needs to actually be a valid message for the firmware to be able to read it. The final implementation consists of adding a header that contains a valid \acs{E-link} but an invalid E-path. Following this change, the firmware has been developed to simply ignore and discard messages with headers containing invalid \acs{E-link}s.
+In the \texttt{TrickleManager} class, are briefly mentioned in the list private implementations of callback functions that are used to handle the events of opening/closing a connection and receiving data. Other than those there is also a private function (texttt{add\_padding}) that adds padding to a \emph{trickle configuration} payload to ensure that the data is aligned to a 4096-byte boundary, which is a requirement of the latest \acs{PCIe} standard. The interesting part is that the padding needs to actually be a valid message for the firmware to be able to read it. The final implementation consists of adding a header that contains a valid \acs{E-link} but an invalid E-path. Following this change, the firmware has been developed to simply ignore and discard messages with headers containing invalid \acs{E-link}s.
 
 \subsubsection{FromHostBuffer} is the abstract base class that is tasked with managing buffers in the \texttt{felix-toflx} direction. It is specialized to work both with the real hardware and with the emulated one. It is responsible for keeping track of the read and write pointers to the \acs{DMA} buffer it is wrapping, and to manage concurrent \emph{write} and \emph{read} operations to it.
 
@@ -234,12 +235,12 @@ There are private implementations of the callback functions that are used to han
 
 \subsection{Firmware's role}
 
-The \acs{FELIX} firmware is responsible for reading configuration data from the Trickle buffer and forwarding it to the appropriate \acs{FE} links. The read pointer in firmware advances as configuration data is consumed. No write pointer is maintained in firmware; the reason behind the pointers choice is because \textit{trickle configuration} is something that will not change often, it is meant to be written one time in the \acs{DMA} buffer with the firmware continuously reading the buffer and sending the configuration in between triggers. When the configuration needs to change, the buffer is set to one-shot (which invalidates the buffer once reading the last bit), the confiuration is changed, the buffer is again set to be a ring-buffer and the firmware is signaled to resume reading by setting the register that validates the buffer.\\
+The \acs{FELIX} firmware is responsible for reading configuration data from the Trickle buffer and forwarding it to the appropriate \acs{E-link}s that deliver the data to the \acs{FE}. The read pointer in firmware advances as configuration data is consumed. No write pointer is maintained in firmware; the reason behind the pointers choice is because \textit{trickle configuration} is something that will not change often, it is meant to be written one time in the \acs{DMA} buffer with the firmware continuously reading the buffer and sending the configuration in between triggers. When the configuration needs to change, the buffer is set to one-shot (which invalidates the buffer once reading the last bit), the configuration is changed, the buffer is again set to be a ring-buffer and the firmware is signaled to resume reading by setting the register that validates the buffer.\\
 The firmware is implemented in a way so that \texttt{trickle configuration} has the lowest priority compared to other data.
 
 \subsection{Trickle Configuration - Client}
 
-Image~\ref{fig:trickle-client-uml} shows how the \texttt{Trickle Configuration} \acs{API} call has been implemented on the client side \cite{felix-star-trickle-client}. 
+Image~\ref{fig:trickle-client-uml} shows the \texttt{Trickle Configuration} \acs{API}  implemented on the client side \cite{felix-star-trickle-client}. 
 
 \begin{figure}[htbp]
   \makebox[\textwidth][c]{\includegraphics[width=1.72\textwidth]{images/contributions/client-trickle-config-uml.png}}%
@@ -256,7 +257,7 @@ A brief explanation of the classes involved in the client-side implementation of
     
     \item \textbf{TrickleFormatter}: This class is responsible for formatting trickle messages into JSON strings.
     
-    \item \textbf{FelixClient}: This is the class that implements the \acs{API} to interact with the \texttt{felix-star} applications. It is responsible for sending and receiving messages, and for managing the connection to the \texttt{felix-star} applications. In the context of \texttt{trickle configuration} it uses the \texttt{TrickleFormatter} generate trickle configurations in JSON format, and generate commands to send to the server, also as JSON strings.
+    \item \textbf{FelixClient}: This is the class that implements the \acs{API} to interact with the \texttt{felix-star} applications. It is responsible for sending and receiving messages, and for managing the connection to the \texttt{felix-star} applications. It uses \texttt{TrickleFormatter} to generate trickle configurations, which are wrapped in a JSON message, which can also contain commands for the texttt{Trickle Configuration} server.
 \end{itemize}
 
 
@@ -273,7 +274,7 @@ To address these limitations, the architecture was refactored to apply the \text
 \label{fig:monitoring-software-architecture}
 \end{sidewaysfigure}
 
-\textbf{Monitor} is the class that is used by the \texttt{felix-star} applications to produce monitoring data. It is an abstract base class that defines the interface for monitoring. It has a pure virtual method \texttt{write\_message(const nlohmann::json\&)} that must be implemented by subclasses. The \texttt{Monitor} class is responsible for collecting monitoring data and delegating the writing of that data to a \texttt{Writer} instance. The concrete implementations are defined depending on the direction, thus there are \emph{ToHostMonitor} and \emph{FromHostMonitor}. The choice of the \texttt{Writer} implementation is determined at runtime based on user configuration, allowing the same monitoring logic to be reused with different output strategies.
+\textbf{Monitor} is the class that is used by the \texttt{felix-star} applications to produce monitoring data. It is an abstract base class that defines the interface for monitoring. It has a pure virtual method\footnote{A method that must be overridden by a derived class, otherwise the derived class will also become an abstract class} \texttt{write\_message(const nlohmann::json\&)} that must be implemented by subclasses. The \texttt{Monitor} class is responsible for collecting monitoring data and delegating the writing of that data to a \texttt{Writer} instance. The concrete implementations are defined depending on the direction, thus there are \emph{ToHostMonitor} and \emph{FromHostMonitor}. The choice of the \texttt{Writer} implementation is determined at runtime based on user configuration, allowing the same monitoring logic to be reused with different output strategies.
 
 \textbf{Writer} is the abstract base class for the three concrete implementations of the monitoring output strategies. Each of the concrete classes implements the\\ \texttt{write\_message(const nlohmann::json\&)} method, which defines how the monitoring data is written to the desired output or destination. The concrete implementations of this class include:
 
@@ -286,14 +287,14 @@ To address these limitations, the architecture was refactored to apply the \text
 \clearpage
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.46\textwidth]{images/results/fifo-monitor.png}
+\includegraphics[width=0.65\textwidth]{images/results/fifo-monitor.png}
 \caption[Monitoring FIFO example]{An example of what can be seen inside the UNIX FIFO. It's a JSON message containing the monitoring data.}
 \label{fig:fifo-monitoring}
 \end{figure}
 
 \begin{sidewaysfigure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{images/results/monitoring-merged.png}
+\includegraphics[width=0.99\textwidth]{images/results/monitoring-merged.png}
 \caption[Grafana sample]{This is a sample of the combined Prometheus and Grafana solution. The sampling rate can be set in the docker image, in this case it is 5 seconds. Here, I was stress testing felix-tohost as shown by the size of the chunks and their \acs{E-link} rate well above 1.5 MHz. }
 \label{fig:felix-tohost-monitoring}
 \end{sidewaysfigure}

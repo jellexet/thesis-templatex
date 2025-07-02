@@ -2,12 +2,12 @@
 
 \section{Hardware testing}
 
-A total of 40 FLX-182-1B cards, in 3 different batches, were subjected to hardware validation and testing. During this process, 10 cards were found to be non-functional due to a range of issues, including component failures and configuration errors. Through the aforementioned diagnostics and interventions, 8 of the faulty cards were fully or partially recovered and restored to operational status.\\
+A total of 40 FLX-182-1B cards, in 3 different batches, were subjected to hardware validation and testing. During this process, 10 cards were found to be non-functional due to a range of issues, including component failures and configuration errors. Through the aforementioned diagnostics and interventions (Section~\ref{sec:felix-hardware-contributions}), 8 of the faulty cards were fully or partially recovered and restored to operational status.\\
 All the recovered cards are now delivered to the institutes and functioning properly.
 
 \section{Performance measurements: netio3}
 \label{sec:netio3-perf}
-The network performance evaluation focused on two key parameters: Throughput and \ac{RTT}. The experiments were conducted in a controlled testbed environment using servers connected via a 200 Gbit/s Ethernet link through a switch. The hardware specifications of the servers are the same for both, and they are detailed below:
+The network performance evaluation focused on two key parameters: Throughput and \ac{RTT}. The experiments were conducted in a controlled testbed environment using servers connected via a 200 Gbit/s Ethernet link that passes through a switch. The hardware specifications of the servers are the same for both, and they are detailed below:
 
 
 \begin{lstlisting}[caption={Network interface information}, label={lst:network}]
@@ -42,12 +42,12 @@ RANGE                                 SIZE  STATE REMOVABLE BLOCK
 0x0000000000000000-0x000000187fffffff  98G online       yes  0-48
 \end{lstlisting}
 
-Statics have been collected from the sending part; the reason was because the sending part interrupts the connection, and the statistics collection could be stopped at the same time.
+Statics have been collected from the sending part; the reason was because the sending part interrupts the connection, and it made sense to also stop the statistics collection from there.
 
 \subsection{Throughput}
 
-The throughput tests were conducted using two \textit{netio3-backends}: LIBFABRIC-RDMA and ASYNCMSG-TCP. Each test involved a sender and a receiver. The sender transmits a buffer containing random data from RAM memory to the receiver. On the receiver side, dedicated buffers are filled with the incoming messages from the sender. Both the sender and receiver executables allow configuration of the number and size of buffers. For these tests, buffer sizes ranged from 1 KB to 64 KB (with 64 KB being the size used in ATLAS production), and the number of buffers ranged from 1 to 512. The same buffer size and number of buffers were used for both sender and receiver.\\
-More specifically, the sender transmits buffers sequentially, using a polling mechanism to determine when the next buffer can be sent. The receiver simply acknowledges receipt and does not process the data, as the primary objective was to measure throughput. A total of 70 combinations of buffer sizes and counts were tested for LIBFABRIC-RDMA, while only 28 combinations were evaluated for ASYNCMSG-TCP due to diminishing returns observed in preliminary tests.\\
+The throughput tests were conducted using two \textit{netio3-backends}: LIBFABRIC-RDMA and ASYNCMSG-TCP. In the context of this test, a message received by the \emph(Receiver) is equivalent to a buffer full of zeroes from the \emph{Sender}. Both the sender and receiver executables allow configuration of the number and size of buffers. For these tests, buffer sizes ranged from 1 KB to 64 KB (with 64 KB being the size used in ATLAS production), and the number of buffers ranged from 1 to 512. The same buffer size and number of buffers were used for both sender and receiver.\\
+More specifically, the sender transmits buffers sequentially, using a polling mechanism to determine when the next buffer can be sent. The receiver simply acknowledges and discards the incoming messages without further processing, as the primary objective was to measure throughput. A total of 70 combinations of buffer sizes and counts were tested for LIBFABRIC-RDMA, while only 28 combinations were evaluated for ASYNCMSG-TCP due to diminishing returns observed in preliminary tests.\\
 To manage the large number of tests, an Ansible \cite{ansible} playbook was developed. The output was processed using a custom Python script, which also generated the graphs using the Matplotlib \cite{matplotlib} library.\\
 
 \subsubsection{Analysis}
@@ -107,7 +107,7 @@ For ASYNCMSG-TCP, the results (Figure \ref{fig:tcp-mean-throughput-comparison}) 
 The decision to limit the number of buffers and sizes tested for ASYNCMSG-TCP was based on the observed saturation of bandwidth for LIBFABRIC-RDMA and the lack of performance improvement for ASYNCMSG-TCP with larger buffers. These findings conclusively demonstrate that LIBFABRIC-RDMA outperforms\\ ASYNCMSG-TCP in terms of data throughput.
 
 Given those results, why is TCP included as an option? There are technical reasons and internal ones. Technically, the pros for TCP over RDMA include simplicity, a smaller memory footprint, opening connections is less costly and, as mentioned before, memory stability during the send operation. 
-The internal reasons for using TCP in \acs{ATLAS} derive on how its monitoring works. In order to monitor the entirety of \acs{ATLAS}' \acl{FE} electronics many elinks need to be used, in that case using LIBFABRIC-RDMA would require creating a \acs{DMA} buffer for each of them, plus sometimes the network library is used to send configurations to \acs{FE} electronics, meaning that the buffers need to be big enough for such scenarios. It comes by itself that the amount of memory needed is very large, and that memory would not be used efficiently, also the use case of the monitoring does not require high performance, thus ASYNCMSG-TCP is ideal.
+The internal reasons for using TCP in \acs{ATLAS} derive on how its monitoring works. In order to monitor the entirety of \acs{ATLAS}' \acl{FE} electronics many elinks need to be used, in that case using LIBFABRIC-RDMA would require creating a \acs{DMA} buffer for each of them, plus sometimes the network library is used to send configurations to \acs{FE} electronics, meaning that the buffers need to be big enough for such scenarios. It comes by itself that the amount of memory needed is very large, and that memory would not be used efficiently. Also the use case of the monitoring does not require high performance, thus ASYNCMSG-TCP is ideal.
 
 \subsection{\acf{RTT}}
 
@@ -175,10 +175,10 @@ Table~\ref{tab:rtt-outlier} summarizes the previous analysis.
 
 \section{Performance measurements: felix-tohost}
 
-\texttt{felix-tohost} represents the data direction from the Detectors to the T-DAQ infrastructure and between. The measurements that follow were conducted on the same device and host used for the \texttt{netio3} performance evaluation (Section~\ref{sec:netio3-perf}). 
+\texttt{felix-tohost} represents the data direction from the Detectors to the T-DAQ infrastructure. The measurements that follow were conducted on the same device and host used for the \texttt{netio3} performance evaluation (Section~\ref{sec:netio3-perf}). 
 Figure~\ref{fig:tbed-setup} below illustrates the setup for the test.\\
 \emph{pc-tbed-felix-15} mounts the currently used in production \emph{FLX-712} with the \emph{F-EMU} firmware, which is used to generate emulated data in the FULLMODE format; this data is routed via network to the other server, \emph{pc-tbed-felix-14}.
-On the same machine (\emph{pc-tbed-felix-15}) runs \emph{felix-test-swrod}, which is a software that subscribes to the \acs{E-link}s through \texttt{felix-tohost}, which in turn publishes the data when available.\\
+On the same machine (\emph{pc-tbed-felix-15}) runs \emph{felix-test-swrod}, which is a software that subscribes to the \acs{E-link}s through \texttt{felix-tohost}, which in turn publishes (to \emph{stdout} for the test) the data once available.\\
 On \emph{pc-tbed-felix-14} is mounted an \emph{FLX-182-1B} card (that I personally tested and validated), with FULLMODE firmware. The \acs{FELIX} card receives the emulated FULL mode data via network and writes it into the enabled \acs{DMA} buffers through \acs{E-link}s. It can be configured which \acs{E-link} writes in which \acs{DMA} buffer using the \emph{elinkconfig} tool (Fiure~\ref{fig:elinkconfig}). In the context of this test, all the 12 \acs{E-link}s, per device\footnote{The FELIX card, when inserted in a PCIe socket appears to the Operating System as two PCIe devices}, have been used, specifically 3 links per \acs{DMA} buffer. On the same host machine runs \texttt{felix-tohost}, which, as mentioned, reads the data from the \acs{DMA} buffers (with three threads per buffer in this test), and publishes it to \emph{felix-test-swrod}; \texttt{felix-tohost} posts the monitoring data to a pre-decided port; a Prometheus instance, running on Docker on my local machine, scrapes the data knowing the IP address and port, and a Grafana instance queries Prometheus for that data and creates the Dashboard seen in Figure~\ref{fig:tohost-perf-760B} and Figure~\ref{fig:tohost-perf-2k}. On \emph{pc-tbed-felix-14}, there is also the \acl{TTC} emulator, which provides the clock that gives the pace to the FULLMODE emulator; in this test, the emulator trigger signals were set at 1 MHz.\\
 It is relevant to introduce a technical hardware and firmware implementation of the \acs{FELIX} card. When a \acs{FELIX} card is inserted into the \acs{PCIe} socket, it presents itself as two \acs{PCIe} endpoints, which appear to the Operating System as two separate devices. This is useful because each device can have its own \acs{DMA} buffer and control logic. For this reason, in order to use a \acs{FELIX} card, the BIOS has to set the \acs{PCIe} socket with bifurcation, which essentially splits the 16 lanes of the \acs{PCIe} slot into two 8-lane segments, and this is the explanation of the two \acs{PCIe} devices. For the test \texttt{felix-tohost} has been run using the two devices exposed by the FLX-182.\\
 For what concerns the \emph{netio3} network library, LIBFABRIC-RDMA was used.\\
@@ -218,7 +218,7 @@ To recap, Figure~\ref{fig:tohost-perf-760B} shows that \texttt{felix-tohost} can
 \label{fig:tohost-perf-2k}
 \end{sidewaysfigure}
 
-Figure~\ref{fig:cpu-usage} illustrates the CPU usage per chunk size. The percentage value represents the average CPU usage over a 30-second period. 760 bytes chunk size is around the theoretical maximum that FULL mode can handle at 1 MHz; the CPU usage with 760 bytes sized messages is about 765\%; There are two \acs{FELIX} cards mounted on a server, thus doubling the total CPU requirements; this brings to the conclusion that the host machine must have a minimum of 16 cores of an equivalent CPU to the \emph{AMD EPYC 9354P} in order to run \emph{felix-tohost} with the theoretical maximum chunk size at a 1MHz rate.
+Figure~\ref{fig:cpu-usage} illustrates the CPU usage per chunk size. The percentage value represents the average CPU usage over a 30-second period. 760 bytes chunk size is around the theoretical maximum that FULL mode can handle at 1 MHz; the CPU usage with 760 bytes sized messages is about 765\%; There are two \acs{FELIX} cards mounted on a server, thus doubling the total CPU requirements; this brings to the conclusion that the host machine must have a minimum of 16 cores of an equivalent CPU to the \emph{AMD EPYC 9354P} in order to run \texttt{felix-tohost} with the theoretical maximum chunk size at a 1MHz rate.
 
 \begin{figure}[htbp]
 \centering
