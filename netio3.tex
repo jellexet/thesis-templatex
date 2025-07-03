@@ -54,13 +54,11 @@ The netio3 frontend is built on top of netio3 backend to handle communications i
 This feature is useful in scenarios with bursty or fine-grained message patterns, as it averages the cost of network transmission over multiple messages.
 
 
-\section{Personal Contributions}
-
-\subsection{New network buffer format}
+\section{Personal Contributions - Network Buffer Format}
 
 The \texttt{felix-star} application processes uplink data by dividing it into 1\,KB \texttt{blocks}, decoding these blocks, and passing the decoded data to \texttt{netio3}, which adds a header for the remote clients. 
 Previously, a fixed 13-byte header was used; for messages of 10 bytes (or smaller), the overhead ratio was inefficient.
-The enhancement involved designing a new, more efficient header and updating the encode/decode routines accordingly \cite{netio3-header-commit}.\\
+The enhancement involved designing a new, more efficient header and updating the encode/decode routines accordingly (Commit~\cite{netio3-header-commit}).\\
 
 \begin{figure}[htbp]
 \centering
