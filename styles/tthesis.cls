@@ -7,12 +7,10 @@
 \usepackage{cmap}
 
 \usepackage[english]{babel}
-
 %\usepackage[latin9]{inputenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern} % Latin Modern font
 \usepackage[T1]{fontenc}
-
 \usepackage{csquotes}
 
 \usepackage{textcomp} % needed for fontenc

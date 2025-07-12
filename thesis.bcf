@@ -2476,13 +2476,14 @@
     <bcf:citekey order="105" intorder="1">ansible</bcf:citekey>
     <bcf:citekey order="106" intorder="1">matplotlib</bcf:citekey>
     <bcf:citekey order="107" intorder="1">matplotlib</bcf:citekey>
-    <bcf:citekey order="108" intorder="1">flamegraph</bcf:citekey>
-    <bcf:citekey order="109" intorder="1">protodune</bcf:citekey>
+    <bcf:citekey order="108" intorder="1">felix-monitor</bcf:citekey>
+    <bcf:citekey order="109" intorder="1">flamegraph</bcf:citekey>
     <bcf:citekey order="110" intorder="1">protodune</bcf:citekey>
-    <bcf:citekey order="110" intorder="2">Martellotti:2056863</bcf:citekey>
-    <bcf:citekey order="111" intorder="1">sphenix</bcf:citekey>
-    <bcf:citekey order="112" intorder="1">spidr4</bcf:citekey>
-    <bcf:citekey order="113" intorder="1">timepix4</bcf:citekey>
+    <bcf:citekey order="111" intorder="1">protodune</bcf:citekey>
+    <bcf:citekey order="111" intorder="2">Martellotti:2056863</bcf:citekey>
+    <bcf:citekey order="112" intorder="1">sphenix</bcf:citekey>
+    <bcf:citekey order="113" intorder="1">spidr4</bcf:citekey>
+    <bcf:citekey order="114" intorder="1">timepix4</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">

@@ -115,18 +115,10 @@ The \acl{RTT} tests were conducted using the two \textit{netio3-backends} LIBFAB
 
 \subsubsection{Analysis}
 
-Figure~\ref{fig:rtt-tcp-rdma} illustrates the average \acs{RTT} of 64-byte messages transmitted using\\ ASYNCMSG-TCP and LIBFABRIC-RDMA backends, with both epoll and \texttt{BOOST::ASIO} event-loops. The results show that LIBFABRIC-RDMA achieves significantly lower \acs{RTT} compared to the ASYNCMSG-TCP implementation, regardless of the event-loop used. For ASYNCMSG-TCP, using \texttt{BOOST::ASIO} over \texttt{epoll} nearly halves the average \acs{RTT}. The reason derives from the implementation of the \texttt{asyncmsg} library. To recall Section~\ref{subsec:asyncmsg}, the library \texttt{asyncmsg} uses a \texttt{BOOST::ASIO} event-loop internally, so if \texttt{netio3-backend} is run with the \texttt{epoll} event-loop data has to be transferred between two threads. For \texttt{libfabric}, this is not the case. There, the \texttt{BOOST::ASIO} event-loop offers no benefits over the \texttt{epoll} event-loop and is has a more restrictive \acs{API}.
+Figure~\ref{fig:rtt-tcp-rdma} illustrates the average \acs{RTT} of 64-byte messages transmitted using\\ ASYNCMSG-TCP and LIBFABRIC-RDMA backends, with both epoll and \texttt{BOOST::ASIO} event-loops. The results show that LIBFABRIC-RDMA achieves significantly lower \acs{RTT} compared to the ASYNCMSG-TCP implementation, regardless of the event-loop used. For ASYNCMSG-TCP, using \texttt{BOOST::ASIO} over \texttt{epoll} nearly halves the average \acs{RTT}. The reason derives from the implementation of the \texttt{asyncmsg} library. To recall Section~\ref{subsec:asyncmsg}, the library \texttt{asyncmsg} uses a \texttt{BOOST::ASIO} event-loop internally, so if \texttt{netio3-backend} is run with the \texttt{epoll} event-loop data has to be transferred between two threads. For \texttt{libfabric}, this is not the case. There, the \texttt{BOOST::ASIO} event-loop offers no benefits over the \texttt{epoll} event-loop and is has a more restrictive \acs{API}.\\
+Table~\ref{tab:rtt-comparison} structures the data for the analysis.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{images/results/rtt.png}
-\caption[RTT plot]{RTT plot of ASYNCMSG-TCP and LIBFABRIC-RDMA backends. The unit of measurement is in microseconds.}
-\label{fig:rtt-tcp-rdma}
-\end{figure}
-
-Table~\ref{tab:rtt-comparison} summarizes the previous analysis.
-
-\begin{table}[ht]
+\begin{table}[htbp]
 \centering
 \begin{tabular}{|l|c|c|}
 \hline
@@ -142,18 +134,17 @@ Table~\ref{tab:rtt-comparison} summarizes the previous analysis.
 \label{tab:rtt-comparison}
 \end{table}
 
-LIBFABRIC-RDMA comes with a high connection establishment cost. In the previous analysis the \acs{RTT} of the connection establishment has been considered an outlier and not used in the plot. Figure~\ref{fig:rtt-rdma-outlier} shows the effects of the outlier on the LIBFABRIC-RDMA backend \acs{RTT}. The outliers (323 µs for \texttt{epoll} and 329 µs for \texttt{BOOST::ASIO}) skew the average \acs{RTT} and increase the standard deviation over 25 messages.
-
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{images/results/rtt-RDMA-outliers.png}
-\caption[RDMA RTT plot, with outliers]{RTT plot of LIBFABRIC-RDMA backend with and without the connection establishment outlier. The unit of measurement is in microseconds.}
-\label{fig:rtt-rdma-outlier}
+\includegraphics[width=\textwidth]{images/results/rtt.png}
+\caption[RTT plot]{RTT plot of ASYNCMSG-TCP and LIBFABRIC-RDMA backends. The unit of measurement is in microseconds.}
+\label{fig:rtt-tcp-rdma}
 \end{figure}
 
-Table~\ref{tab:rtt-outlier} summarizes the previous analysis.
+LIBFABRIC-RDMA comes with a high connection establishment cost. In the previous analysis the \acs{RTT} of the connection establishment has been considered an outlier and not used in the plot. Figure~\ref{fig:rtt-rdma-outlier} shows the effects of the outlier on the LIBFABRIC-RDMA backend \acs{RTT}. The outliers (323 µs for \texttt{epoll} and 329 µs for \texttt{BOOST::ASIO}) skew the average \acs{RTT} and increase the standard deviation over 25 messages.\\
+Table~\ref{tab:rtt-outlier} provides a structured summary of the data discussed above.
 
-\begin{table}[ht]
+\begin{table}[htbp]
 \centering
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{|l|c|c|c|}
@@ -171,6 +162,12 @@ Table~\ref{tab:rtt-outlier} summarizes the previous analysis.
 \label{tab:rtt-outlier}
 \end{table}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/results/rtt-RDMA-outliers.png}
+\caption[RDMA RTT plot, with outliers]{RTT plot of LIBFABRIC-RDMA backend with and without the connection establishment outlier. The unit of measurement is in microseconds.}
+\label{fig:rtt-rdma-outlier}
+\end{figure}
 
 \section{Performance measurements: felix-tohost}
 
@@ -178,7 +175,7 @@ Table~\ref{tab:rtt-outlier} summarizes the previous analysis.
 Figure~\ref{fig:tbed-setup} below illustrates the setup for the test.\\
 \emph{pc-tbed-felix-15} mounts the currently used in production \emph{FLX-712} with the \emph{F-EMU} firmware, which is used to generate emulated data in the FULLMODE format; this data is routed via network to the other server, \emph{pc-tbed-felix-14}.
 On the same machine (\emph{pc-tbed-felix-15}) runs \emph{felix-test-swrod}, which is a software that subscribes to the \acs{E-link}s through \texttt{felix-tohost}, which in turn publishes (to \emph{stdout} for the test) the data once available.\\
-On \emph{pc-tbed-felix-14} is mounted an \emph{FLX-182-1B} card (that I personally tested and validated), with FULLMODE firmware. The \acs{FELIX} card receives the emulated FULL mode data via network and writes it into the enabled \acs{DMA} buffers through \acs{E-link}s. It can be configured which \acs{E-link} writes in which \acs{DMA} buffer using the \emph{elinkconfig} tool (Fiure~\ref{fig:elinkconfig}). In the context of this test, all the 12 \acs{E-link}s, per device\footnote{The FELIX card, when inserted in a PCIe socket appears to the Operating System as two PCIe devices}, have been used, specifically 3 links per \acs{DMA} buffer. On the same host machine runs \texttt{felix-tohost}, which, as mentioned, reads the data from the \acs{DMA} buffers (with three threads per buffer in this test), and publishes it to \emph{felix-test-swrod}; \texttt{felix-tohost} posts the monitoring data to a pre-decided port; a Prometheus instance, running on Docker on my local machine, scrapes the data knowing the IP address and port, and a Grafana instance queries Prometheus for that data and creates the Dashboard seen in Figure~\ref{fig:tohost-perf-760B} and Figure~\ref{fig:tohost-perf-2k}. On \emph{pc-tbed-felix-14}, there is also the \acl{TTC} emulator, which provides the clock that gives the pace to the FULLMODE emulator; in this test, the emulator trigger signals were set at 1 MHz.\\
+On \emph{pc-tbed-felix-14} is mounted an \emph{FLX-182-1B} card (that I personally tested and validated), with FULLMODE firmware. The \acs{FELIX} card receives the emulated FULL mode data via network and writes it into the enabled \acs{DMA} buffers through \acs{E-link}s. It can be configured which \acs{E-link} writes in which \acs{DMA} buffer using the \emph{elinkconfig} tool (Fiure~\ref{fig:elinkconfig}). In the context of this test, all the 12 \acs{E-link}s, per device\footnote{The FELIX card, when inserted in a PCIe socket appears to the Operating System as two PCIe devices}, have been used, specifically 3 links per \acs{DMA} buffer. On the same host machine runs \texttt{felix-tohost}, which, as mentioned, reads the data from the \acs{DMA} buffers (with three threads per buffer in this test), and publishes it to \emph{felix-test-swrod}. Thanks to the personal contribution to the monitoring system (Section~\ref{sec:felix_monitoring}), \texttt{felix-tohost} can post the monitoring data via an HTTP endpoint. The monitoring setup on my local machine used \texttt{felix-monitor} \cite{felix-monitor}, which consists of a Docker Compose configuration running two containers: a Prometheus server and Grafana. Prometheus scrapes the monitoring data exposed by \texttt{felix-tohost}, while Grafana queries Prometheus to generate the dashboard graphs shown in Figure~\ref{fig:tohost-perf-760B} and Figure~\ref{fig:tohost-perf-2k}. On \emph{pc-tbed-felix-14}, there is also the \acl{TTC} emulator, which provides the clock that gives the pace to the FULLMODE emulator; in this test, the emulator trigger signals were set at 1 MHz.\\
 It is relevant to introduce a technical hardware and firmware implementation of the \acs{FELIX} card. When a \acs{FELIX} card is inserted into the \acs{PCIe} socket, it presents itself as two \acs{PCIe} endpoints, which appear to the Operating System as two separate devices. This is useful because each device can have its own \acs{DMA} buffer and control logic. For this reason, in order to use a \acs{FELIX} card, the BIOS has to set the \acs{PCIe} socket with bifurcation, which essentially splits the 16 lanes of the \acs{PCIe} slot into two 8-lane segments, and this is the explanation of the two \acs{PCIe} devices. For the test \texttt{felix-tohost} has been run using the two devices exposed by the FLX-182.\\
 For what concerns the \emph{netio3} network library, LIBFABRIC-RDMA was used.\\
 The test consisted of sending data through all 12 links distributed across 4 \acs{DMA} buffers (3 links per \acs{DMA} buffer) at a steady 1 MHz rate, but changing the \emph{chunk} size. For reading each DMA buffer, three threads have been used.\\
